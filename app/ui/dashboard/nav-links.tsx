@@ -1,9 +1,11 @@
 'use client';
 
 import {
-  // UserGroupIcon,
   HomeIcon,
-  // DocumentDuplicateIcon,
+  CalculatorIcon,
+  ClipboardIcon,
+  PrinterIcon,
+  ArrowsRightLeftIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,12 +15,13 @@ import clsx from 'clsx';
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  // {
-  //   name: 'Invoices',
-  //   href: '/dashboard/invoices',
-  //   icon: DocumentDuplicateIcon,
-  // },
-  // { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  {
+    name: 'EWT',
+    href: '/dashboard/ewt', icon: CalculatorIcon,
+  },
+  { name: 'Outs', href: '/dashboard/outs', icon: ClipboardIcon },
+  { name: 'Printing Tools', href: '/dashboard/printingtools', icon: PrinterIcon },
+  { name: 'Roll to Sheet', href: '/dashboard/rolltosheet', icon: ArrowsRightLeftIcon }
 ];
 
 export default function NavLinks() {
@@ -28,7 +31,7 @@ export default function NavLinks() {
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
-          <a
+          <Link
             key={link.name}
             href={link.href}
             className={clsx(
@@ -37,10 +40,10 @@ export default function NavLinks() {
                 'bg-sky-100 text-blue-600': pathname === link.href,
               },
             )}
-            >
+          >
             <LinkIcon className="w-6" />
             <p className="hidden md:block">{link.name}</p>
-          </a>
+          </Link>
         );
       })}
     </>
