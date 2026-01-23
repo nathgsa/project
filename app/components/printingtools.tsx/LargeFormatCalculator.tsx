@@ -192,7 +192,7 @@ const LargeFormatCalculator: React.FC = () => {
       <div className="bg-white p-6 rounded-lg shadow-md space-y-6">
         {/* Unit Selector */}
         <div className="flex flex-col">
-          <label className="mb-2 font-semibold">Unit:</label>
+          <label className="mb-2 font-medium">Unit:</label>
           <select
             value={calculator.unit}
             onChange={handleUnitChange}
@@ -207,7 +207,7 @@ const LargeFormatCalculator: React.FC = () => {
 
         {/* Length */}
         <div className="flex flex-col">
-          <label className="mb-2 font-semibold">Length:</label>
+          <label className="mb-2 font-medium">Length:</label>
           <input
             type="number"
             value={calculator.length}
@@ -218,7 +218,7 @@ const LargeFormatCalculator: React.FC = () => {
 
         {/* Width */}
         <div className="flex flex-col">
-          <label className="mb-2 font-semibold">Width:</label>
+          <label className="mb-2 font-medium">Width:</label>
           <input
             type="number"
             value={calculator.width}
@@ -229,7 +229,7 @@ const LargeFormatCalculator: React.FC = () => {
 
         {/* Material */}
         <div className="flex flex-col">
-          <label className="mb-2 font-semibold">Material:</label>
+          <label className="mb-2 font-medium">Material:</label>
           <select
             value={calculator.selectedMaterial?.id || ""}
             onChange={handleMaterialChange}
@@ -244,7 +244,7 @@ const LargeFormatCalculator: React.FC = () => {
 
         {/* Per Square Foot Addons */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-lg">Per Square Foot Addons:</h3>
+          <h3 className="font-medium text-lg">Per Square Foot Addons:</h3>
           {CONFIG.addons.perSquareFoot.map((addon) => (
             <label key={addon.id} className="flex items-center space-x-2">
               <input
@@ -262,7 +262,7 @@ const LargeFormatCalculator: React.FC = () => {
 
         {/* Per Piece Addons */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-lg">Per Piece Addons:</h3>
+          <h3 className="font-medium text-lg">Per Piece Addons:</h3>
           {CONFIG.addons.perPiece.map((addon) => (
             <label key={addon.id} className="flex items-center space-x-2">
               <input
