@@ -20,7 +20,7 @@ const links = [
     href: '/dashboard/ewt', icon: CalculatorIcon,
   },
   { name: 'Outs', href: '/dashboard/outs', icon: ClipboardIcon },
-  { name: 'Printing Tools', href: '/dashboard/printingtools', icon: PrinterIcon },
+  { name: 'Large Formats', href: '/dashboard/printingtools', icon: PrinterIcon },
   { name: 'Roll to Sheet', href: '/dashboard/rolltosheet', icon: ArrowsRightLeftIcon }
 ];
 

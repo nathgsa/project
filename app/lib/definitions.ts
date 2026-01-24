@@ -7,4 +7,6 @@ export type User = {
   name: string;
   email: string;
   password: string;
+  created_at: string;   // timestamp when created
+  updated_at: string;   // timestamp when last updated
 };
