@@ -5,7 +5,6 @@ import Calculator from '@/app/ui/dashboard/calculator';
 
 export default async function Page() {
 
-  const userName = 'Nathalie'; // Replace with actual user data if you have it
 
   return (
     <main>
@@ -16,7 +15,7 @@ export default async function Page() {
 <br />
       {/* Welcome message */}
       <p className="mb-6 text-gray-600 text-sm md:text-base">
-        Welcome back, <span className="font-semibold">{userName}</span>!
+        Welcome back myApp!
       </p>
       </div>
       
