@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import NavLinks from './nav-links';
-import AppLogo from '@/app/ui/app-logo';
+import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { getCurrentUser, signOut } from '@/app/lib/auth';
 
@@ -28,7 +28,9 @@ export default async function SideNav() {
               alt={user.name || 'User'}
               className="h-12 w-12 rounded-full object-cover"
             />
-            <span className="text-sm font-medium text-gray-700">{user.name}</span>
+            <span className="text-sm font-medium text-gray-700">
+              {user.name}
+            </span>
           </div>
         )}
 

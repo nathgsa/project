@@ -17,12 +17,10 @@ export default function LoginForm() {
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Sign in to continue
         </h1>
-
         <p className="mb-6 text-sm text-gray-600">
           Only whitelisted Google accounts are allowed.
         </p>
 
-        {/* Google OAuth Button */}
         <Button
           onClick={() => signIn('google', { callbackUrl })}
           className="w-full"

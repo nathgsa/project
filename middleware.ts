@@ -1,14 +1,21 @@
-import { auth } from '@/app/lib/auth';
-// import NextAuth from 'next-auth';
-// import { authConfig } from './auth.config';
+// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default auth((req) => {
-  if (!req.auth && req.nextUrl.pathname.startsWith('/dashboard')) {
-    return Response.redirect(new URL('/login', req.url));
+// Only allow access to /dashboard if user is logged in (simple redirect)
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get('next-auth.session-token');
+
+  if (!token && req.nextUrl.pathname.startsWith('/dashboard')) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
   }
-});
 
+  return NextResponse.next();
+}
+
+// Match everything in /dashboard
 export const config = {
   matcher: ['/dashboard/:path*'],
 };
-

@@ -1,13 +1,11 @@
 'use server';
 
-import NextAuth, { AuthOptions } from 'next-auth';
+import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { getServerSession } from 'next-auth/next';
 import postgres from 'postgres';
-import { Whitelist } from './definitions';
 import { redirect } from 'next/navigation';
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import type { Whitelist } from './definitions';
 
 type SessionUser = {
   name?: string | null;
@@ -15,7 +13,10 @@ type SessionUser = {
   image?: string | null;
 };
 
-export const authOptions: AuthOptions = {
+// Postgres client
+const db = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -24,19 +25,19 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user }: { user: SessionUser }) {
-      if (!user?.email) return false;
+      if (!user.email) return false;
 
-      const result = await sql<Whitelist[]>`
+      const result: Whitelist[] = await db<Whitelist[]>`
         SELECT * FROM whitelist WHERE email = ${user.email}
       `;
 
-      return result.length > 0; // only allow if in whitelist
+      return result.length > 0; // only allow whitelisted users
     },
-    async session({ session }) {
+    async session({ session }: { session: any }) {
       return session;
     },
     async jwt({ token, user }: { token: any; user?: SessionUser }) {
-      if (user?.email) token.id = user.email;
+      if (user) token.id = user.email;
       return token;
     },
   },
@@ -44,10 +45,11 @@ export const authOptions: AuthOptions = {
     signIn: '/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+} as const;
 
 export default NextAuth(authOptions);
 
+// Get current user (server-side)
 export async function getCurrentUser() {
   const session = await getServerSession(authOptions);
   if (!session?.user) return null;
@@ -59,6 +61,7 @@ export async function getCurrentUser() {
   };
 }
 
+// Sign out helper
 export async function signOut({ redirectTo = '/' }: { redirectTo?: string } = {}) {
   'use server';
   redirect(redirectTo);

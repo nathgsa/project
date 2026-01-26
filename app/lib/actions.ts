@@ -1,37 +1,23 @@
-// 'use server';
- 
-// import { signIn } from '@/app/lib/auth';
-// import { AuthError } from 'next-auth';
-// import postgres from 'postgres';
-
-// const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
-
-// export async function authenticate(
-//   prevState: string | undefined,
-//   formData: FormData,
-// ) {
-//   try {
-//     await signIn('credentials', formData);
-//   } catch (error) {
-//     if (error instanceof AuthError) {
-//       switch (error.type) {
-//         case 'CredentialsSignin':
-//           return 'Invalid credentials.';
-//         default:
-//           return 'Something went wrong.';
-//       }
-//     }
-//     throw error;
-//   }
-// }
 'use server';
 
-import { sql } from '@vercel/postgres';
+import postgres from 'postgres';
+import type { Whitelist } from './definitions';
 
-export async function addWhitelistEmail(email: string) {
-  await sql`
-    INSERT INTO whitelist (email)
-    VALUES (${email})
-    ON CONFLICT DO NOTHING
-  `;
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+/**
+ * Check if an email is whitelisted.
+ * @param email Email to check
+ * @returns boolean True if email is in whitelist, false otherwise
+ */
+export async function isWhitelisted(email: string): Promise<boolean> {
+  try {
+    const rows = await sql<Whitelist[]>`
+      SELECT * FROM whitelist WHERE email = ${email};
+    `;
+    return rows.length > 0;
+  } catch (error) {
+    console.error('Failed to check whitelist:', error);
+    return false;
+  }
 }
