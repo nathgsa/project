@@ -1,4 +1,10 @@
-import postgres from 'postgres';
-// import { User } from './definitions';
+// import postgres from 'postgres';
+import sql from '@/app/lib/db';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+export async function getUsers() {
+  return await sql`
+    SELECT id, name, email
+    FROM users
+  `;
+}
+

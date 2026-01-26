@@ -2,6 +2,12 @@ import { lusitana } from '@/app/ui/fonts';
 import Clock from '@/app/ui/dashboard/clock';
 import Calendar from '@/app/ui/dashboard/calendar';
 import Calculator from '@/app/ui/dashboard/calculator';
+import { Suspense } from 'react';
+import { Metadata } from 'next';
+ 
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 export default async function Page() {
 
@@ -21,9 +27,12 @@ export default async function Page() {
       
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 center">
-        <Clock />
-        <Calendar />
-        <Calculator />
+        <Suspense>
+          <Clock />
+          <Calendar />
+          <Calculator />
+        </Suspense>
+        
       </div>
     </main>
   );
