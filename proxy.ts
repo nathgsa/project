@@ -1,31 +1,21 @@
-// // app/proxy.ts
-// import { NextRequest, NextResponse } from 'next/server';
-// import { getServerSession } from 'next-auth/next';
-// import { authOptions } from './lib/auth';
+// app/proxy.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { auth } from '@/app/lib/auth';
 
-// export async function proxy(req: NextRequest) {
-//   const url = req.nextUrl.clone();
+export async function proxy(req: NextRequest) {
+  const session = await auth();
 
-//   // Only protect /dashboard routes
-//   if (url.pathname.startsWith('/dashboard')) {
-//     try {
-//       const session = await getServerSession(authOptions);
+  // Protect dashboard routes
+  if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
 
-//       if (!session?.user) {
-//         url.pathname = '/login';
-//         return NextResponse.redirect(url);
-//       }
-//     } catch (err) {
-//       console.error('Auth proxy error:', err);
-//       url.pathname = '/login';
-//       return NextResponse.redirect(url);
-//     }
-//   }
+  return NextResponse.next();
+}
 
-//   return NextResponse.next();
-// }
-
-// // Proxy matcher for all /dashboard routes
-// export const config = {
-//   matcher: ['/dashboard/:path*'],
-// };
+export const config = {
+  matcher: ['/dashboard/:path*'],
+};

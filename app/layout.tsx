@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: '%s | myApp',
     default: 'myApp',
   },
-  description: 'The official Next.js Learn Dashboard built with App Router.',
+  description: 'My APP Dashboard built with App Router.',
   metadataBase: new URL('https://project-beta-nine-97.vercel.app'),
 };
 
