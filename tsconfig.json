@@ -31,6 +31,6 @@
     "app/lib/placeholder-data.ts",
     "scripts/seed.js",
     ".next/dev/types/**/*.ts"
-  ],
+, "app/components/printingtools", "app/components/outs/OutsCalculator.jsx"  ],
   "exclude": ["node_modules"]
 }

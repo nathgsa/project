@@ -1,17 +1,21 @@
-// import bcrypt from 'bcrypt';
-// import postgres from 'postgres';
-// import { users } from '@app/lib/placeholder-data';
+// app/api/seed/route.ts
+import postgres from 'postgres';
 
-// const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
-
-import { sql } from '@vercel/postgres';
+const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
 export async function GET() {
   await sql`
+    CREATE TABLE IF NOT EXISTS whitelist (
+      id SERIAL PRIMARY KEY,
+      email TEXT UNIQUE NOT NULL
+    );
+  `;
+
+  await sql`
     INSERT INTO whitelist (email)
-    VALUES ('admin@gmail.com')
+    VALUES ('nathaliegraceacojedo@gmail.com')
     ON CONFLICT DO NOTHING;
   `;
 
-  return Response.json({ message: 'Seeded successfully' });
+  return Response.json({ message: 'Whitelist table ready' });
 }
