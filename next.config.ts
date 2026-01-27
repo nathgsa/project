@@ -1,15 +1,8 @@
-// next.config.js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/login',
-        destination: '/',
-        permanent: true,
-      },
-    ];
-  }
+// next.config.ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  // Your config options here
 };
 
-module.exports = nextConfig;
+export default nextConfig;

@@ -1,18 +1,8 @@
-// app/page.tsx
 import AppLogo from '@/app/ui/app-logo';
-// import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import GoogleLogo from '@/app/ui/google-logo';
-import { getCurrentUser } from '@/app/lib/auth';
-import { redirect } from 'next/navigation';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
-export default async function Page() {
-  const user = await getCurrentUser();
-  
-  // If user is already logged in, redirect to dashboard
-  if (user) {
-    redirect('/dashboard');
-  }
-
+export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-900 p-4 md:h-52">
@@ -24,19 +14,15 @@ export default async function Page() {
           <p className="text-xl text-gray-800 md:text-3xl md:leading-normal">
             <strong>Welcome to myApp.</strong>
           </p>
-          
-          <p className="text-gray-600">
-            Sign in with your Google account to access the dashboard.
-          </p>
 
-          {/* GOOGLE SIGN IN BUTTON */}
-          <a
-            href="/api/auth/signin/google"
-            className="flex items-center justify-center gap-3 self-start rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 md:text-base"
+          {/* LOGIN BUTTON */}
+          <Link
+            href="/login"
+            className="flex items-center gap-5 self-start rounded-lg bg-blue-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
           >
-            <GoogleLogo className="h-5 w-5" />
-            <span>Continue with Google</span>
-          </a>
+            <span>Log in</span>
+            <ArrowRightIcon className="w-5 md:w-6" />
+          </Link>
         </div>
 
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">

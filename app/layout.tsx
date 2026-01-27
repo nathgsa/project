@@ -1,22 +1,24 @@
-// app/dashboard/layout.tsx
-import SideNav from '@/app/ui/dashboard/sidenav';
-import { getCurrentUser } from '@/app/lib/auth';
-import { redirect } from 'next/navigation';
+import '@/app/style/global.css';
+import { inter } from '@/app/ui/fonts';
+import { Metadata } from 'next';
+ 
+export const metadata: Metadata = {
+  title: {
+    template: '%s | myApp',
+    default: 'myApp',
+  },
+  description: 'My APP Dashboard built with App Router.',
+  metadataBase: new URL('https://project-beta-nine-97.vercel.app'),
+};
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
-  const user = await getCurrentUser();
-  
-  // If not authenticated, redirect to home (which now has login)
-  if (!user) {
-    redirect('/');
-  }
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="w-full flex-none md:w-64">
-        <SideNav user={user} />
-      </div>
-      <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
-    </div>
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>{children}</body>
+    </html>
   );
 }

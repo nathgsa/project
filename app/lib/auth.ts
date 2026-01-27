@@ -1,18 +1,13 @@
 // app/lib/auth.ts
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
+import { authConfig } from '@/auth.config';
 import postgres from 'postgres';
 
 const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
-
+  ...authConfig,
+  
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false;
@@ -33,12 +28,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     },
   },
 
-  // Remove or update pages configuration
-  // pages: {
-  //   signIn: '/', // Now the home page is the login page
-  // },
-
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
 });
 
 export async function getCurrentUser() {
