@@ -1,45 +1,36 @@
 // app/lib/auth.ts
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
+import { authConfig } from '@/auth.config';
 import postgres from 'postgres';
-import type { Whitelist } from './definitions';
 
 const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
-export const authOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
-
+export const { auth, signIn, signOut, handlers } = NextAuth({
+  ...authConfig,
+  
   callbacks: {
-    async signIn({ user }: { user: { email?: string | null } }) {
+    async signIn({ user }) {
       if (!user.email) return false;
 
-      const rows = await sql<Whitelist[]>`
-        SELECT id FROM whitelist WHERE email = ${user.email}
-      `;
-
-      return rows.length > 0;
+      try {
+        const rows = await sql`
+          SELECT id FROM whitelist WHERE email = ${user.email}
+        `;
+        return rows.length > 0;
+      } catch (error) {
+        console.error('Database error:', error);
+        return false;
+      }
     },
 
-    async session({ session }: { session: any }) {
+    async session({ session }) {
       return session;
     },
   },
 
-  pages: {
-    signIn: '/login',
-  },
-
   secret: process.env.AUTH_SECRET,
-};
+});
 
-export const { auth, signIn, signOut } = NextAuth(authOptions);
-
-// ✅ SERVER USER (NextAuth v5 way)
 export async function getCurrentUser() {
   const session = await auth();
   return session?.user ?? null;

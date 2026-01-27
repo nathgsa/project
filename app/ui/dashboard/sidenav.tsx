@@ -1,11 +1,32 @@
+// app/ui/dashboard/sidenav.tsx
+'use client';
+
 import Link from 'next/link';
 import NavLinks from './nav-links';
 import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { getCurrentUser, signOut } from '@/app/lib/auth';
+import { useRouter } from 'next/navigation';
 
-export default async function SideNav() {
-  const user = await getCurrentUser(); // server-side fetch
+interface SideNavProps {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  } | null;
+}
+
+export default function SideNav({ user }: SideNavProps) {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout', { method: 'POST' });
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  };
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
@@ -23,28 +44,26 @@ export default async function SideNav() {
 
         {user && (
           <div className="hidden md:flex md:flex-col md:items-center md:space-y-2 md:rounded-md md:bg-gray-50 md:p-3">
-            <img
-              src={user.image || '/default-avatar.png'}
-              alt={user.name || 'User'}
-              className="h-12 w-12 rounded-full object-cover"
-            />
+            {user.image && (
+              <img
+                src={user.image}
+                alt={user.name || 'User'}
+                className="h-12 w-12 rounded-full object-cover"
+              />
+            )}
             <span className="text-sm font-medium text-gray-700">
-              {user.name}
+              {user.name || user.email}
             </span>
           </div>
         )}
 
-        <form
-          action={async () => {
-            'use server';
-            await signOut({ redirectTo: '/' });
-          }}
+        <button
+          onClick={handleSignOut}
+          className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
         >
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-            <PowerIcon className="w-6" />
-            <div className="hidden md:block">Sign Out</div>
-          </button>
-        </form>
+          <PowerIcon className="w-6" />
+          <div className="hidden md:block">Sign Out</div>
+        </button>
       </div>
     </div>
   );
