@@ -1,16 +1,18 @@
 // app/proxy.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/app/lib/auth';
 
-export async function proxy(req: NextRequest) {
-  const session = await auth();
+export default async function proxy(req: NextRequest) {
+  const url = req.nextUrl.clone();
 
   // Protect dashboard routes
-  if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
-    const url = req.nextUrl.clone();
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
+  if (url.pathname.startsWith('/dashboard')) {
+    const session = await auth();
+
+    if (!session?.user) {
+      url.pathname = '/login';
+      return NextResponse.redirect(url);
+    }
   }
 
   return NextResponse.next();
