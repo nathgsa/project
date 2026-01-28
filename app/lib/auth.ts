@@ -1,12 +1,12 @@
+// app/lib/auth.ts
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import postgres from 'postgres';
+import type { Whitelist } from './definitions';
 
-export const {
-  auth,
-  handlers,
-  signIn,
-  signOut,
-} = NextAuth({
+const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
+
+export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -14,9 +14,19 @@ export const {
     }),
   ],
 
-  pages: {
-    signIn: '/login',
-  },
+  callbacks: {
+    async signIn({ user }: { user: { email?: string | null } }) {
+      if (!user?.email) return false;
 
-  secret: process.env.AUTH_SECRET,
-});
+      try {
+        const rows = await sql<Whitelist[]>`
+          SELECT id FROM whitelist WHERE email = ${user.email};
+        `;
+        return rows.length > 0;
+      } catch (error) {
+        console.error('Database error:', error);
+        return false;
+      }
+    },
+
+    async
