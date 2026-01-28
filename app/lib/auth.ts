@@ -28,7 +28,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     },
   },
 
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export async function getCurrentUser() {
