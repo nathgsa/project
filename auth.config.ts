@@ -23,7 +23,7 @@ export const authConfig: NextAuthConfig = {
     async signIn({ user }) {
       if (!user.email) return false;
 
-      const whitelist = ["nathaliegraceacojedo@gmail.com"]; // exact email from Google
+      const whitelist = ["nathaliegraceacojedo@gmail.com", "Emman.villaver@gmail.com"]; // exact email from Google
       const email = user.email.toLowerCase().trim();
       return whitelist.includes(email);
     },
