@@ -36,7 +36,7 @@ export default function SideNav() {
 
         <button
           onClick={handleSignOut}
-          className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+          className="flex h-[48px] w-full items-center gap-1 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
         >
           <PowerIcon className="w-6" />
           <span className="hidden md:block">Sign Out</span>
