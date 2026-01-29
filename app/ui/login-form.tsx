@@ -8,18 +8,13 @@ import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
   const handleGoogleSignIn = async () => {
-    await signIn('google', {
-      callbackUrl: '/dashboard',
-    });
+    await signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return (
     <div className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className={`${lusitana.className} mb-3 text-2xl`}>
-          Sign in to continue
-        </h1>
-
+        <h1 className={`${lusitana.className} mb-3 text-2xl`}>Sign in to continue</h1>
         <p className="mb-6 text-sm text-gray-600">
           Only whitelisted Google accounts are allowed.
         </p>

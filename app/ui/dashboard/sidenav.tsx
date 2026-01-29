@@ -15,12 +15,11 @@ interface SideNavProps {
 }
 
 export default function SideNav({ user }: SideNavProps) {
-
   const handleSignOut = async () => {
     try {
-      await signOut({ callbackUrl: '/login' });
+      await signOut({ callbackUrl: "/login" });
     } catch (error) {
-      console.error('Sign out error:', error);
+      console.error("Sign out error:", error);
     }
   };
 
