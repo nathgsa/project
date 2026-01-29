@@ -10,11 +10,11 @@ export default function DashboardGuard({ children }: { children: React.ReactNode
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace('/login'); // force redirect to login
+      router.replace('/login'); // force redirect if session expired or user is signed out
     }
   }, [status, router]);
 
-  if (status === 'loading') return null; // optional: show a loading screen
+  if (status === 'loading') return null; // optional loading state
 
   return <>{children}</>;
 }

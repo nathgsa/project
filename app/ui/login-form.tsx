@@ -10,7 +10,7 @@ export default function LoginForm() {
   const handleGoogleSignIn = async () => {
     await signIn("google", {
       callbackUrl: "/dashboard",
-      prompt: "select_account", // <- forces account chooser
+      prompt: "select_account", // <-- forces Google account chooser
     });
   };
 

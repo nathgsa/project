@@ -3,15 +3,10 @@ import Clock from '@/app/ui/dashboard/clock';
 import Calendar from '@/app/ui/dashboard/calendar';
 import Calculator from '@/app/ui/dashboard/calculator';
 import { Suspense } from 'react';
-import { Metadata } from 'next';
 import DashboardGuard from '@/app/ui/dashboard/dashboard-gaurd';
 
-export const metadata: Metadata = {
-  title: 'Dashboard',
-  // headers: {
-  //   'Cache-Control': 'no-store', // prevent browser cache
-  // },
-};
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default function DashboardPage() {
   return (

@@ -5,6 +5,7 @@ import NavLinks from './nav-links';
 import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface SideNavProps {
   user?: {
@@ -15,9 +16,16 @@ interface SideNavProps {
 }
 
 export default function SideNav({ user }: SideNavProps) {
+  const router = useRouter();
+
   const handleSignOut = async () => {
     try {
-      await signOut({ callbackUrl: "/login" });
+      await signOut({
+        redirect: false, // don't redirect automatically
+      });
+
+      // replace history so back button can't go to dashboard
+      router.replace("/login");
     } catch (error) {
       console.error("Sign out error:", error);
     }
