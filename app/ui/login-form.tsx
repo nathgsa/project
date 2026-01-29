@@ -1,14 +1,16 @@
-// app/ui/login-form.tsx
 'use client';
 
 import { lusitana } from '@/app/ui/fonts';
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
+import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
-  const handleGoogleSignIn = () => {
-    window.location.href = '/api/auth/signin/google';
+  const handleGoogleSignIn = async () => {
+    await signIn('google', {
+      callbackUrl: '/dashboard',
+    });
   };
 
   return (
@@ -17,14 +19,12 @@ export default function LoginForm() {
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Sign in to continue
         </h1>
+
         <p className="mb-6 text-sm text-gray-600">
           Only whitelisted Google accounts are allowed.
         </p>
 
-        <Button
-          onClick={handleGoogleSignIn}
-          className="w-full"
-        >
+        <Button onClick={handleGoogleSignIn} className="w-full">
           <AtSymbolIcon className="mr-2 h-5 w-5" />
           Sign in with Google
           <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />

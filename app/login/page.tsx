@@ -3,17 +3,19 @@ import AppLogo from '@/app/ui/app-logo';
 import LoginForm from '@/app/ui/login-form';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { getCurrentUser } from '@/app/lib/auth';
+import { auth } from '@/app/lib/auth';
 import { redirect } from 'next/navigation';
+// import { getCurrentUser } from '@/app/lib/auth';
+// import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Login',
 };
 
 export default async function LoginPage() {
-  const user = await getCurrentUser();
-  
-  if (user) {
+  const session = await auth();
+
+  if (session) {
     redirect('/dashboard');
   }
 

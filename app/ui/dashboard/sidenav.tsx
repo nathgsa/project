@@ -42,7 +42,7 @@ export default function SideNav({ user }: SideNavProps) {
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
 
-        {user && (
+        {/* {user && (
           <div className="hidden md:flex md:flex-col md:items-center md:space-y-2 md:rounded-md md:bg-gray-50 md:p-3">
             {user.image && (
               <img
@@ -55,7 +55,7 @@ export default function SideNav({ user }: SideNavProps) {
               {user.name || user.email}
             </span>
           </div>
-        )}
+        )} */}
 
         <button
           onClick={handleSignOut}
