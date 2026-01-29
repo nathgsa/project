@@ -8,7 +8,10 @@ import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
   const handleGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/dashboard" });
+    await signIn("google", {
+      callbackUrl: "/dashboard",
+      prompt: "select_account", // <- forces account chooser
+    });
   };
 
   return (
