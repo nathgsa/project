@@ -10,7 +10,8 @@ export const authConfig: NextAuthConfig = {
   ],
   session: { strategy: "jwt" },
   callbacks: {
-    async signIn() {
+    async signIn({ user }) {
+    console.log("GOOGLE EMAIL:", user.email);
     return true;
   },
   },
