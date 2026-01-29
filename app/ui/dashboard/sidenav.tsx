@@ -1,11 +1,10 @@
-// app/ui/dashboard/sidenav.tsx
 'use client';
 
 import Link from 'next/link';
 import NavLinks from './nav-links';
 import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 interface SideNavProps {
   user?: {
@@ -16,13 +15,10 @@ interface SideNavProps {
 }
 
 export default function SideNav({ user }: SideNavProps) {
-  const router = useRouter();
 
   const handleSignOut = async () => {
     try {
-      await fetch('/api/auth/signout', { method: 'POST' });
-      router.push('/');
-      router.refresh();
+      await signOut({ callbackUrl: '/login' });
     } catch (error) {
       console.error('Sign out error:', error);
     }
@@ -41,21 +37,6 @@ export default function SideNav({ user }: SideNavProps) {
 
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
-
-        {/* {user && (
-          <div className="hidden md:flex md:flex-col md:items-center md:space-y-2 md:rounded-md md:bg-gray-50 md:p-3">
-            {user.image && (
-              <img
-                src={user.image}
-                alt={user.name || 'User'}
-                className="h-12 w-12 rounded-full object-cover"
-              />
-            )}
-            <span className="text-sm font-medium text-gray-700">
-              {user.name || user.email}
-            </span>
-          </div>
-        )} */}
 
         <button
           onClick={handleSignOut}
