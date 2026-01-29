@@ -1,3 +1,4 @@
+// app/lib/auth.config.ts
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
 
@@ -8,11 +9,21 @@ export const authConfig: NextAuthConfig = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60,       // 1 hour session timeout
+    updateAge: 5 * 60,     // refresh every 5 minutes
+  },
   callbacks: {
     async signIn({ user }) {
-    console.log("GOOGLE EMAIL:", user.email);
-    return true;
+      if (!user.email) return false;
+
+      const whitelist = ["nathaliegraceacojedo@gmail.com"]; // exact email from Google
+      const email = user.email.toLowerCase().trim();
+      return whitelist.includes(email);
+    },
   },
+  pages: {
+    error: "/login", // redirect to login on access denied
   },
 };

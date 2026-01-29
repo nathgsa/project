@@ -22,3 +22,10 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export const headers = {
+  'Cache-Control': 'no-store',
+};
