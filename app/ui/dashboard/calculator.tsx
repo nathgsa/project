@@ -135,13 +135,13 @@ export default function Calculator() {
           </button>
         ))}
 
-        {/* Clear button */}
+        {/* Clear button
         <button
           className="col-span-4 rounded bg-red-100 p-2 font-semibold hover:bg-red-200"
           onClick={() => handleButtonClick('C')}
         >
           Clear
-        </button>
+        </button> */}
       </div>
 
       {/* History */}
