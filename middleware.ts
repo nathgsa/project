@@ -1,14 +1,12 @@
-import { auth } from "@/app/lib/auth";
+import { auth } from '@/app/lib/auth';
+// export { default } from "next-auth/middleware";
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isProtected = req.nextUrl.pathname.startsWith("/app");
-
-  if (!isLoggedIn && isProtected) {
-    return Response.redirect(new URL("/", req.url));
+  if (!req.auth && req.nextUrl.pathname.startsWith('/dashboard')) {
+    return Response.redirect(new URL('/login', req.url));
   }
 });
 
 export const config = {
-  matcher: ["/app/:path*"],
+  matcher: ['/dashboard/:path*'],
 };
