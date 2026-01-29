@@ -4,7 +4,7 @@ import Calendar from '@/app/ui/dashboard/calendar';
 import Calculator from '@/app/ui/dashboard/calculator';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-// import DashboardGuard from '@/app/ui/dashboard/dashboard-gaurd';
+import DashboardGuard from '@/app/ui/dashboard/dashboard-gaurd';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    //<DashboardGuard>
+    <DashboardGuard>
       <main>
         <div className="bg-blue-100 rounded-[5px] p-4">
           <h1 className={`${lusitana.className} mb-2 text-xl md:text-2xl`}>Dashboard</h1>
@@ -32,6 +32,6 @@ export default function DashboardPage() {
           </Suspense>
         </div>
       </main>
-    //</DashboardGuard>
+    </DashboardGuard>
   );
 }
