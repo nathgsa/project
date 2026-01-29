@@ -11,7 +11,7 @@ export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
   callbacks: {
     async signIn({ user }) {
-      const whitelist = ["admin@gmail.com"];
+      const whitelist = ["nathaliegraceacojedogmail.com"];
       return !!user.email && whitelist.includes(user.email);
     },
   },
