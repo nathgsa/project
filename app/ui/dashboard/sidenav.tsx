@@ -4,19 +4,19 @@ import Link from 'next/link';
 import NavLinks from './nav-links';
 import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { signOut } from '@/app/lib/auth';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function SideNav() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut({
-      redirectTo: '/login',
-    });
+    await signOut({ redirect: false });
 
-    // hard refresh to kill cached auth state
+    // replace history so back button doesn't work
     router.replace('/login');
+
+    // extra safety
     router.refresh();
   };
 
