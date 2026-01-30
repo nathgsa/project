@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col p-6">
+    <main className="flex min-h-screen flex-col p-6 items-center">
       
       {/* HEADER – no background */}
       <div className="flex h-20 shrink-0 items-center p-4 md:h-52 center">
