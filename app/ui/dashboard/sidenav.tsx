@@ -10,12 +10,13 @@ export default function SideNav() {
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
-        className="mb-2 flex h-20 items-end justify-start rounded-md  p-4 md:h-40"
+        className="mb-2 flex h-20 w-full items-center justify-center rounded-md p-0 md:h-40"
         href="/dashboard"
       >
-        <div className="w-32 md:w-40 flex">
-                          <AppLogo showText={false} size={350} />
-                        </div>
+        <div className="flex w-full h-full items-center justify-center object-contain">
+          {/* Make the logo take full width and height */}
+          <AppLogo />
+        </div>
       </Link>
 
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
