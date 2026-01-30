@@ -4,67 +4,44 @@ import Link from 'next/link';
 import NavLinks from './nav-links';
 import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { signOut } from '@/app/lib/auth';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function SideNav() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut({
-      redirectTo: '/login',
-    });
+    await signOut({ redirect: false });
 
-    // hard refresh to kill cached auth state
+    // replace history so back button doesn't work
     router.replace('/login');
+
+    // extra safety
     router.refresh();
   };
 
   return (
-    // <div className="flex h-full flex-col px-3 py-4 md:px-2">
-    //   <Link
-    //     className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
-    //     href="/dashboard"
-    //   >
-    //     <div className="w-32 text-white md:w-40">
-    //       <AppLogo />
-    //     </div>
-    //   </Link>
-
-    //   <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-    //     <NavLinks />
-
-    //     <button
-    //       onClick={handleSignOut}
-    //       className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
-    //     >
-    //       <PowerIcon className="w-6" />
-    //       <span className="hidden md:block">Sign Out</span>
-    //     </button>
-    //   </div>
-    // </div>
-    <aside className="flex h-full flex-col px-2 py-3">
-      {/* Logo */}
+    <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
+        className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
         href="/dashboard"
-        className="mb-2 flex h-16 items-center rounded-md bg-blue-600 px-3"
       >
-        <AppLogo />
+        <div className="w-32 text-white md:w-40">
+          <AppLogo />
+        </div>
       </Link>
-
-      {/* Navigation */}
-      <nav className="flex flex-1 flex-col">
+      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
-      </nav>
-
-      {/* Sign Out */}
-      <button
-        onClick={handleSignOut}
-        className="mt-2 flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
-      >
-        <PowerIcon className="h-5 w-5" />
-        <span className="ml-2">Sign Out</span>
-      </button>
-    </aside>
+        
+        <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+        <button
+          onClick={handleSignOut}
+          className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+        >
+          <PowerIcon className="w-6" />
+          <span className="hidden md:block">Sign Out</span>
+        </button>
+      </div>
+    </div>
   );
 }
