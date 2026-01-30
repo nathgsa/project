@@ -1,39 +1,52 @@
 import AppLogo from '@/app/ui/app-logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+import Image from 'next/image';
+import { signIn } from 'next-auth/react';
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-white px-6">
-      
-      {/* LOGO */}
-      <div className="mb-10 flex items-center justify-center">
-        <AppLogo showText={false} size={160} />
-      </div>
+    <main className="flex min-h-screen items-center justify-center bg-white px-6">
+      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-2xl bg-gray-50 shadow-sm md:grid-cols-2">
+        <div className="flex flex-col items-center justify-center">
+          <AppLogo showText={false} size={300} />
+        </div>
 
-      {/* CONTENT */}
-      <div className="flex w-full max-w-2xl flex-col items-center gap-6 rounded-2xl bg-gray-50 px-8 py-12 text-center shadow-sm">
-        
-        <h1 className="text-2xl font-semibold text-gray-900 md:text-3xl">
-          Welcome to
-        </h1>
+        {/* LEFT — SIGN IN */}
+        <div className="flex flex-col items-center justify-center gap-6 px-8 py-16">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Sign in to continue
+          </h2>
 
-        <p className="text-lg font-medium text-gray-700 md:text-xl">
-          Optima Typographics Calculators
-        </p>
+          <button
+            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+            className="flex w-full max-w-xs items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+          >
+            <Image
+              src="/google.svg"
+              alt="Google"
+              width={20}
+              height={20}
+            />
+            Sign in with Google
+          </button>
 
-        <p className="max-w-md text-sm text-gray-600 md:text-base">
-          Powerful, accurate, and easy-to-use calculators built to support
-          typographic precision and design workflows.
-        </p>
+          <p className="text-center text-xs text-gray-500 max-w-xs">
+            Only authorized Google accounts can access this application.
+          </p>
+        </div>
 
-        <Link
-          href="/login"
-          className="mt-4 inline-flex items-center gap-3 rounded-xl bg-blue-900 px-8 py-3 text-sm font-medium text-white transition hover:bg-blue-700 md:text-base"
-        >
-          Log in
-          <ArrowRightIcon className="w-5" />
-        </Link>
+        {/* RIGHT — BRANDING */}
+        <div className="flex flex-col items-center justify-center gap-6 bg-white px-10 py-16 text-center">
+          <AppLogo showText={false} size={140} />
+
+          <h1 className="text-2xl font-semibold text-gray-900 md:text-3xl">
+            Optima Typographics Calculators
+          </h1>
+
+          <p className="max-w-md text-sm text-gray-600 md:text-base">
+            Easy-to-use calculators designed to support
+            professional typographic and printing workflows.
+          </p>
+        </div>
       </div>
     </main>
   );

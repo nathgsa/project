@@ -5,8 +5,6 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { auth } from '@/app/lib/auth';
 import { redirect } from 'next/navigation';
-// import { getCurrentUser } from '@/app/lib/auth';
-// import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Login',
