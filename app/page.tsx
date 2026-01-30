@@ -36,7 +36,7 @@ export default function Page() {
 
         {/* RIGHT — BRANDING */}
         <div className="flex flex-col items-center justify-center gap-6 bg-white px-10 py-16 text-center">
-          <AppLogo showText={false} size={140} />
+          
 
           <h1 className="text-2xl font-semibold text-gray-900 md:text-3xl">
             Optima Typographics Calculators
