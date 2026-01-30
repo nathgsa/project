@@ -13,14 +13,15 @@ export default function Page() {
 
       {/* CONTENT */}
       <div className="flex w-full max-w-2xl flex-col items-center gap-6 rounded-2xl bg-gray-50 px-8 py-12 text-center shadow-sm">
-        
-        <p className="text-2xl font-semibold text-gray-900 md:text-3xl">
+        <h1></h1>
+
+        <p className="text-lg font-semibold text-gray-900 md:text-3xl">
           Welcome to
         </p>
 
-        <h1 className="text-lg font-medium text-gray-700 md:text-xl">
+        <p className="text-2xl font-bold text-gray-700 md:text-xl">
           Optima Typographics Calculators
-        </h1>
+        </p>
 
         <p className="max-w-md text-sm text-gray-600 md:text-base">
           Easy-to-use calculators built to support
