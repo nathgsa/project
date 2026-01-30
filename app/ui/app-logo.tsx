@@ -1,18 +1,28 @@
 import Image from 'next/image';
-// import { lusitana } from '@/app/ui/fonts';
+import { lusitana } from '@/app/ui/fonts';
 
-export default function AppLogo() {
+type AppLogoProps = {
+  showText?: boolean;
+  size?: number;
+};
+
+export default function AppLogo({ showText = true, size = 48 }: AppLogoProps) {
   return (
-    <div className={` flex flex-row items-center leading-none text-white`}
+    <div
+      className={`${lusitana.className} flex items-center leading-none`}
     >
       <Image
         src="/optima-logo.png"
         alt="Optima Logo"
-        width={500}
-        height={500}
-        className="mr-2"
+        width={size}
+        height={size}
+        className="object-contain"
         priority
       />
+
+      {showText && (
+        <p className="ml-2 text-[44px] text-white">myApp</p>
+      )}
     </div>
   );
 }
