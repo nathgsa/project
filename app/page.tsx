@@ -1,19 +1,12 @@
-import Image from 'next/image';
+import AppLogo from '@/app/ui/app-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg p-4 md:h-52 justify-center">
-        <Image
-                src="/optima-logo.png"
-                alt="Optima Logo"
-                width={48}
-                height={48}
-                className="mr-2"
-                priority
-              />
+      <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-900 p-4 md:h-52">
+        <AppLogo />
       </div>
 
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">

@@ -8,8 +8,8 @@ export default function AppLogo() {
       <Image
         src="/optima-logo.png"
         alt="Optima Logo"
-        width={48}
-        height={48}
+        width={100}
+        height={100}
         className="mr-2"
         priority
       />
