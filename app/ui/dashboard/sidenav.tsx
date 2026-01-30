@@ -8,7 +8,7 @@ import { signOutAction } from '@/app/actions/auth-action';
 
 export default function SideNav() {
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2 bg-sky-100">
+    <div className="flex h-full flex-col px-3 py-4 md:px-2 bg-sky-150">
       <Link
         className="flex h-20 w-full md:h-40 items-center justify-center"
         href="/dashboard"
