@@ -20,9 +20,9 @@ export default function AppLogo({ showText = true, size = 48 }: AppLogoProps) {
         priority
       />
 
-      {showText && (
+      {/* {showText && (
         <p className="ml-2 text-[44px] text-white">myApp</p>
-      )}
+      )} */}
     </div>
   );
 }
