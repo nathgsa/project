@@ -15,7 +15,7 @@ export default function SideNav() {
       >
         <div className="flex w-full h-full items-center object-contain">
           {/* Make the logo take full width and height */}
-          <AppLogo showText={false} size={200} />
+          <AppLogo showText={false} size={250} />
         </div>
       </Link>
 
