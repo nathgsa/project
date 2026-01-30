@@ -7,8 +7,8 @@ export default function Page() {
     <main className="flex min-h-screen flex-col p-6">
       
       {/* HEADER – no background */}
-      <div className="flex h-20 shrink-0 items-center p-4 md:h-52">
-        <AppLogo showText={false} size={50} />
+      <div className="flex h-20 shrink-0 items-center p-4 md:h-52 center">
+        <AppLogo showText={false} size={500} />
       </div>
 
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
