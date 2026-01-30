@@ -14,7 +14,7 @@ export default function SideNav() {
         href="/dashboard"
       >
         <div className="w-32 md:w-40 flex">
-                          <AppLogo showText={false} size={300} />
+                          <AppLogo showText={false} size={350} />
                         </div>
       </Link>
 
