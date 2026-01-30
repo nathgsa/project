@@ -4,19 +4,19 @@ import Link from 'next/link';
 import NavLinks from './nav-links';
 import AppLogo from '../app-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { signOut } from 'next-auth/react';
+import { signOut } from '@/app/lib/auth';
 import { useRouter } from 'next/navigation';
 
 export default function SideNav() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
+    await signOut({
+      redirectTo: '/login',
+    });
 
-    // replace history so back button doesn't work
+    // hard refresh to kill cached auth state
     router.replace('/login');
-
-    // extra safety
     router.refresh();
   };
 
@@ -30,9 +30,10 @@ export default function SideNav() {
           <AppLogo />
         </div>
       </Link>
+
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
-        <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+
         <button
           onClick={handleSignOut}
           className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
@@ -40,14 +41,6 @@ export default function SideNav() {
           <PowerIcon className="w-6" />
           <span className="hidden md:block">Sign Out</span>
         </button>
-        {/* <form>
-          <button
-          onClick={handleSignOut}
-           className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-            <PowerIcon className="w-6" />
-            <div className="hidden md:block">Sign Out</div>
-          </button>
-        </form> */}
       </div>
     </div>
   );
