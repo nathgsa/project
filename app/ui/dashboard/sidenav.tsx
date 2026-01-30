@@ -21,27 +21,50 @@ export default function SideNav() {
   };
 
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
+    // <div className="flex h-full flex-col px-3 py-4 md:px-2">
+    //   <Link
+    //     className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
+    //     href="/dashboard"
+    //   >
+    //     <div className="w-32 text-white md:w-40">
+    //       <AppLogo />
+    //     </div>
+    //   </Link>
+
+    //   <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+    //     <NavLinks />
+
+    //     <button
+    //       onClick={handleSignOut}
+    //       className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+    //     >
+    //       <PowerIcon className="w-6" />
+    //       <span className="hidden md:block">Sign Out</span>
+    //     </button>
+    //   </div>
+    // </div>
+    <aside className="flex h-full flex-col px-2 py-3">
+      {/* Logo */}
       <Link
-        className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
         href="/dashboard"
+        className="mb-2 flex h-16 items-center rounded-md bg-blue-600 px-3"
       >
-        <div className="w-32 text-white md:w-40">
-          <AppLogo />
-        </div>
+        <AppLogo />
       </Link>
 
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      {/* Navigation */}
+      <nav className="flex flex-1 flex-col">
         <NavLinks />
+      </nav>
 
-        <button
-          onClick={handleSignOut}
-          className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
-        >
-          <PowerIcon className="w-6" />
-          <span className="hidden md:block">Sign Out</span>
-        </button>
-      </div>
-    </div>
+      {/* Sign Out */}
+      <button
+        onClick={handleSignOut}
+        className="mt-2 flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+      >
+        <PowerIcon className="h-5 w-5" />
+        <span className="ml-2">Sign Out</span>
+      </button>
+    </aside>
   );
 }
