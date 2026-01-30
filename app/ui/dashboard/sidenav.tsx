@@ -31,7 +31,7 @@ export default function SideNav() {
         </div>
       </Link>
 
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      <div className="flex grow flex-row justify-between md:flex-col ">
         <NavLinks />
 
         <button
