@@ -1,4 +1,4 @@
-import LargeFormatCalculator from "@/app/components/printingtools/LargeFormatCalculator";
+import LargeFormatCalculator from "@/app/components/LargeFormatCalculator";
 import { Suspense } from 'react';
 import { Metadata } from 'next';
  

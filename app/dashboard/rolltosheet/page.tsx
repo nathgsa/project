@@ -1,4 +1,4 @@
-import PaperCalculator from "@/app/components/rolltosheet/PaperCalculator";
+import PaperCalculator from "@/app/components/PaperCalculator";
 import { Suspense } from 'react';
 import { Metadata } from 'next';
  

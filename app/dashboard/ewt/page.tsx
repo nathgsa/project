@@ -1,4 +1,4 @@
-import EWTCalculator from "@/app/components/ewt/EWTCalculator"
+import EWTCalculator from "@/app/components/EWTCalculator"
 import { Suspense } from 'react';
 import { Metadata } from 'next';
  

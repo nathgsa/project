@@ -1,4 +1,4 @@
-import OutsCalculator from "@/app/components/outs/OutsCalculator";
+import OutsCalculator from "@/app/components/OutsCalculator";
 import { Suspense } from 'react';
 import { Metadata } from 'next';
  
