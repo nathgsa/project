@@ -15,11 +15,11 @@ export default function Page() {
       <div className="flex w-full max-w-2xl flex-col items-center gap-6 rounded-2xl bg-gray-50 px-8 py-12 text-center shadow-sm">
         <h1></h1>
 
-        <p className="text-lg font-semibold text-gray-900 md:text-3xl">
+        <p className="text-lg font-bold text-gray-700 md:text-xl">
           Welcome to
         </p>
 
-        <p className="text-2xl font-bold text-gray-700 md:text-xl">
+        <p className="text-2xl font-semibold text-gray-900 md:text-3xl">
           Optima Typographics Calculators
         </p>
 
