@@ -24,7 +24,7 @@ export default function LoginForm() {
 
         <Button onClick={handleGoogleSignIn} className="w-full">
           <AtSymbolIcon className="mr-2 h-5 w-5" />
-          Sign in with Google
+          Continue with Google
           <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
       </div>
