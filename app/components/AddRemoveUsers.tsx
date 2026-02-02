@@ -122,7 +122,7 @@ export default function AddRemoveUsers() {
                       className="rounded-md bg-red-500 px-3 py-1 text-xs font-semibold text-white
                                  hover:bg-red-600 disabled:opacity-50"
                     >
-                      Remove
+                      Disable
                     </button>
                   )}
                 </td>
