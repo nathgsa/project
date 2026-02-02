@@ -4,6 +4,7 @@ import Clock from '@/app/ui/dashboard/clock';
 import Calendar from '@/app/ui/dashboard/calendar';
 import Calculator from '@/app/ui/dashboard/calculator';
 import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 import DashboardGuard from '@/app/ui/dashboard/dashboard-guard';
 import { auth } from "@/app/lib/auth";
 import AddRemoveUsers from "@/app/components/AddRemoveUsers";
@@ -14,6 +15,11 @@ export const revalidate = 0;
 
 export default async function DashboardPage() {
   const session = await auth();
+
+if (session?.user?.role !== "admin") {
+  redirect("/dashboard"); // server-side redirect
+}
+
 
   return (
     <DashboardGuard>
