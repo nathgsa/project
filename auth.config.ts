@@ -10,22 +10,17 @@ export const authConfig: NextAuthConfig = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
-          prompt: "select_account", // ✅ forces account selection every login
-          access_type: "offline",    // optional: gets refresh token
+          prompt: "select_account",
+          access_type: "offline",
           response_type: "code",
         },
       },
     }),
   ],
-
-  session: {
-    strategy: "jwt",
-  },
-
+  session: { strategy: "jwt" },
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false;
-
       const email = user.email.toLowerCase();
 
       try {
@@ -33,17 +28,12 @@ export const authConfig: NextAuthConfig = {
           SELECT id FROM users WHERE email = ${email}
         `;
 
-        if (existing.length === 0) {
-          await sql`
-            INSERT INTO users (email, name, role)
-            VALUES (${email}, ${user.name ?? "No Name"}, 'member')
-          `;
-        }
+        if (existing.length === 0) return false; // ❌ block login
 
         return true;
       } catch (error) {
         console.error("❌ SIGN-IN DB ERROR:", error);
-        return false; // block login ONLY if DB truly fails
+        return false;
       }
     },
 
@@ -54,14 +44,15 @@ export const authConfig: NextAuthConfig = {
         const res = await sql<{ role: "admin" | "member" }[]>`
           SELECT role FROM users WHERE email = ${session.user.email}
         `;
-
         session.user.role = res[0]?.role ?? "member";
       } catch (error) {
         console.error("❌ SESSION ROLE ERROR:", error);
-        session.user.role = "member"; // safe fallback
+        session.user.role = "member";
       }
 
       return session;
     },
   },
+  pages: { error: "/login" },
 };
+
