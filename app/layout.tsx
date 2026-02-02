@@ -6,10 +6,10 @@ import { SessionProvider } from 'next-auth/react';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | myApp',
-    default: 'myApp',
+    template: '%s | OTCal',
+    default: 'OTCal',
   },
-  description: 'My APP Dashboard built with App Router.',
+  description: 'My OTCal built with App Router.',
   metadataBase: new URL('https://project-beta-nine-97.vercel.app'),
 };
 
