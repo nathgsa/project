@@ -36,14 +36,20 @@ export default function AddRemoveUsers() {
   };
 
   const removeUser = async (email: string) => {
-    setLoading(true);
-    await fetch("/api/admin/users", {
-      method: "DELETE",
-      body: JSON.stringify({ email }),
-    });
-    await loadUsers();
-    setLoading(false);
-  };
+  setLoading(true);
+  const res = await fetch("/api/admin/users", {
+    method: "DELETE",
+    body: JSON.stringify({ email }),
+  });
+
+  if (!res.ok) {
+    alert("Failed to remove user");
+  }
+
+  await loadUsers();
+  setLoading(false);
+};
+
 
   return (
     <div className="space-y-6">

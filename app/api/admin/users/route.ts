@@ -31,12 +31,27 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const session = await auth();
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  try {
+    const { email } = await req.json(); // ✅ parse JSON body
 
-  const { email } = await req.json();
-  await sql`DELETE FROM users WHERE email = ${email}`;
-  return NextResponse.json({ success: true });
+    if (!email) {
+      return new Response(JSON.stringify({ error: "Email required" }), {
+        status: 400,
+      });
+    }
+
+    // Delete from DB
+    await sql`
+      DELETE FROM users WHERE email = ${email} AND role != 'admin'
+    `;
+
+    return new Response(JSON.stringify({ message: "User removed" }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: "Failed to remove user" }), {
+      status: 500,
+    });
+  }
 }
