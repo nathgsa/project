@@ -1,33 +1,31 @@
-// app/api/admin/users/route.ts
 import { auth } from "@/app/lib/auth";
 import { sql } from "@/app/lib/db";
-import { NextResponse } from "next/server";
 
+// GET all users
 export async function GET() {
   const session = await auth();
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  if (!session || session.user.role !== "admin")
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
 
-  const users = await sql`
-    SELECT id, email, role FROM users ORDER BY created_at DESC
+  const users = await sql<{ id: string; email: string; role: string }[]>`
+    SELECT id, email, role FROM users ORDER BY email
   `;
-  return NextResponse.json(users);
+
+  return new Response(JSON.stringify(users));
 }
 
+// ADD user
 export async function POST(req: Request) {
   const session = await auth();
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  if (!session || session.user.role !== "admin")
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
 
   const { email } = await req.json();
   await sql`
-    INSERT INTO users (email, role)
-    VALUES (${email}, 'member')
-    ON CONFLICT (email) DO NOTHING
+    INSERT INTO users (email, name, role) VALUES (${email}, 'No Name', 'member')
   `;
-  return NextResponse.json({ success: true });
+
+  return new Response(JSON.stringify({ success: true }));
 }
 
 export async function DELETE(req: Request) {

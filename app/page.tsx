@@ -2,6 +2,7 @@ import AppLogo from '@/app/ui/app-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
+
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-white px-6">
