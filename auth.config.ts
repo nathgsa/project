@@ -10,33 +10,50 @@ export const authConfig: NextAuthConfig = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  session: { strategy: "jwt" },
+
+  session: {
+    strategy: "jwt",
+  },
+
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false;
 
       const email = user.email.toLowerCase();
 
-      const existing = await sql<{ id: string }[]>`
-        SELECT id FROM users WHERE email = ${email}
-      `;
-
-      if (!existing.length) {
-        await sql`
-          INSERT INTO users (email, name, role)
-          VALUES (${email}, ${user.name ?? "No Name"}, 'member')
+      try {
+        const existing = await sql<{ id: string }[]>`
+          SELECT id FROM users WHERE email = ${email}
         `;
+
+        if (existing.length === 0) {
+          await sql`
+            INSERT INTO users (email, name, role)
+            VALUES (${email}, ${user.name ?? "No Name"}, 'member')
+          `;
+        }
+
+        return true;
+      } catch (error) {
+        console.error("❌ SIGN-IN DB ERROR:", error);
+        return false; // block login ONLY if DB truly fails
       }
-      return true;
     },
 
     async session({ session }) {
-      if (session.user?.email) {
+      if (!session.user?.email) return session;
+
+      try {
         const res = await sql<{ role: "admin" | "member" }[]>`
           SELECT role FROM users WHERE email = ${session.user.email}
         `;
+
         session.user.role = res[0]?.role ?? "member";
+      } catch (error) {
+        console.error("❌ SESSION ROLE ERROR:", error);
+        session.user.role = "member"; // safe fallback
       }
+
       return session;
     },
   },
