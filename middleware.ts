@@ -2,15 +2,15 @@
 import { auth } from "@/app/lib/auth";
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
   const path = req.nextUrl.pathname;
+  const isLoggedIn = !!req.auth;
 
-  // Protect /dashboard
-  if (path.startsWith("/dashboard") && !isLoggedIn) {
+  // Redirect non-logged-in users trying to access dashboard/admin
+  if ((path.startsWith("/dashboard") || path.startsWith("/admin")) && !isLoggedIn) {
     return Response.redirect(new URL("/login", req.url));
   }
 
-  // Protect /admin
+  // Only allow admins to access /admin
   if (path.startsWith("/admin") && req.auth?.user?.role !== "admin") {
     return Response.redirect(new URL("/dashboard", req.url));
   }
@@ -22,5 +22,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/login"],
 };

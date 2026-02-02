@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import NavLinks from './nav-links';
-import AppLogo from '../app-logo';
-import { PowerIcon } from '@heroicons/react/24/outline';
-import { signOutAction } from '@/app/actions/auth-action';
+import Link from "next/link";
+import NavLinks from "./nav-links";
+import AppLogo from "../app-logo";
+import { PowerIcon } from "@heroicons/react/24/outline";
+import { signOutAction } from "@/app/actions/auth-action";
 
 export default function SideNav() {
   return (
@@ -13,19 +13,17 @@ export default function SideNav() {
         className="flex h-20 w-full md:h-40 items-center justify-center"
         href="/dashboard"
       >
-        {/* Container fills the parent div */}
         <div className="flex w-full h-full items-center justify-center">
           <AppLogo showText={false} size={250} />
         </div>
       </Link>
-
 
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
 
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block" />
 
-        {/* ✅ CSRF-SAFE SIGN OUT */}
+        {/* ✅ CSRF-safe sign out */}
         <form action={signOutAction}>
           <button
             type="submit"
