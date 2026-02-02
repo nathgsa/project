@@ -24,17 +24,21 @@ export const authConfig: NextAuthConfig = {
       const email = user.email.toLowerCase();
 
       try {
-        const existing = await sql<{ id: string }[]>`
-          SELECT id FROM users WHERE email = ${email}
-        `;
+    const existing = await sql<{ id: string }[]>`
+      SELECT id FROM users WHERE email = ${email}
+    `;
 
-        if (existing.length === 0) return false; // ❌ block login
+    if (existing.length === 0) {
+      // ❌ block login
+      // Pass a custom error code
+      return "/login?error=not_allowed";
+    }
 
-        return true;
-      } catch (error) {
-        console.error("❌ SIGN-IN DB ERROR:", error);
-        return false;
-      }
+    return true;
+  } catch (error) {
+    console.error("❌ SIGN-IN DB ERROR:", error);
+    return "/login?error=db_error";
+  }
     },
 
     async session({ session }) {
