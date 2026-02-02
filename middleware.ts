@@ -1,21 +1,28 @@
-// middleware.ts
-import { auth } from "@/app/lib/auth";
+import { auth } from '@/app/lib/auth';
+import { NextResponse } from 'next/server';
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const path = req.nextUrl.pathname;
+  const session = req.auth;
+  const { pathname } = req.nextUrl;
 
-  // Protect /dashboard
-  if (path.startsWith("/dashboard") && !isLoggedIn) {
-    return Response.redirect(new URL("/login", req.url));
+  if (pathname === '/login' && session) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
-  // Redirect logged-in users away from /login
-  if (path === "/login" && isLoggedIn) {
-    return Response.redirect(new URL("/dashboard", req.url));
+  if (pathname.startsWith('/dashboard') && !session) {
+    return NextResponse.redirect(new URL('/login', req.url));
   }
+
+  if (
+    pathname.startsWith('/dashboard/admin') &&
+    session?.user?.role !== 'admin'
+  ) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
+
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ['/dashboard/:path*', '/login'],
 };

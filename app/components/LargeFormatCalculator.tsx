@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
 import { useState, useEffect, useRef } from 'react';
 
+// Types
 interface Material {
   id: string;
   name: string;
@@ -12,10 +13,13 @@ interface Addon {
   id: string;
   name: string;
   rate: number;
+  type: 'perSquareFoot' | 'perPiece';
   quantity?: number;
 }
 
-interface SelectedAddon extends Addon {
+interface SelectedAddon {
+  id: string;
+  name: string;
   rate: number;
   quantity?: number;
 }
@@ -27,39 +31,6 @@ interface CalculationResults {
   breakdown1: string[];
   breakdown2: string[];
 }
-
-const CONFIG = {
-  materials: [
-    { id: 'vinyl-gloss', name: 'Vinyl Gloss', baseRate: 60.0 },
-    { id: 'vinyl-matte', name: 'Vinyl Matte', baseRate: 70.0 },
-    { id: 'clear-sticker', name: 'Clear Sticker', baseRate: 70.0 },
-    { id: 'avery-sticker', name: 'Avery Sticker', baseRate: 100.0 },
-    { id: '3m-reflectorize', name: '3M Reflectorize', baseRate: 200.0 },
-    { id: 'photo-paper-matte', name: 'Photo Paper Matte', baseRate: 70.0 },
-    { id: 'photo-paper-glossy', name: 'Photo Paper Glossy', baseRate: 60.0 },
-    { id: 'sintra-3mm', name: 'Sticker Sintra 3MM', baseRate: 130.0 },
-    { id: 'sintra-3mm-fb', name: 'Sticker Sintra 3MM - Front & Back', baseRate: 190.0 },
-    { id: 'sintra-5mm', name: 'Sticker Sintra 5MM', baseRate: 150.0 },
-    { id: 'sintra-5mm-fb', name: 'Sticker Sintra 5MM - Front & Back', baseRate: 210.0 },
-    { id: 'pvc-sticker', name: 'PVC on Sticker', baseRate: 220.0 },
-    { id: 'tarp-8oz', name: 'Tarp (8oz.)', baseRate: 10.0 },
-    { id: 'tarp-10oz', name: 'Tarp (10oz.)', baseRate: 15.0 },
-    { id: 'tarp-black-15oz', name: 'Tarp Black 15oz.', baseRate: 25.0 },
-    { id: 'panaflex', name: 'Panaflex', baseRate: 80.0 },
-  ],
-  addons: {
-    perSquareFoot: [
-      { id: 'plotter-cut', name: 'Plotter Cut', rate: 15 },
-      { id: 'lamination-one-side', name: 'Lamination - One Side', rate: 40 },
-      { id: 'lamination-two-side', name: 'Lamination - Two Side', rate: 80 },
-      { id: 'installation-tape', name: 'Installation Tape', rate: 15 },
-    ],
-    perPiece: [
-      { id: 'eyelet', name: 'Eyelet', rate: 1 },
-      { id: 'miscellaneous', name: 'Miscellaneous', rate: 0 },
-    ],
-  },
-};
 
 class Calculator {
   length = 0;
@@ -94,11 +65,9 @@ class Calculator {
     this.width = (parseFloat(String(width)) || 0) * conversionFactor;
   }
 
-  setMaterial(materialId: string) {
-    this.selectedMaterial = CONFIG.materials.find((m) => m.id === materialId) || null;
-    if (this.selectedMaterial) {
-      this.rate1 = this.selectedMaterial.baseRate;
-    }
+  setMaterial(material: Material) {
+    this.selectedMaterial = material;
+    this.rate1 = material.baseRate;
   }
 
   setRate1(rate: number) {
@@ -109,35 +78,27 @@ class Calculator {
     this.rate2 = parseFloat(String(rate)) || 0;
   }
 
-  toggleAddon(type: 'perSquareFoot' | 'perPiece', addonId: string, isSelected: boolean, customRate: number | null = null) {
-    const addonList = CONFIG.addons[type];
-    const addon = addonList.find((a) => a.id === addonId);
-    if (!addon) return;
-
+  toggleAddon(type: 'perSquareFoot' | 'perPiece', addon: Addon, isSelected: boolean) {
     if (isSelected) {
-      this.selectedAddons[type].set(addonId, {
-        ...addon,
-        rate: customRate !== null ? parseFloat(String(customRate)) : addon.rate,
-        quantity: type === 'perPiece' ? 1 : undefined,
-      });
+      this.selectedAddons[type].set(addon.id, { ...addon, quantity: type === 'perPiece' ? 1 : undefined });
     } else {
-      this.selectedAddons[type].delete(addonId);
+      this.selectedAddons[type].delete(addon.id);
     }
   }
 
-  updateAddonRate(type: 'perSquareFoot' | 'perPiece', addonId: string, rate: number) {
-    if (this.selectedAddons[type].has(addonId)) {
-      const addon = this.selectedAddons[type].get(addonId)!;
-      addon.rate = parseFloat(String(rate)) || 0;
-      this.selectedAddons[type].set(addonId, addon);
+  updateAddonRate(type: 'perSquareFoot' | 'perPiece', id: string, rate: number) {
+    if (this.selectedAddons[type].has(id)) {
+      const addon = this.selectedAddons[type].get(id)!;
+      addon.rate = rate;
+      this.selectedAddons[type].set(id, addon);
     }
   }
 
-  updateAddonQuantity(type: 'perSquareFoot' | 'perPiece', addonId: string, quantity: number) {
-    if (type === 'perPiece' && this.selectedAddons[type].has(addonId)) {
-      const addon = this.selectedAddons[type].get(addonId)!;
-      addon.quantity = Math.max(1, parseInt(String(quantity)) || 1);
-      this.selectedAddons[type].set(addonId, addon);
+  updateAddonQuantity(id: string, quantity: number) {
+    if (this.selectedAddons.perPiece.has(id)) {
+      const addon = this.selectedAddons.perPiece.get(id)!;
+      addon.quantity = Math.max(1, quantity);
+      this.selectedAddons.perPiece.set(id, addon);
     }
   }
 
@@ -157,7 +118,7 @@ class Calculator {
   }
 
   getBreakdown(baseRate: number, totalSqFt: number) {
-    const breakdown = [];
+    const breakdown: string[] = [];
     breakdown.push(
       `Base: ${this.formatDimension(totalSqFt)} × PHP ${this.formatNumber(baseRate)} = PHP ${this.formatNumber(totalSqFt * baseRate)}`
     );
@@ -200,15 +161,15 @@ class Calculator {
 
     return {
       totalSquareFeet: totalSqFt,
-      total1: total1,
-      total2: total2,
+      total1,
+      total2,
       breakdown1: this.getBreakdown(this.rate1, totalSqFt),
       breakdown2: this.rate2 ? this.getBreakdown(this.rate2, totalSqFt) : [],
     };
   }
 }
 
-function LargeFormatCalculator() {
+export default function LargeFormatCalculator() {
   const [calculator] = useState(() => new Calculator());
   const [length, setLength] = useState('');
   const [width, setWidth] = useState('');
@@ -217,9 +178,14 @@ function LargeFormatCalculator() {
   const [showMaterialDropdown, setShowMaterialDropdown] = useState(false);
   const [rate1, setRate1] = useState('');
   const [rate2, setRate2] = useState('');
-  const [selectedAddons, setSelectedAddons] = useState<
-    Map<string, { type: 'perSquareFoot' | 'perPiece'; addon: SelectedAddon }>
-  >(new Map());
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [addons, setAddons] = useState<{ perSquareFoot: Addon[]; perPiece: Addon[] }>({
+    perSquareFoot: [],
+    perPiece: [],
+  });
+  const [selectedAddons, setSelectedAddons] = useState<Map<string, { type: 'perSquareFoot' | 'perPiece'; addon: SelectedAddon }>>(
+    new Map()
+  );
   const [results, setResults] = useState<CalculationResults>({
     totalSquareFeet: 0,
     total1: 0,
@@ -229,6 +195,24 @@ function LargeFormatCalculator() {
   });
 
   const materialDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Fetch materials & addons from DB on load
+  useEffect(() => {
+    fetch('/api/admin/materials')
+      .then((res) => res.json())
+      .then((data) => setMaterials(data))
+      .catch(console.error);
+
+    fetch('/api/admin/addons')
+      .then((res) => res.json())
+      .then((data) =>
+        setAddons({
+          perSquareFoot: data.filter((a: Addon) => a.type === 'perSquareFoot'),
+          perPiece: data.filter((a: Addon) => a.type === 'perPiece'),
+        })
+      )
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -240,11 +224,9 @@ function LargeFormatCalculator() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const updateCalculations = () => {
-    const newResults = calculator.calculate();
-    setResults(newResults);
-  };
+  const updateCalculations = () => setResults(calculator.calculate());
 
+  // Unit, dimensions, rate effects
   useEffect(() => {
     calculator.setUnit(unit);
     updateCalculations();
@@ -265,33 +247,26 @@ function LargeFormatCalculator() {
     updateCalculations();
   }, [rate2]);
 
+  // Material selection
   const handleMaterialSelect = (material: Material) => {
-    calculator.setMaterial(material.id);
-    setMaterialSearch(`${material.name} - PHP ${formatNumber(material.baseRate)}`);
+    calculator.setMaterial(material);
+    setMaterialSearch(`${material.name} - PHP ${calculator.formatNumber(material.baseRate)}`);
     setRate1(String(material.baseRate));
     setShowMaterialDropdown(false);
     updateCalculations();
   };
 
-  const handleAddonSelect = (value: string) => {
-    if (!value) return;
-    const [type, id] = value.split(':') as ['perSquareFoot' | 'perPiece', string];
-    const addonList = CONFIG.addons[type];
-    const addon = addonList.find((a) => a.id === id);
-    if (!addon) return;
-
-    calculator.toggleAddon(type, id, true);
+  // Addon selection
+  const handleAddonSelect = (type: 'perSquareFoot' | 'perPiece', addon: Addon) => {
+    calculator.toggleAddon(type, addon, true);
     const newMap = new Map(selectedAddons);
-    newMap.set(`${type}:${id}`, {
-      type,
-      addon: { ...addon, quantity: type === 'perPiece' ? 1 : undefined },
-    });
+    newMap.set(`${type}:${addon.id}`, { type, addon });
     setSelectedAddons(newMap);
     updateCalculations();
   };
 
   const handleRemoveAddon = (type: 'perSquareFoot' | 'perPiece', id: string) => {
-    calculator.toggleAddon(type, id, false);
+    calculator.toggleAddon(type, { id, name: '', rate: 0, type }, false);
     const newMap = new Map(selectedAddons);
     newMap.delete(`${type}:${id}`);
     setSelectedAddons(newMap);
@@ -312,15 +287,15 @@ function LargeFormatCalculator() {
   };
 
   const handleAddonQuantityChange = (type: 'perSquareFoot' | 'perPiece', id: string, quantity: string) => {
-    calculator.updateAddonQuantity(type, id, parseInt(quantity) || 1);
+    calculator.updateAddonQuantity(id, parseInt(quantity) || 1);
     const newMap = new Map(selectedAddons);
-    const key = `${type}:${id}`;
-    const existing = newMap.get(key);
-    if (existing) {
-      existing.addon.quantity = Math.max(1, parseInt(quantity) || 1);
-      newMap.set(key, existing);
-      setSelectedAddons(newMap);
-    }
+    selectedAddons.forEach((value, key) => {
+      if (value.addon.id === id) {
+        value.addon.quantity = Math.max(1, parseInt(quantity) || 1);
+        newMap.set(key, value);
+      }
+    });
+    setSelectedAddons(newMap);
     updateCalculations();
   };
 
@@ -331,7 +306,7 @@ function LargeFormatCalculator() {
     }).format(number);
   };
 
-  const filteredMaterials = CONFIG.materials.filter((material) =>
+  const filteredMaterials = materials.filter((material) =>
     `${material.name} - PHP ${formatNumber(material.baseRate)}`.toLowerCase().includes(materialSearch.toLowerCase())
   );
 
@@ -451,7 +426,14 @@ function LargeFormatCalculator() {
               <h3 className="text-lg font-medium text-gray-800 mb-4">Add-ons</h3>
               <select
                 onChange={(e) => {
-                  handleAddonSelect(e.target.value);
+                  const value = e.target.value;
+                  if (value) {
+                    const [type, id] = value.split(':') as ['perSquareFoot' | 'perPiece', string];
+                    const addon = (type === 'perSquareFoot' ? addons.perSquareFoot : addons.perPiece).find((a) => a.id === id);
+                    if (addon) {
+                      handleAddonSelect(type, addon);
+                    }
+                  }
                   e.target.value = '';
                 }}
                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 mb-4"
@@ -459,14 +441,14 @@ function LargeFormatCalculator() {
               >
                 <option value="">Select Add-on</option>
                 <optgroup label="Per Square Foot Add-ons">
-                  {CONFIG.addons.perSquareFoot.map((addon) => (
+                  {addons.perSquareFoot.map((addon) => (
                     <option key={addon.id} value={`perSquareFoot:${addon.id}`}>
                       {addon.name} (PHP {formatNumber(addon.rate)} per sq ft)
                     </option>
                   ))}
                 </optgroup>
                 <optgroup label="Per Piece Add-ons">
-                  {CONFIG.addons.perPiece.map((addon) => (
+                  {addons.perPiece.map((addon) => (
                     <option key={addon.id} value={`perPiece:${addon.id}`}>
                       {addon.name} (PHP {formatNumber(addon.rate)} per piece)
                     </option>
@@ -571,5 +553,3 @@ function LargeFormatCalculator() {
     </div>
   );
 }
-
-export default LargeFormatCalculator;
