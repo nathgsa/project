@@ -3,19 +3,21 @@ import { auth } from "@/app/lib/auth";
 
 export default auth((req) => {
   const path = req.nextUrl.pathname;
+
+  // is there a valid JWT session?
   const isLoggedIn = !!req.auth;
 
-  // Redirect non-logged-in users trying to access dashboard/admin
+  // protect dashboard/admin
   if ((path.startsWith("/dashboard") || path.startsWith("/admin")) && !isLoggedIn) {
     return Response.redirect(new URL("/login", req.url));
   }
 
-  // Only allow admins to access /admin
+  // protect admin routes
   if (path.startsWith("/admin") && req.auth?.user?.role !== "admin") {
     return Response.redirect(new URL("/dashboard", req.url));
   }
 
-  // Redirect logged-in users away from /login
+  // redirect logged-in users away from login
   if (path === "/login" && isLoggedIn) {
     return Response.redirect(new URL("/dashboard", req.url));
   }
