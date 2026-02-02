@@ -16,9 +16,9 @@ export const revalidate = 0;
 export default async function DashboardPage() {
   const session = await auth();
 
-if (session?.user?.role !== "admin") {
-  redirect("/dashboard"); // server-side redirect
-}
+  if (!session || session.user.role !== "admin") {
+    redirect("/dashboard");
+  }
 
 
   return (
