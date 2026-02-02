@@ -1,55 +1,77 @@
-import { auth } from "@/app/lib/auth";
+// app/api/admin/users/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/app/lib/db";
 
-// GET all users
+// GET: return all users
 export async function GET() {
-  const session = await auth();
-  if (!session || session.user.role !== "admin")
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-
-  const users = await sql<{ id: string; email: string; role: string }[]>`
-    SELECT id, email, role FROM users ORDER BY email
-  `;
-
-  return new Response(JSON.stringify(users));
-}
-
-// ADD user
-export async function POST(req: Request) {
-  const session = await auth();
-  if (!session || session.user.role !== "admin")
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-
-  const { email } = await req.json();
-  await sql`
-    INSERT INTO users (email, name, role) VALUES (${email}, 'No Name', 'member')
-  `;
-
-  return new Response(JSON.stringify({ success: true }));
-}
-
-export async function DELETE(req: Request) {
   try {
-    const { email } = await req.json(); // ✅ parse JSON body
+    const users = await sql<{ id: string; email: string; role: "admin" | "member" }[]>`
+      SELECT id, email, role FROM users ORDER BY created_at DESC
+    `;
+    return NextResponse.json(users);
+  } catch (error) {
+    console.error("❌ GET USERS ERROR:", error);
+    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+  }
+}
 
+// POST: add new user
+export async function POST(req: NextRequest) {
+  try {
+    const { email } = await req.json();
     if (!email) {
-      return new Response(JSON.stringify({ error: "Email required" }), {
-        status: 400,
-      });
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // Delete from DB
-    await sql`
-      DELETE FROM users WHERE email = ${email} AND role != 'admin'
+    const existing = await sql<{ id: string }[]>`
+      SELECT id FROM users WHERE email = ${email.toLowerCase()}
     `;
 
-    return new Response(JSON.stringify({ message: "User removed" }), {
-      status: 200,
-    });
+    if (existing.length > 0) {
+      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    }
+
+    const newUser = await sql<{ id: string }[]>`
+      INSERT INTO users (email, name, role)
+      VALUES (${email.toLowerCase()}, ${email.split("@")[0]}, 'member')
+      RETURNING id
+    `;
+
+    return NextResponse.json({ id: newUser[0].id, email, role: "member" });
   } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ error: "Failed to remove user" }), {
-      status: 500,
-    });
+    console.error("❌ ADD USER ERROR:", error);
+    return NextResponse.json({ error: "Failed to add user" }, { status: 500 });
+  }
+}
+
+// DELETE: remove user
+export async function DELETE(req: NextRequest) {
+  try {
+    const { email } = await req.json();
+    if (!email) {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    }
+
+    // Admins cannot delete other admins
+    const targetUser = await sql<{ role: "admin" | "member" }[]>`
+      SELECT role FROM users WHERE email = ${email.toLowerCase()}
+    `;
+
+    if (!targetUser.length) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (targetUser[0].role === "admin") {
+      return NextResponse.json({ error: "Cannot remove admin users" }, { status: 403 });
+    }
+
+    await sql`
+      DELETE FROM users WHERE email = ${email.toLowerCase()}
+    `;
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("❌ DELETE USER ERROR:", error);
+    return NextResponse.json({ error: "Failed to remove user" }, { status: 500 });
   }
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import NavLinks from "./nav-links";
@@ -9,23 +9,13 @@ import { signOut } from "next-auth/react";
 export default function SideNav() {
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2 bg-sky-200">
-      <br />
-      <Link
-        className="flex h-20 w-full md:h-40 items-center justify-center"
-        href="/dashboard"
-      >
-        <div className="flex w-full h-full items-center justify-center">
-          <AppLogo showText={false} size={250} />
-        </div>
+      <Link href="/dashboard" className="flex h-20 w-full md:h-40 items-center justify-center mb-4">
+        <AppLogo showText={false} size={250} />
       </Link>
-      <br />
 
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      <div className="flex grow flex-col justify-between space-y-2">
         <NavLinks />
 
-        <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block" />
-
-        {/* ✅ Sign Out using next-auth */}
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/login" })}
