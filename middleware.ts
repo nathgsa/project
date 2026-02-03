@@ -11,17 +11,17 @@ export async function middleware(req: any) {
   const path = req.nextUrl.pathname;
   const isLoggedIn = !!token;
 
-  // Protect /dashboard and /admin routes
+  // Protect /dashboard and /admin
   if ((path.startsWith("/dashboard") || path.startsWith("/admin")) && !isLoggedIn) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Prevent logged-in users from accessing /login
+  // Redirect logged-in users away from /login
   if (path === "/login" && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  return NextResponse.next(); // let everything else pass
+  return NextResponse.next();
 }
 
 export const config = {
