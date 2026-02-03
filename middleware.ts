@@ -1,36 +1,20 @@
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+// middleware.ts
+import { auth } from "@/app/lib/auth";
 
-export async function middleware(req: any) {
+export default auth((req) => {
   const path = req.nextUrl.pathname;
+  const isLoggedIn = !!req.auth;
 
-  // ❌ Ignore NextAuth routes and static files
-  if (
-    path.startsWith("/api/auth") ||
-    path.startsWith("/_next") ||
-    path.includes(".svg") ||
-    path.includes(".png") ||
-    path.includes(".jpg") ||
-    path.includes(".ico")
-  ) {
-    return NextResponse.next();
-  }
-
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const isLoggedIn = !!token;
-
-  // Protect dashboard/admin pages
   if ((path.startsWith("/dashboard") || path.startsWith("/admin")) && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return Response.redirect(new URL("/login", req.url));
   }
 
-  // Redirect logged-in users away from login page
   if (path === "/login" && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return Response.redirect(new URL("/dashboard", req.url));
   }
 
-  return NextResponse.next();
-}
+  return; // let everything else pass
+});
 
 export const config = {
   matcher: ["/dashboard/:path*", "/admin/:path*", "/login"],
