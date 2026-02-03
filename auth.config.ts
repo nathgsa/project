@@ -11,8 +11,8 @@ export const authConfig: NextAuthConfig = {
       authorization: {
         params: {
           prompt: "select_account",
-          access_type: "offline",
-          response_type: "code",
+          // access_type: "offline",
+          // response_type: "code",
         },
       },
     }),
