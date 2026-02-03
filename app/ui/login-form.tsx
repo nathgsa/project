@@ -35,7 +35,7 @@ export default function LoginForm() {
         {/* Use Next.js Image for SVG */}
         <Image src={GoogleIcon} alt="Google" width={20} height={20} />
         Continue with Google
-        <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+        <ArrowRightIcon className="ml-auto h-5 w-5 text-black" />
       </Button>
     </div>
   );
