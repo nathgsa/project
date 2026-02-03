@@ -8,15 +8,18 @@ import GoogleIcon from '@/public/google.svg'; // SVG file in /public
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 
 export default function LoginForm() {
-
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
   const handleGoogleSignIn = async () => {
-    await signIn("google", {
-      callbackUrl: "/dashboard",
-      prompt: "select_account",
-    });
+    try {
+      await signIn("google", {
+        callbackUrl: "/dashboard",
+        prompt: "select_account", // forces account selection
+      });
+    } catch (err) {
+      console.error("Sign-in error:", err);
+    }
   };
 
   return (
@@ -24,10 +27,8 @@ export default function LoginForm() {
       {error && (
         <p className="text-sm text-red-600 text-center">
           {error === "AccessDenied"
-            ? "Your Google account is not authorized to access this app."
-            : error === "db_error"
-            ? "Database error. Please try again."
-            : "Login error. Please try again."}
+            ? "Your Google account is not authorized."
+            : "Login failed. Please try again."}
         </p>
       )}
 
@@ -37,6 +38,6 @@ export default function LoginForm() {
         Continue with Google
         <ArrowRightIcon className="ml-auto h-5 w-5 text-black" />
       </Button>
-    // </div>
+    </div>
   );
 }
