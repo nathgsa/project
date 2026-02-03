@@ -4,7 +4,7 @@
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Button } from '@/app/ui/button';
-import { AtSymbolIcon } from '@heroicons/react/24/outline';
+import GoogleIcon from "@/public/google.svg";
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 
 export default function LoginForm() {
@@ -27,7 +27,7 @@ export default function LoginForm() {
       )}
 
       <Button onClick={handleGoogleSignIn} className="w-full">
-        <AtSymbolIcon className="mr-2 h-5 w-5" />
+        <GoogleIcon className="mr-2 h-5 w-5" />
         Continue with Google
         <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
       </Button>

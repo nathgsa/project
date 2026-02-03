@@ -1,7 +1,7 @@
 // app/ui/google-logo.tsx
 import { SVGProps } from 'react';
 
-export default function GoogleLogo(props: SVGProps<SVGSVGElement>) {
+export default function Google(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
