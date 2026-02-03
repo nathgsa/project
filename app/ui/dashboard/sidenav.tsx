@@ -18,9 +18,9 @@ export default function SideNav() {
       </Link>
 
       {/* Main nav container */}
-      <div className="flex grow flex-col justify-between space-y-2">
+      <div className="flex grow flex-col justify-between">
         
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-2">
           <NavLinks />
         </div>
 
