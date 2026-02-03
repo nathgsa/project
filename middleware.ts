@@ -6,12 +6,12 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const sessionToken =
-    req.cookies.get("__Secure-next-auth.session-token")?.value ||
-    req.cookies.get("next-auth.session-token")?.value;
+    req.cookies.get("__Secure-authjs.session-token")?.value ||
+    req.cookies.get("authjs.session-token")?.value;
 
   const isLoggedIn = Boolean(sessionToken);
 
-  // Block unauthenticated users
+  // Protect private routes
   if (
     (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) &&
     !isLoggedIn
@@ -19,14 +19,9 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Block authenticated users from login
-  if (pathname === "/login" && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/admin/:path*"], // ❌ REMOVE /login
 };

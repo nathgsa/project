@@ -24,21 +24,21 @@ export const authConfig: NextAuthConfig = {
 
   callbacks: {
     async signIn({ user }) {
-      if (!user.email) return false;
+  if (!user.email) return false;
 
-      const email = user.email.toLowerCase();
+  const email = user.email.toLowerCase();
 
-      const existing = await sql<{ id: string }[]>`
-        SELECT id FROM users WHERE email = ${email}
-      `;
+  const existing = await sql<{ id: string }[]>`
+    SELECT id FROM users WHERE email = ${email}
+  `;
 
-      // ❌ not in whitelist → error page (NO LOOP)
-      if (existing.length === 0) {
-        throw new Error("AccessDenied");
-      }
+  // ❌ not in whitelist
+  if (existing.length === 0) {
+    return false; // DO NOT throw
+  }
 
-      return true;
-    },
+  return true;
+},
 
     async session({ session }) {
       if (!session.user?.email) return session;
