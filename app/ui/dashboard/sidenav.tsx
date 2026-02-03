@@ -1,4 +1,3 @@
-// app/ui/dashboard/sidenav.tsx
 "use client";
 
 import Link from "next/link";
@@ -10,21 +9,13 @@ import { signOut } from "next-auth/react";
 export default function SideNav() {
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2 bg-sky-200">
-      <Link
-        href="/dashboard"
-        className="flex h-20 w-full md:h-40 items-center justify-center mb-4"
-      >
+      <Link href="/dashboard" className="flex h-20 w-full md:h-40 items-center justify-center mb-4">
         <AppLogo showText={false} size={250} />
       </Link>
 
-      {/* Main nav container */}
-      <div className="flex grow flex-col justify-between">
-        {/* Nav links — NO spacing */}
-        <div className="flex flex-col">
-          <NavLinks />
-        </div>
+      <div className="flex grow flex-col justify-between space-y-2">
+        <NavLinks />
 
-        {/* Sign out stays bottom */}
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/login" })}
