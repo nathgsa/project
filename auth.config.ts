@@ -17,28 +17,31 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
+
   session: { strategy: "jwt" },
+
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false;
+
       const email = user.email.toLowerCase();
 
       try {
-    const existing = await sql<{ id: string }[]>`
-      SELECT id FROM users WHERE email = ${email}
-    `;
+        const existing = await sql<{ id: string }[]>`
+          SELECT id FROM users WHERE email = ${email}
+        `;
 
-    if (existing.length === 0) {
-      // ❌ block login
-      // Pass a custom error code
-      return "/login?error=not_allowed";
-    }
+        // ❌ If not in DB, block login
+        if (existing.length === 0) {
+          // Returning false triggers `pages.error` redirect
+          return false;
+        }
 
-    return true;
-  } catch (error) {
-    console.error("❌ SIGN-IN DB ERROR:", error);
-    return "/login?error=db_error";
-  }
+        return true;
+      } catch (error) {
+        console.error("❌ SIGN-IN DB ERROR:", error);
+        return false;
+      }
     },
 
     async session({ session }) {
@@ -57,6 +60,9 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
-  pages: { error: "/login" },
-};
 
+  pages: {
+    signIn: "/login", // login page
+    error: "/login?error=AccessDenied", // error redirect for whitelist fail
+  },
+};
