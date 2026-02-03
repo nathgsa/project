@@ -1,21 +1,27 @@
 // middleware.ts
-import { auth } from "@/app/lib/auth";
+import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default auth((req) => {
+export async function middleware(req: any) {
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
   const path = req.nextUrl.pathname;
-  const isLoggedIn = !!req.auth;
+  const isLoggedIn = !!token;
 
-  if ((path.startsWith("/dashboard") || path.startsWith("/admin")) && !isLoggedIn) {
-    return Response.redirect(new URL("/login", req.url));
+  if (path.startsWith("/dashboard") && !isLoggedIn) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   if (path === "/login" && isLoggedIn) {
-    return Response.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  return; // let everything else pass
-});
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/login"],
 };

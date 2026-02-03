@@ -20,7 +20,7 @@ export default function AddRemoveUsers() {
   const addUser = async () => {
     if (!email) return;
     setLoading(true);
-    await fetch("/api/admin/users", { method: "POST", body: JSON.stringify({ email }) });
+    await fetch("/api/admin/users", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
     setEmail("");
     await loadUsers();
     setLoading(false);
@@ -28,7 +28,7 @@ export default function AddRemoveUsers() {
 
   const removeUser = async (email: string) => {
     setLoading(true);
-    await fetch("/api/admin/users", { method: "DELETE", body: JSON.stringify({ email }) });
+    await fetch("/api/admin/users", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
     await loadUsers();
     setLoading(false);
   };

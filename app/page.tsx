@@ -21,7 +21,7 @@ export default function Page() {
         </p>
 
         <p className="text-2xl font-semibold text-gray-900 md:text-3xl">
-          Optima Typographics Calculators
+          OT Calculators
         </p>
 
         <p className="max-w-md text-sm text-gray-600 md:text-base">
