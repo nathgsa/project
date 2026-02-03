@@ -11,15 +11,11 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signIn("google", {
-        callbackUrl: "/dashboard",
-        prompt: "select_account",
-      });
-    } catch (err) {
-      console.error("Sign-in error:", err);
-    }
+  const handleGoogleSignIn = () => {
+    // ⚠️ signIn always redirects — no await, no try/catch
+    signIn("google", {
+      callbackUrl: "/dashboard",
+    });
   };
 
   return (
@@ -33,6 +29,7 @@ export default function LoginForm() {
       )}
 
       <Button
+        type="button"
         onClick={handleGoogleSignIn}
         className="w-full flex items-center justify-center gap-2"
       >

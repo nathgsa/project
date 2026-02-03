@@ -1,4 +1,4 @@
-// app/lib/auth.config.ts
+// auth.config.ts
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
 import { sql } from "@/app/lib/db";
@@ -28,42 +28,36 @@ export const authConfig: NextAuthConfig = {
 
       const email = user.email.toLowerCase();
 
-      try {
-        const existing = await sql<{ id: string }[]>`
-          SELECT id FROM users WHERE email = ${email}
-        `;
+      const existing = await sql<{ id: string }[]>`
+        SELECT id FROM users WHERE email = ${email}
+      `;
 
-        // ❌ Only allow emails in DB
-        if (existing.length === 0) {
-          return false; // Redirect to error page
-        }
-
-        return true;
-      } catch (error) {
-        console.error("SIGN-IN DB ERROR:", error);
-        return false;
+      // ❌ not in whitelist → error page (NO LOOP)
+      if (existing.length === 0) {
+        throw new Error("AccessDenied");
       }
+
+      return true;
     },
 
     async session({ session }) {
       if (!session.user?.email) return session;
 
-      try {
-        const res = await sql<{ role: "admin" | "member" }[]>`
-          SELECT role FROM users WHERE email = ${session.user.email}
-        `;
-        session.user.role = res[0]?.role ?? "member";
-      } catch (error) {
-        console.error("SESSION ROLE ERROR:", error);
-        session.user.role = "member";
-      }
+      const res = await sql<{ role: "admin" | "member" }[]>`
+        SELECT role FROM users WHERE email = ${session.user.email}
+      `;
 
+      session.user.role = res[0]?.role ?? "member";
       return session;
+    },
+
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/dashboard`; // ✅ NEVER /login
     },
   },
 
   pages: {
-    signIn: "/login", // login page
-    error: "/login?error=AccessDenied", // whitelist fail
+    signIn: "/login",
+    error: "/login?error=AccessDenied",
   },
 };
