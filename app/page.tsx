@@ -1,24 +1,21 @@
-import { auth } from '@/app/lib/auth';
-import { redirect } from 'next/navigation';
 import AppLogo from '@/app/ui/app-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-export default async function Page() {
-  const session = await auth();
 
-  // If already logged in, go straight to dashboard
-  if (session) {
-    redirect('/dashboard');
-  }
-
+export default function Page() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-white px-6">
+      
+      {/* LOGO */}
       <div className="mb-10 flex items-center justify-center">
         <AppLogo showText={false} size={350} />
       </div>
 
+      {/* CONTENT */}
       <div className="flex w-full max-w-2xl flex-col items-center gap-6 rounded-2xl bg-gray-50 px-8 py-12 text-center shadow-sm">
+        <h1></h1>
+
         <p className="text-lg font-bold text-gray-700 md:text-xl">
           Welcome to
         </p>
