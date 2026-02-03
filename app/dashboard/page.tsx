@@ -32,18 +32,21 @@ export default function DashboardPage() {
 
         {/* Admin Panel */}
         {session?.user?.role === "admin" && (
-          <div className="bg-gray-50 rounded-xl p-4 my-4 shadow-sm">
+          <div className="bg-gray-100 p-4 my-4 rounded shadow-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b">
               <div>
                 <h2 className="text-lg font-semibold text-gray-800">
                   Admin Panel
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Add members
+                  Manage members and access permissions
                 </p>
-                <span className="px-3 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">
+              </div>
+
+              <span className="px-3 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">
                 Admin Only
               </span>
-              </div>
+            </div>
             <AddRemoveUsers />
           </div>
         )}
