@@ -24,40 +24,50 @@ export const authConfig: NextAuthConfig = {
 
   callbacks: {
     async signIn({ user }) {
-  if (!user.email) return false;
+      if (!user.email) {
+        // Google returned no email
+        return "/login?error=NoEmail";
+      }
 
-  const email = user.email.toLowerCase();
+      const email = user.email.toLowerCase();
 
-  const existing = await sql<{ id: string }[]>`
-    SELECT id FROM users WHERE email = ${email}
-  `;
+      const existing = await sql<{ id: string }[]>`
+        SELECT id FROM users WHERE email = ${email}
+      `;
 
-  // ❌ not in whitelist
-  if (existing.length === 0) {
-    return false; // DO NOT throw
-  }
+      // Email not in your DB → redirect with custom error
+      if (existing.length === 0) {
+        return "/login?error=NotRegistered";
+      }
 
-  return true;
-},
+      // Email is whitelisted → allow login
+      return true;
+    },
 
     async session({ session }) {
       if (!session.user?.email) return session;
 
-      const res = await sql<{ role: "admin" | "member" }[]>`
-        SELECT role FROM users WHERE email = ${session.user.email}
-      `;
+      try {
+        const res = await sql<{ role: "admin" | "member" }[]>`
+          SELECT role FROM users WHERE email = ${session.user.email}
+        `;
+        session.user.role = res[0]?.role ?? "member";
+      } catch (error) {
+        console.error("SESSION ROLE ERROR:", error);
+        session.user.role = "member";
+      }
 
-      session.user.role = res[0]?.role ?? "member";
       return session;
     },
 
     async redirect({ baseUrl }) {
-      return `${baseUrl}/dashboard`; // ✅ NEVER /login
+      // Always redirect to dashboard after login
+      return `${baseUrl}/dashboard`;
     },
   },
 
   pages: {
     signIn: "/login",
-    error: "/login?error=AccessDenied",
+    error: "/login", // we handle custom error via query param
   },
 };
