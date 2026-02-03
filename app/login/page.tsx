@@ -13,7 +13,7 @@ export default function LoginPage() {
         <div className="flex items-center justify-center">
           <AppLogo showText={false} size={250} />
         </div>
-<br><br><br><br><br><br><br><br>
+
         {/* Login form */}
         <Suspense>
           <LoginForm />
