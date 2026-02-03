@@ -40,6 +40,9 @@ export default function DashboardPage() {
                 <p className="text-sm text-gray-500">
                   Add members
                 </p>
+                <span className="px-3 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">
+                Admin Only
+              </span>
               </div>
             <AddRemoveUsers />
           </div>
