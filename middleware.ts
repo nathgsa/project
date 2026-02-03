@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Auth.js v5 cookie names
   const sessionToken =
     req.cookies.get("__Secure-authjs.session-token")?.value ||
     req.cookies.get("authjs.session-token")?.value;
@@ -23,5 +24,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*"], // ❌ REMOVE /login
+  matcher: ["/dashboard/:path*", "/admin/:path*"], // no /login
 };
