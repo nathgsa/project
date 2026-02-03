@@ -1,4 +1,4 @@
-// app/lib/auth.config.ts
+// auth.config.ts
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
 import { sql } from "@/app/lib/db";
@@ -17,28 +17,30 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
+
   session: { strategy: "jwt" },
+
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false;
+
       const email = user.email.toLowerCase();
 
       try {
-    const existing = await sql<{ id: string }[]>`
-      SELECT id FROM users WHERE email = ${email}
-    `;
+        const existing = await sql<{ id: string }[]>`
+          SELECT id FROM users WHERE email = ${email}
+        `;
 
-    if (existing.length === 0) {
-      // ❌ block login
-      // Pass a custom error code
-      return "/login?error=not_allowed";
-    }
+        // ❌ block non-whitelisted users
+        if (existing.length === 0) {
+          return false;
+        }
 
-    return true;
-  } catch (error) {
-    console.error("❌ SIGN-IN DB ERROR:", error);
-    return "/login?error=db_error";
-  }
+        return true;
+      } catch (error) {
+        console.error("❌ SIGN-IN ERROR:", error);
+        return false;
+      }
     },
 
     async session({ session }) {
@@ -48,6 +50,7 @@ export const authConfig: NextAuthConfig = {
         const res = await sql<{ role: "admin" | "member" }[]>`
           SELECT role FROM users WHERE email = ${session.user.email}
         `;
+
         session.user.role = res[0]?.role ?? "member";
       } catch (error) {
         console.error("❌ SESSION ROLE ERROR:", error);
@@ -57,6 +60,9 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
-  pages: { error: "/login" },
-};
 
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+};
