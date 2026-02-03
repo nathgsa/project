@@ -34,7 +34,7 @@ export const authConfig: NextAuthConfig = {
 
   // ❌ not in whitelist
   if (existing.length === 0) {
-    return "/login?error=NotRegistered"; // DO NOT throw
+    return false; // DO NOT throw
   }
 
   return true;
@@ -58,6 +58,6 @@ export const authConfig: NextAuthConfig = {
 
   pages: {
     signIn: "/login",
-    error: "/login?error=AccessDenied",
+    error: "/login?error=NotRegistered",
   },
 };
