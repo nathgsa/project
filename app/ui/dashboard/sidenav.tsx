@@ -18,19 +18,17 @@ export default function SideNav() {
         <AppLogo showText={false} size={250} />
       </Link>
 
-      {/* Main nav container */}
-      <div className="flex grow flex-col justify-between">
+      {/* Nav container */}
+      <div className="flex flex-row md:flex-col flex-wrap justify-around md:justify-start gap-2 md:gap-2 items-center md:items-start">
 
         {/* Nav links */}
-        <div className="flex flex-row md:flex-col flex-wrap justify-around md:justify-start gap-2 md:gap-2">
-          <NavLinks />
-        </div>
+        <NavLinks />
 
-        {/* Sign out stays bottom */}
+        {/* Sign out button */}
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="flex h-[48px] w-full items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+          className="flex h-[48px] items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
         >
           <PowerIcon className="w-6" />
           <span className="hidden md:block">Sign Out</span>
