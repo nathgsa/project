@@ -6,12 +6,12 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const sessionToken =
-    req.cookies.get("__Secure-next-auth.session-token") ||
-    req.cookies.get("next-auth.session-token");
+    req.cookies.get("__Secure-next-auth.session-token")?.value ||
+    req.cookies.get("next-auth.session-token")?.value;
 
-  const isLoggedIn = !!sessionToken;
+  const isLoggedIn = Boolean(sessionToken);
 
-  // Protect dashboard & admin
+  // Block unauthenticated users
   if (
     (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) &&
     !isLoggedIn
@@ -19,7 +19,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Prevent logged-in users from seeing login
+  // Block authenticated users from login
   if (pathname === "/login" && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
