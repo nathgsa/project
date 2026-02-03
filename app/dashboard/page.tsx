@@ -24,12 +24,23 @@ export default function DashboardPage() {
           <p className="mb-6 text-gray-600 text-sm md:text-base">
             Welcome back, {loading ? "..." : session?.user?.name}!
           </p>
+          {/* Role badge */}
+          <span className="inline-block mt-3 px-3 py-1 text-xs font-medium rounded-full bg-white/20">
+            Role: {session?.user?.role ?? "member"}
+          </span>
         </div>
 
         {/* Admin Panel */}
         {session?.user?.role === "admin" && (
           <div className="bg-gray-50 rounded-xl p-4 my-4 shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">Admin Panel</h2>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800">
+                  Admin Panel
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Add members
+                </p>
+              </div>
             <AddRemoveUsers />
           </div>
         )}
