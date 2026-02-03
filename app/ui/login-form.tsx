@@ -12,22 +12,23 @@ export default function LoginForm() {
   const error = searchParams.get("error");
 
   const handleGoogleSignIn = async () => {
-    await signIn("google", {
-      callbackUrl: "/dashboard",
-      prompt: "select_account",
-    });
+    try {
+      await signIn("google", {
+        callbackUrl: "/dashboard",
+        prompt: "select_account", // forces account selection
+      });
+    } catch (err) {
+      console.error("Sign-in error:", err);
+    }
   };
 
   return (
     <div className="space-y-4">
-      {error === "not_allowed" && (
+      {error && (
         <p className="text-sm text-red-600 text-center">
-          Your account is not authorized to access this app.
-        </p>
-      )}
-      {error === "db_error" && (
-        <p className="text-sm text-red-600 text-center">
-          Database error occurred. Try again later.
+          {error === "AccessDenied"
+            ? "Your Google account is not authorized."
+            : "Login failed. Please try again."}
         </p>
       )}
 
