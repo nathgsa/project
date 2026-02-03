@@ -1,20 +1,12 @@
-// middleware.ts
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function middleware(req: any) {
   const path = req.nextUrl.pathname;
 
-  // ❌ Skip NextAuth API routes and _next assets
-  if (
-    path.startsWith("/api/auth") || 
-    path.startsWith("/_next") ||
-    path.startsWith("/favicon.ico")
-  ) {
-    return NextResponse.next();
-  }
+  // Ignore NextAuth API routes
+  if (path.startsWith("/api/auth")) return NextResponse.next();
 
-  // Check if user has session
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const isLoggedIn = !!token;
 

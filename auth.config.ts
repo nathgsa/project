@@ -1,4 +1,3 @@
-// app/lib/auth.config.ts
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
 import { sql } from "@/app/lib/db";
@@ -11,8 +10,8 @@ export const authConfig: NextAuthConfig = {
       authorization: {
         params: {
           prompt: "select_account",
-          // access_type: "offline",
-          // response_type: "code",
+          access_type: "offline",
+          response_type: "code",
         },
       },
     }),
@@ -22,7 +21,7 @@ export const authConfig: NextAuthConfig = {
 
   callbacks: {
     async signIn({ user }) {
-      if (!user.email) return false;
+      if (!user.email) return "/login?error=no_email";
 
       const email = user.email.toLowerCase();
 
@@ -31,16 +30,15 @@ export const authConfig: NextAuthConfig = {
           SELECT id FROM users WHERE email = ${email}
         `;
 
-        // ❌ If not in DB, block login
+        // Only allow whitelisted users
         if (existing.length === 0) {
-          // Returning false triggers `pages.error` redirect
-          return false;
+          return "/login?error=AccessDenied";
         }
 
-        return true;
+        return true; // Allowed
       } catch (error) {
         console.error("❌ SIGN-IN DB ERROR:", error);
-        return false;
+        return "/login?error=db_error";
       }
     },
 
@@ -62,7 +60,7 @@ export const authConfig: NextAuthConfig = {
   },
 
   pages: {
-    signIn: "/login", // login page
-    error: "/login?error=AccessDenied", // error redirect for whitelist fail
+    signIn: "/login",
+    error: "/login", // We handle errors with ?error= query
   },
 };

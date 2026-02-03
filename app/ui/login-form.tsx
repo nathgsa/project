@@ -9,6 +9,9 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 
 export default function LoginForm() {
 
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+
   const handleGoogleSignIn = async () => {
     await signIn("google", {
       callbackUrl: "/dashboard",
@@ -16,17 +19,17 @@ export default function LoginForm() {
     });
   };
 
-
-
   return (
-    // <div className="space-y-4">
-    //   {error && (
-    //     <p className="text-sm text-red-600 text-center">
-    //       {error === "AccessDenied"
-    //         ? "Your Google account is not authorized."
-    //         : "Login failed. Please try again."}
-    //     </p>
-    //   )}
+    <div className="space-y-4">
+      {error && (
+        <p className="text-sm text-red-600 text-center">
+          {error === "AccessDenied"
+            ? "Your Google account is not authorized to access this app."
+            : error === "db_error"
+            ? "Database error. Please try again."
+            : "Login error. Please try again."}
+        </p>
+      )}
 
       <Button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center gap-2">
         {/* Use Next.js Image for SVG */}
