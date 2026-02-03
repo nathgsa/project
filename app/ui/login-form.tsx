@@ -8,29 +8,25 @@ import GoogleIcon from '@/public/google.svg'; // SVG file in /public
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 
 export default function LoginForm() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
 
   const handleGoogleSignIn = async () => {
-    try {
-      await signIn("google", {
-        callbackUrl: "/dashboard",
-        prompt: "select_account", // forces account selection
-      });
-    } catch (err) {
-      console.error("Sign-in error:", err);
-    }
+    await signIn("google", {
+      callbackUrl: "/dashboard",
+      prompt: "select_account",
+    });
   };
 
+
+
   return (
-    <div className="space-y-4">
-      {error && (
-        <p className="text-sm text-red-600 text-center">
-          {error === "AccessDenied"
-            ? "Your Google account is not authorized."
-            : "Login failed. Please try again."}
-        </p>
-      )}
+    // <div className="space-y-4">
+    //   {error && (
+    //     <p className="text-sm text-red-600 text-center">
+    //       {error === "AccessDenied"
+    //         ? "Your Google account is not authorized."
+    //         : "Login failed. Please try again."}
+    //     </p>
+    //   )}
 
       <Button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center gap-2">
         {/* Use Next.js Image for SVG */}
@@ -38,6 +34,6 @@ export default function LoginForm() {
         Continue with Google
         <ArrowRightIcon className="ml-auto h-5 w-5 text-black" />
       </Button>
-    </div>
+    // </div>
   );
 }
