@@ -18,8 +18,8 @@ export default function SideNav() {
       </Link>
 
       {/* Main nav container */}
-      <div className="flex grow flex-col justify-between">
-        {/* Nav links — NO spacing */}
+      <div className="flex grow flex-col justify-between space-y-2">
+        
         <div className="flex flex-col">
           <NavLinks />
         </div>
