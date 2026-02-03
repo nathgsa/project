@@ -1,14 +1,13 @@
-// middleware.ts
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function middleware(req: any) {
   const path = req.nextUrl.pathname;
 
-  // 1️⃣ Ignore NextAuth routes and static files
+  // ❌ Ignore NextAuth routes and static files
   if (
-    path.startsWith("/api/auth") || 
-    path.startsWith("/_next") || 
+    path.startsWith("/api/auth") ||
+    path.startsWith("/_next") ||
     path.includes(".svg") ||
     path.includes(".png") ||
     path.includes(".jpg") ||
@@ -17,16 +16,15 @@ export async function middleware(req: any) {
     return NextResponse.next();
   }
 
-  // 2️⃣ Get the JWT token
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const isLoggedIn = !!token;
 
-  // 3️⃣ Protect dashboard/admin pages
+  // Protect dashboard/admin pages
   if ((path.startsWith("/dashboard") || path.startsWith("/admin")) && !isLoggedIn) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // 4️⃣ Redirect logged-in users away from login page
+  // Redirect logged-in users away from login page
   if (path === "/login" && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
