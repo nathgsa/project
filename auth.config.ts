@@ -21,48 +21,41 @@ export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
 
   callbacks: {
+    // ✅ Allow only users in DB
     async signIn({ user }) {
       if (!user.email) return false;
 
       const email = user.email.toLowerCase();
 
-      try {
-        const existing = await sql<{ id: string }[]>`
-          SELECT id FROM users WHERE email = ${email}
-        `;
+      const existing = await sql<{ id: string }[]>`
+        SELECT id FROM users WHERE email = ${email}
+      `;
 
-        // ❌ block non-whitelisted users
-        if (existing.length === 0) {
-          return false;
-        }
-
-        return true;
-      } catch (error) {
-        console.error("❌ SIGN-IN ERROR:", error);
-        return false;
-      }
+      return existing.length > 0;
     },
 
+    // ✅ Attach role to session
     async session({ session }) {
       if (!session.user?.email) return session;
 
-      try {
-        const res = await sql<{ role: "admin" | "member" }[]>`
-          SELECT role FROM users WHERE email = ${session.user.email}
-        `;
+      const res = await sql<{ role: "admin" | "member" }[]>`
+        SELECT role FROM users WHERE email = ${session.user.email}
+      `;
 
-        session.user.role = res[0]?.role ?? "member";
-      } catch (error) {
-        console.error("❌ SESSION ROLE ERROR:", error);
-        session.user.role = "member";
-      }
-
+      session.user.role = res[0]?.role ?? "member";
       return session;
+    },
+
+    // ✅ CRITICAL FIX: stop redirecting back to /login
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith(baseUrl)) return url;
+      return `${baseUrl}/dashboard`;
     },
   },
 
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: "/login", // ✅ KEEP
+    // ❌ REMOVE error page (causes OAuth loop)
   },
 };
