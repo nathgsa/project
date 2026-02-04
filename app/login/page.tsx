@@ -11,11 +11,11 @@ export default function LoginPage() {
         
         {/* Logo */}
         <div className="flex items-center justify-center space-y-6">
-          <AppLogo showText={false} size={600} />
+          <AppLogo showText={false} size={500} />
         </div>
 
         {/* Login form */}
-        <div className="flex items-center justify-center w-full">
+        <div className="flex items-center justify-center w-full max-w-[500px] bg-white p-8 rounded-lg shadow-md">
           <Suspense>
           <LoginForm />
         </Suspense>
