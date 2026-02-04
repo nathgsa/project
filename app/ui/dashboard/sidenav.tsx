@@ -19,18 +19,21 @@ export default function SideNav() {
       </Link>
 
       {/* Nav container */}
-      <div className="flex flex-1 flex-row md:flex-col justify-between md:justify-start">
+      <div className="flex flex-1 flex-col">
 
         {/* Nav links – FORCE COLUMN */}
         <div className="flex flex-col gap-2 w-full">
           <NavLinks />
         </div>
 
+        {/* Flexible spacer */}
+        <div className="flex-1" />
+
         {/* Sign out button */}
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="mt-2 flex h-[48px] items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+          className="flex h-[48px] items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
         >
           <PowerIcon className="w-6" />
           <span className="hidden md:block">Sign Out</span>
