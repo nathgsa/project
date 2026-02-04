@@ -15,10 +15,12 @@ export default function LoginPage() {
         </div>
 
         {/* Login form */}
-        <div className="flex items-center justify-center w-full max-w-[500px] bg-white p-8 rounded-lg shadow-md">
-          <Suspense>
-          <LoginForm />
-        </Suspense>
+        <div className="flex w-full justify-center">
+          <div className="w-full max-w-md"> 
+            <Suspense>
+              <LoginForm />
+            </Suspense>
+          </div>
         </div>
         
       </div>
