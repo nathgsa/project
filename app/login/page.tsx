@@ -11,7 +11,7 @@ export default function LoginPage() {
         
         {/* Logo */}
         <div className="flex items-center justify-center space-y-6">
-          <AppLogo showText={false} size={450} />
+          <AppLogo showText={false} size={600} />
         </div>
 
         {/* Login form */}
