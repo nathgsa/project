@@ -9,7 +9,7 @@ export default function Page() {
       
       {/* LOGO */}
       <div className="mb-10 flex items-center justify-center">
-        <AppLogo showText={false} size={350} />
+        <AppLogo showText={false} size={450} />
       </div>
 
       {/* CONTENT */}
