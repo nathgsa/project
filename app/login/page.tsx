@@ -7,7 +7,7 @@ import LoginForm from '@/app/ui/login-form';
 export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
-      <div className="flex w-full flex-col items-center justify-center space-y-6 -mt-16">
+      <div className="flex w-full flex-col items-center justify-center space-y-6 -mt-20">
         
         {/* Logo */}
         <div className="flex items-center justify-center space-y-6">
@@ -16,7 +16,7 @@ export default function LoginPage() {
 
         {/* Login form */}
         <div className="flex w-full justify-center">
-          <div className="w-full max-w-md"> 
+          <div className="w-full max-w-sm"> 
             <Suspense>
               <LoginForm />
             </Suspense>
