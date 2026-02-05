@@ -54,52 +54,56 @@ const EWTCalculator: React.FC = () => {
   };
 
   return (
-    // 🔥 REMOVE MOBILE PADDING COMPLETELY
-    <div className="min-h-screen w-full flex flex-col items-stretch p-0 sm:p-4 font-inter">
-      
+    <div className="min-h-screen w-full flex flex-col items-stretch p-2 font-inter">
+      {/* Message Box */}
       {message && (
-        <div className="fixed top-2 right-2 bg-red-500 text-white py-1 px-2 rounded-md shadow-lg z-50 text-sm">
+        <div className="fixed top-2 right-2 bg-red-500 text-white py-1 px-2 rounded-lg shadow-lg z-50 text-sm">
           {message}
         </div>
       )}
 
-      {/* 🔥 EDGE-TO-EDGE ON MOBILE */}
-      <div className="w-full flex flex-col bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-none sm:rounded-xl p-1 sm:p-4">
-        
-        <div className="text-center mb-2 sm:mb-6">
-          <h1 className="text-lg sm:text-3xl font-bold text-gray-800">EWT Calculator</h1>
-          <p className="text-gray-500 text-xs sm:text-base">
+      {/* Calculator Container - FLEX */}
+      <div className="w-full flex flex-col items-stretch justify-start bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-md sm:rounded-xl p-2 sm:p-4">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center mb-2 sm:mb-6">
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-800">EWT Calculator</h1>
+          <p className="text-gray-500 mt-1 text-xs sm:text-base">
             Calculate all EWT combinations for a given payment amount.
           </p>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleCalculate} className="flex flex-col gap-2 sm:gap-4 w-full">
-          <div>
-            <label className="text-xs sm:text-xl font-semibold text-gray-700">
+          <div className="flex flex-col w-full">
+            <label htmlFor="payment-amount" className="text-sm sm:text-xl font-semibold text-gray-700 mb-1">
               Total Invoice Amount
             </label>
-
-            <div className="relative">
-              <span className="absolute left-1 inset-y-0 flex items-center text-gray-500 text-xs">₱</span>
+            <div className="relative w-full">
+              <span className="absolute inset-y-0 left-1 flex items-center text-gray-500 text-sm">₱</span>
               <input
                 type="number"
-                className="w-full pl-6 pr-2 py-1 sm:py-3 border border-gray-300 rounded-none sm:rounded-lg text-sm sm:text-lg"
+                id="payment-amount"
+                placeholder="e.g., 10000"
+                className="w-full pl-6 pr-2 py-1 sm:py-3 text-sm sm:text-lg border-2 border-gray-300 rounded-md sm:rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition"
+                step="0.01"
                 value={paymentAmount}
-                onChange={(e) =>
-                  setPaymentAmount(e.target.value === "" ? "" : parseFloat(e.target.value))
-                }
+                onChange={(e) => setPaymentAmount(e.target.value === "" ? "" : parseFloat(e.target.value))}
               />
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
-            <button className="bg-blue-700 text-white py-2 sm:py-4 rounded-none sm:rounded-xl">
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
+            <button
+              type="submit"
+              className="flex-1 bg-blue-700 hover:bg-blue-600 text-white font-semibold py-2 sm:py-4 rounded-md sm:rounded-xl text-sm sm:text-lg transition"
+            >
               Calculate All
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="bg-gray-500 text-white py-2 sm:py-4 rounded-none sm:rounded-xl"
+              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 sm:py-4 rounded-md sm:rounded-xl text-sm sm:text-lg transition"
             >
               Clear
             </button>
@@ -107,14 +111,51 @@ const EWTCalculator: React.FC = () => {
         </form>
       </div>
 
-      {/* 🔥 RESULTS EDGE-TO-EDGE */}
+      {/* Results */}
       {showResults && (
-        <div className="mt-1 sm:mt-6 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-4">
-          <div className="bg-black text-white p-2 sm:p-4 rounded-none sm:rounded-xl">
-            VATABLE RESULTS
+        <div className="mt-2 sm:mt-6 w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4 px-0">
+          {/* VATable */}
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-md sm:rounded-xl p-2 sm:p-4">
+            <h3 className="text-lg sm:text-2xl font-bold text-center mb-2">With 12% VAT</h3>
+            <div className="mb-2 sm:mb-4">
+              <h4 className="font-semibold text-sm sm:text-xl text-blue-300 mb-1">@ 1% EWT (Goods)</h4>
+              <div className="space-y-1 text-sm sm:text-lg">
+                <div className="flex justify-between"><span className="text-gray-400">Tax Base:</span> <span className="font-semibold">₱ {formatNumber(results.vatable.base)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-400">EWT Amount:</span> <span className="font-semibold text-red-400">- ₱ {formatNumber(results.vatable.ewt1)}</span></div>
+                <div className="flex justify-between"><span className="text-green-400">Net Amount:</span> <span className="font-bold text-green-400">₱ {formatNumber(results.vatable.net1)}</span></div>
+              </div>
+            </div>
+            <hr className="border-gray-600 my-1 sm:my-4" />
+            <div>
+              <h4 className="font-semibold text-sm sm:text-xl text-blue-300 mb-1">@ 2% EWT (Services)</h4>
+              <div className="space-y-1 text-sm sm:text-lg">
+                <div className="flex justify-between"><span className="text-gray-400">Tax Base:</span> <span className="font-semibold">₱ {formatNumber(results.vatable.base)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-400">EWT Amount:</span> <span className="font-semibold text-red-400">- ₱ {formatNumber(results.vatable.ewt2)}</span></div>
+                <div className="flex justify-between"><span className="text-green-400">Net Amount:</span> <span className="font-bold text-green-400">₱ {formatNumber(results.vatable.net2)}</span></div>
+              </div>
+            </div>
           </div>
-          <div className="bg-black text-white p-2 sm:p-4 rounded-none sm:rounded-xl">
-            ZERO-RATED RESULTS
+
+          {/* Zero-Rated */}
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-md sm:rounded-xl p-2 sm:p-4">
+            <h3 className="text-lg sm:text-2xl font-bold text-center mb-2">Zero-Rated / Non-VAT</h3>
+            <div className="mb-2 sm:mb-4">
+              <h4 className="font-semibold text-sm sm:text-xl text-blue-300 mb-1">@ 1% EWT (Goods)</h4>
+              <div className="space-y-1 text-sm sm:text-lg">
+                <div className="flex justify-between"><span className="text-gray-400">Tax Base:</span> <span className="font-semibold">₱ {formatNumber(results.zeroRated.base)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-400">EWT Amount:</span> <span className="font-semibold text-red-400">- ₱ {formatNumber(results.zeroRated.ewt1)}</span></div>
+                <div className="flex justify-between"><span className="text-green-400">Net Amount:</span> <span className="font-bold text-green-400">₱ {formatNumber(results.zeroRated.net1)}</span></div>
+              </div>
+            </div>
+            <hr className="border-gray-600 my-1 sm:my-4" />
+            <div>
+              <h4 className="font-semibold text-sm sm:text-xl text-blue-300 mb-1">@ 2% EWT (Services)</h4>
+              <div className="space-y-1 text-sm sm:text-lg">
+                <div className="flex justify-between"><span className="text-gray-400">Tax Base:</span> <span className="font-semibold">₱ {formatNumber(results.zeroRated.base)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-400">EWT Amount:</span> <span className="font-semibold text-red-400">- ₱ {formatNumber(results.zeroRated.ewt2)}</span></div>
+                <div className="flex justify-between"><span className="text-green-400">Net Amount:</span> <span className="font-bold text-green-400">₱ {formatNumber(results.zeroRated.net2)}</span></div>
+              </div>
+            </div>
           </div>
         </div>
       )}
