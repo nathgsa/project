@@ -99,7 +99,7 @@ const EWTCalculator: React.FC = () => {
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-            <button type="submit" className="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 rounded-lg text-lg transition">
+            <button type="submit" className="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-4 rounded-lg text-lg transition">
               Calculate All
             </button>
             <button
@@ -117,7 +117,7 @@ const EWTCalculator: React.FC = () => {
       {showResults && (
         <div className="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* VATable Column */}
-          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-2">
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-4">
             <h3 className="text-xl font-bold text-center mb-4">With 12% VAT</h3>
 
             {/* 1% */}
@@ -144,7 +144,7 @@ const EWTCalculator: React.FC = () => {
           </div>
 
           {/* Zero-Rated Column */}
-          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-2">
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-6">
             <h3 className="text-xl font-bold text-center mb-4">Zero-Rated / Non-VAT</h3>
 
             {/* 1% */}
