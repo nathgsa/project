@@ -62,7 +62,7 @@ const EWTCalculator: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-0 sm:p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 px-0 sm:px-1 font-inter">
       {/* Message Box */}
       {message && (
         <div className="fixed top-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg z-50">
