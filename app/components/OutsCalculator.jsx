@@ -88,7 +88,7 @@ export default function OutsCalculator() {
   const handleInputChange = (setter, key, value) => setter(prev => ({ ...prev, [key]: value }));
 
   return (
-    <div className="min-h-screen  p-4 md:p-8 font-sans">
+    <div className="min-h-screen  p-0 md:p-8 font-sans">
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Header */}
