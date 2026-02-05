@@ -11,20 +11,21 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
+// Map of links to display in the side navigation
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  {
-    name: 'EWT',
-    href: '/dashboard/ewt', icon: CalculatorIcon,
-  },
+  { name: 'EWT', href: '/dashboard/ewt', icon: CalculatorIcon },
   { name: 'Outs', href: '/dashboard/outs', icon: ClipboardIcon },
   { name: 'Large Formats', href: '/dashboard/printingtools', icon: PrinterIcon },
   { name: 'Roll to Sheet', href: '/dashboard/rolltosheet', icon: ArrowsRightLeftIcon }
 ];
 
-export default function NavLinks() {
+// Add a prop type for mobile toggle
+interface NavLinksProps {
+  onLinkClick?: () => void;
+}
+
+export default function NavLinks({ onLinkClick }: NavLinksProps) {
   const pathname = usePathname();
   return (
     <>
@@ -34,6 +35,7 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
+            onClick={onLinkClick} // <--- closes sidebar on mobile
             className={clsx(
               'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
