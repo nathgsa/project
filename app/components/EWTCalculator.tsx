@@ -62,7 +62,7 @@ const EWTCalculator: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen  flex flex-col items-center justify-center p-4 font-inter">
+    <div className="min-h-screen  flex flex-col items-center justify-center p-2 font-inter">
       {/* Message Box */}
       {message && (
         <div className="fixed top-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg z-50">
@@ -71,7 +71,7 @@ const EWTCalculator: React.FC = () => {
       )}
 
       {/* Calculator Card */}
-      <div className="w-full max-w-5xl bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-2xl p-6 md:p-10">
+      <div className="w-full max-w-5xl bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-2xl p-2 md:p-10">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800">EWT Calculator</h1>
           <p className="text-gray-500 mt-2">Calculate all EWT combinations for a given payment amount.</p>
@@ -99,7 +99,7 @@ const EWTCalculator: React.FC = () => {
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-            <button type="submit" className="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-4 rounded-lg text-lg transition">
+            <button type="submit" className="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 rounded-lg text-lg transition">
               Calculate All
             </button>
             <button
@@ -117,7 +117,7 @@ const EWTCalculator: React.FC = () => {
       {showResults && (
         <div className="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* VATable Column */}
-          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-2">
             <h3 className="text-xl font-bold text-center mb-4">With 12% VAT</h3>
 
             {/* 1% */}
@@ -144,7 +144,7 @@ const EWTCalculator: React.FC = () => {
           </div>
 
           {/* Zero-Rated Column */}
-          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-2">
             <h3 className="text-xl font-bold text-center mb-4">Zero-Rated / Non-VAT</h3>
 
             {/* 1% */}
