@@ -2,18 +2,25 @@
 "use client";
 
 import { lusitana } from "@/app/ui/fonts";
-import Clock from "@/app/ui/dashboard/clock";
-import Calendar from "@/app/ui/dashboard/calendar";
-import Calculator from "@/app/ui/dashboard/calculator";
 import { Suspense } from "react";
 import DashboardGuard from "@/app/ui/dashboard/dashboard-guard";
 import { useSession } from "next-auth/react";
 import AddRemoveUsers from "@/app/components/AddRemoveUsers";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
+  // Dashboard cards info
+  const dashboardCards = [
+    { name: "EWT", href: "/dashboard/ewt", color: "bg-indigo-400" },
+    { name: "Outs", href: "/dashboard/outs", color: "bg-green-400" },
+    { name: "Large Format", href: "/dashboard/printingtools", color: "bg-yellow-400" },
+    { name: "Roll to Sheet", href: "/dashboard/rolltosheet", color: "bg-pink-400" },
+  ];
+
+  
   return (
     <DashboardGuard>
       <main className="p-4">
@@ -51,11 +58,18 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {/* Dashboard Links */}
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 mt-6">
           <Suspense>
-            <Clock />
-            <Calendar />
-            <Calculator />
+            {dashboardCards.map((card) => (
+              <Link
+                key={card.name}
+                href={card.href}
+                className={`${card.color} hover:scale-105 transition-transform rounded-lg p-6 flex items-center justify-center text-white font-semibold text-lg shadow-lg`}
+              >
+                {card.name}
+              </Link>
+            ))}
           </Suspense>
         </div>
       </main>
