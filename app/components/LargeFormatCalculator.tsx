@@ -376,210 +376,219 @@ export default function LargeFormatCalculator() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-0 -m-6">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Large Format Calculator
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-xl shadow-md">
-          {/* Left Column: Inputs */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-              Job Details
-            </h2>
-
-            {/* Size Inputs */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">Size</h3>
-              <div className="space-y-4">
-                {/* Unit Selector */}
+  <div className="min-h-screen flex flex-col items-center justify-center p-0 -m-6">
+    <div className="max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+        Large Format Calculator
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-xl shadow-md">
+        {/* Left side: Inputs */}
+        <div className="space-y-6">
+          {/* Size section */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-xl font-semibold mb-4">Size</h2>
+            <div className="flex flex-col gap-4">
+              {/* Unit selector */}
+              <div>
+                <label className="block mb-2 font-medium text-gray-700">Unit</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded"
+                  value={unit}
+                  onChange={(e) => {
+                    setUnit(e.target.value);
+                    calculator.setUnit(e.target.value);
+                    updateCalculations();
+                  }}
+                >
+                  <option value="ft">Feet (ft)</option>
+                  <option value="in">Inches (in)</option>
+                  <option value="cm">Centimeters (cm)</option>
+                  <option value="mm">Millimeters (mm)</option>
+                </select>
+              </div>
+              {/* Length & Width inputs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label
-                    htmlFor="unit"
-                    className="block mb-2 text-gray-700 font-medium"
-                  >
-                    Unit
-                  </label>
-                  <select
-                    id="unit"
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  >
-                    <option value="ft">Feet (ft)</option>
-                    <option value="in">Inches (in)</option>
-                    <option value="cm">Centimeters (cm)</option>
-                    <option value="mm">Millimeters (mm)</option>
-                  </select>
+                  <label className="block mb-2 font-medium text-gray-700">Length</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    value={length}
+                    onChange={(e) => {
+                      setLength(e.target.value);
+                      calculator.setDimensions(parseFloat(e.target.value) || 0, parseFloat(width) || 0);
+                      updateCalculations();
+                    }}
+                  />
                 </div>
-                {/* Length & Width Inputs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="length"
-                      className="block mb-2 text-gray-700 font-medium"
-                    >
-                      Length
-                    </label>
-                    <input
-                      type="number"
-                      id="length"
-                      min="0"
-                      step="0.01"
-                      value={length}
-                      onChange={(e) => setLength(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="width"
-                      className="block mb-2 text-gray-700 font-medium"
-                    >
-                      Width
-                    </label>
-                    <input
-                      type="number"
-                      id="width"
-                      min="0"
-                      step="0.01"
-                      value={width}
-                      onChange={(e) => setWidth(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
+                <div>
+                  <label className="block mb-2 font-medium text-gray-700">Width</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    value={width}
+                    onChange={(e) => {
+                      setWidth(e.target.value);
+                      calculator.setDimensions(parseFloat(length) || 0, parseFloat(e.target.value) || 0);
+                      updateCalculations();
+                    }}
+                  />
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Material Search */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">Material</h3>
-              <div className="relative" ref={materialDropdownRef}>
-                <input
-                  type="text"
-                  placeholder="Search materials..."
-                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  value={materialSearch}
-                  onChange={(e) => setMaterialSearch(e.target.value)}
-                  onFocus={() => setShowMaterialDropdown(true)}
-                />
-                {showMaterialDropdown && (
-                  <div className="absolute top-full left-0 right-0 max-h-52 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg z-50 mt-1">
-                    {filteredMaterials.map((material) => (
-                      <div
-                        key={material.id}
-                        className="p-2 cursor-pointer hover:bg-gray-100 transition-colors"
-                        onClick={() => handleMaterialSelect(material)}
-                      >
-                        {material.name} - PHP {formatNumber(material.baseRate)}
+          {/* Material search */}
+          <div className="bg-gray-50 p-4 rounded-lg relative">
+            <h2 className="text-xl font-semibold mb-4">Material</h2>
+            <input
+              type="text"
+              placeholder="Search material..."
+              className="w-full p-2 border border-gray-300 rounded"
+              value={materialSearch}
+              onChange={(e) => {
+                setMaterialSearch(e.target.value);
+                setShowMaterialDropdown(true);
+              }}
+              onFocus={() => setShowMaterialDropdown(true)}
+            />
+            {showMaterialDropdown && (
+              <div className="absolute z-50 top-full mt-1 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg">
+                {filteredMaterials.map((material) => (
+                  <div
+                    key={material.id}
+                    className="p-2 cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleMaterialSelect(material)}
+                  >
+                    {material.name} - PHP {formatNumber(material.baseRate)}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Rate 1 input */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold mb-4">Rate (PHP per sq ft)</h3>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={rate1}
+              onChange={(e) => {
+                setRate1(e.target.value);
+                calculator.setRate1(parseFloat(e.target.value) || 0);
+                updateCalculations();
+              }}
+            />
+          </div>
+
+          {/* Rate 2 input */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold mb-4">Optional Rate (PHP per sq ft)</h3>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={rate2}
+              onChange={(e) => {
+                setRate2(e.target.value);
+                calculator.setRate2(parseFloat(e.target.value) || 0);
+                updateCalculations();
+              }}
+            />
+          </div>
+
+          {/* Add-ons */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold mb-4">Add-ons</h3>
+            <select
+              className="w-full p-2 mb-4 border border-gray-300 rounded"
+              onChange={(e) => {
+                handleAddonSelect(e.target.value);
+                e.target.value = "";
+              }}
+              defaultValue=""
+            >
+              <option value="">Select Add-on</option>
+              <optgroup label="Per Square Foot">
+                {CONFIG.addons.perSquareFoot.map((addon) => (
+                  <option key={addon.id} value={`perSquareFoot:${addon.id}`}>
+                    {addon.name} (PHP {formatNumber(addon.rate)} / sq ft)
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Per Piece">
+                {CONFIG.addons.perPiece.map((addon) => (
+                  <option key={addon.id} value={`perPiece:${addon.id}`}>
+                    {addon.name} (PHP {formatNumber(addon.rate)} / piece)
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+
+            {/* List of selected add-ons */}
+            <div className="space-y-3">
+              {Array.from(selectedAddons.entries()).map(
+                ([key, { type, addon }]) => (
+                  <div
+                    key={key}
+                    className="relative bg-white p-4 rounded border border-gray-300"
+                  >
+                    <button
+                      onClick={() => handleRemoveAddon(type, addon.id)}
+                      className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-xl font-bold"
+                    >
+                      ×
+                    </button>
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-300 mb-3">
+                      <div className="font-medium text-gray-800">{addon.name}</div>
+                      <div className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                        {type === "perSquareFoot" ? "Per Square Foot" : "Per Piece"}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Rate Input */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">
-                Rate (PHP per sq ft)
-              </h3>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={rate1}
-                onChange={(e) => setRate1(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            {/* Optional Rate 2 */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">
-                Alternative Rate (Optional)
-              </h3>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={rate2}
-                onChange={(e) => setRate2(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-              />
-            </div>
-
-            {/* Add-ons */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">Add-ons</h3>
-              <select
-                onChange={(e) => {
-                  handleAddonSelect(e.target.value);
-                  e.target.value = "";
-                }}
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 mb-4"
-                defaultValue=""
-              >
-                <option value="">Select Add-on</option>
-                <optgroup label="Per Square Foot Add-ons">
-                  {CONFIG.addons.perSquareFoot.map((addon) => (
-                    <option
-                      key={addon.id}
-                      value={`perSquareFoot:${addon.id}`}
-                    >
-                      {addon.name} (PHP {formatNumber(addon.rate)} per sq ft)
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="Per Piece Add-ons">
-                  {CONFIG.addons.perPiece.map((addon) => (
-                    <option key={addon.id} value={`perPiece:${addon.id}`}>
-                      {addon.name} (PHP {formatNumber(addon.rate)} per piece)
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
-
-              {/* List of selected add-ons */}
-              <div className="space-y-3">
-                {Array.from(selectedAddons.entries()).map(
-                  ([key, { type, addon }]) => (
-                    <div
-                      key={key}
-                      className="relative bg-white p-4 rounded border border-gray-300"
-                    >
-                      <button
-                        onClick={() => handleRemoveAddon(type, addon.id)}
-                        className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-xl font-bold"
-                      >
-                        ×
-                      </button>
-                      <div className="flex justify-between items-center pb-2 border-b border-gray-300 mb-3">
-                        <div className="font-medium text-gray-800">
-                          {addon.name}
-                        </div>
-                        <div className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {/* Rate input */}
+                      <div>
+                        <label className="block text-sm text-gray-700 mb-1">
                           {type === "perSquareFoot"
-                            ? "Per Square Foot"
-                            : "Per Piece"}
-                        </div>
+                            ? "Rate (PHP/sq ft):"
+                            : "Price per piece (PHP):"}
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={addon.rate}
+                          onChange={(e) =>
+                            handleAddonRateChange(
+                              type,
+                              addon.id,
+                              e.target.value
+                            )
+                          }
+                          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                        />
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {/* Rate input */}
+                      {/* Quantity input for perPiece */}
+                      {type === "perPiece" && (
                         <div>
                           <label className="block text-sm text-gray-700 mb-1">
-                            {type === "perSquareFoot"
-                              ? "Rate (PHP/sq ft):"
-                              : "Price per piece (PHP):"}
+                            Quantity:
                           </label>
                           <input
                             type="number"
-                            min="0"
-                            step="0.01"
-                            value={addon.rate}
+                            min="1"
+                            step="1"
+                            value={addon.quantity || 1}
                             onChange={(e) =>
-                              handleAddonRateChange(
+                              handleAddonQuantityChange(
                                 type,
                                 addon.id,
                                 e.target.value
@@ -588,113 +597,90 @@ export default function LargeFormatCalculator() {
                             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                           />
                         </div>
-                        {/* Quantity input for perPiece */}
-                        {type === "perPiece" && (
-                          <div>
-                            <label className="block text-sm text-gray-700 mb-1">
-                              Quantity:
-                            </label>
-                            <input
-                              type="number"
-                              min="1"
-                              step="1"
-                              value={addon.quantity || 1}
-                              onChange={(e) =>
-                                handleAddonQuantityChange(
-                                  type,
-                                  addon.id,
-                                  e.target.value
-                                )
-                              }
-                              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                            />
-                          </div>
-                        )}
-                      </div>
+                      )}
                     </div>
-                  )
-                )}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right side: Results */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            Calculation Results
+          </h2>
+
+          {/* Total Area */}
+          <div className="bg-gray-50 p-4 rounded-lg text-center">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Total Area</h3>
+            <div className="flex items-center justify-center gap-4 flex-wrap text-gray-800">
+              <div className="flex flex-col items-center min-w-[80px]">
+                <span className="font-medium text-xl">
+                  {formatNumber(
+                    calculator.length / Calculator.UNIT_CONVERSIONS[unit]
+                  )}
+                </span>
+                <small className="text-xs uppercase font-medium text-gray-600">
+                  Length
+                </small>
+              </div>
+              <div className="flex items-center justify-center font-medium text-xl">
+                ×
+              </div>
+              <div className="flex flex-col items-center min-w-[80px]">
+                <span className="font-medium text-xl">
+                  {formatNumber(
+                    calculator.width / Calculator.UNIT_CONVERSIONS[unit]
+                  )}
+                </span>
+                <small className="text-xs uppercase font-medium text-gray-600">
+                  Width
+                </small>
+              </div>
+              <div className="flex items-center justify-center font-medium text-xl">
+                =
+              </div>
+              <div className="flex flex-col items-center min-w-[120px]">
+                <span className="font-medium text-xl">
+                  {formatNumber(results.totalSquareFeet)}
+                </span>
+                <small className="text-xs uppercase font-medium text-gray-600">
+                  sq/{unit}
+                </small>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Results */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-              Calculation Results
-            </h2>
-
-            {/* Total Area */}
-            <div className="bg-gray-50 p-4 rounded-lg text-center">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">
-                Total Area
-              </h3>
-              <div className="flex items-center justify-center gap-4 flex-wrap text-gray-800">
-                <div className="flex flex-col items-center min-w-[80px]">
-                  <span className="font-medium text-xl">
-                    {formatNumber(
-                      calculator.length / Calculator.UNIT_CONVERSIONS[unit]
-                    )}
-                  </span>
-                  <small className="text-xs text-gray-600 uppercase tracking-wide">
-                    Length
-                  </small>
-                </div>
-                <span className="font-medium text-xl">×</span>
-                <div className="flex flex-col items-center min-w-[80px]">
-                  <span className="font-medium text-xl">
-                    {formatNumber(
-                      calculator.width / Calculator.UNIT_CONVERSIONS[unit]
-                    )}
-                  </span>
-                  <small className="text-xs text-gray-600 uppercase tracking-wide">
-                    Width
-                  </small>
-                </div>
-                <span className="font-medium text-xl">=</span>
-                <div className="flex flex-col items-center min-w-[120px]">
-                  <span className="font-medium text-xl">
-                    {formatNumber(results.totalSquareFeet)}
-                  </span>
-                  <small className="text-xs text-gray-600 uppercase tracking-wide">
-                    sq/{unit}
-                  </small>
-                </div>
-              </div>
+          {/* Total (Rate 1) */}
+          <div className="bg-gray-50 p-4 rounded-lg text-center">
+            <h3 className="text-lg font-medium mb-2">Total (Rate 1)</h3>
+            <p className="text-2xl font-semibold text-gray-800">
+              PHP {formatNumber(results.total1)}
+            </p>
+            <div className="mt-3 space-y-1 text-sm text-gray-600 text-left">
+              {results.breakdown1.map((line, index) => (
+                <div key={index}>{line}</div>
+              ))}
             </div>
+          </div>
 
-            {/* Total (Base Rate 1) */}
-            <div className="bg-gray-50 p-4 rounded-lg text-center">
-              <h3 className="text-lg font-medium text-gray-800 mb-2">
-                Total (Base Rate 1)
-              </h3>
-              <p className="text-2xl font-semibold text-gray-800">
-                PHP {formatNumber(results.total1)}
-              </p>
-              <div className="mt-3 space-y-1 text-sm text-gray-600 text-left">
-                {results.breakdown1.map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </div>
-            </div>
-
-            {/* Total (Base Rate 2) */}
-            <div className="bg-gray-50 p-4 rounded-lg text-center">
-              <h3 className="text-lg font-medium text-gray-800 mb-2">
-                Total (Base Rate 2)
-              </h3>
-              <p className="text-2xl font-semibold text-gray-800">
-                PHP {formatNumber(results.total2)}
-              </p>
-              <div className="mt-3 space-y-1 text-sm text-gray-600 text-left">
-                {results.breakdown2.map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </div>
+          {/* Total (Rate 2) */}
+          <div className="bg-gray-50 p-4 rounded-lg text-center">
+            <h3 className="text-lg font-medium mb-2">Total (Rate 2)</h3>
+            <p className="text-2xl font-semibold text-gray-800">
+              PHP {formatNumber(results.total2)}
+            </p>
+            <div className="mt-3 space-y-1 text-sm text-gray-600 text-left">
+              {results.breakdown2.map((line, index) => (
+                <div key={index}>{line}</div>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
