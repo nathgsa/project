@@ -62,7 +62,7 @@ const EWTCalculator: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-inter">
+    <div className="min-h-screen w-full flex flex-col items-stretch p-2 sm:p-4 md:p-6 font-inter">
   {/* Message Box remains */}
   {message && (
     <div className="fixed top-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg z-50">
@@ -71,7 +71,7 @@ const EWTCalculator: React.FC = () => {
   )}
 
   {/* Calculator Card */}
-  <div className="w-full max-w-5xl bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-2xl p-4 sm:p-6 md:p-8">
+  <div className="w-full bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-2xl p-4 sm:p-6 md:p-8">
     <div className="text-center mb-6">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">EWT Calculator</h1>
       <p className="text-gray-500 mt-2 text-sm sm:text-base">Calculate all EWT combinations for a given payment amount.</p>
@@ -115,7 +115,7 @@ const EWTCalculator: React.FC = () => {
 
   {/* Results - stack on mobile, side-by-side on larger screens */}
   {showResults && (
-    <div className="mt-8 w-full max-w-5xl px-4 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+    <div className="mt-4 md:mt-8 w-full px-2 md:px-4 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
       {/* VATable Column */}
       <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-2xl p-4 sm:p-6">
         <h3 className="text-xl sm:text-2xl font-bold text-center mb-4">With 12% VAT</h3>
