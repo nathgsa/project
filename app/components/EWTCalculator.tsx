@@ -63,7 +63,7 @@ const EWTCalculator: React.FC = () => {
       )}
 
       {/* Calculator Card */}
-      <div className="w-full bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-none p-1 sm:rounded-2xl sm:p-4">
+      <div className="w-full bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-md sm:rounded-xl p-2 sm:p-4">
         <div className="text-center mb-2 sm:mb-6">
           <h1 className="text-xl sm:text-3xl font-bold text-gray-800">EWT Calculator</h1>
           <p className="text-gray-500 mt-1 text-xs sm:text-base">
@@ -82,7 +82,7 @@ const EWTCalculator: React.FC = () => {
                 type="number"
                 id="payment-amount"
                 placeholder="e.g., 10000"
-                className="w-full pl-6 pr-2 py-1 sm:py-3 text-sm sm:text-lg border-2 border-gray-300 rounded-none sm:rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition"
+                className="w-full pl-6 pr-2 py-1 sm:py-3 text-sm sm:text-lg border-2 border-gray-300 rounded-md sm:rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition"
                 step="0.01"
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value === "" ? "" : parseFloat(e.target.value))}
@@ -93,14 +93,14 @@ const EWTCalculator: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 pt-1 sm:pt-4">
             <button
               type="submit"
-              className="w-full bg-blue-700 hover:bg-blue-600 text-white font-semibold py-2 sm:py-4 rounded-none sm:rounded-lg text-sm sm:text-lg transition"
+              className="w-full bg-blue-700 hover:bg-blue-600 text-white font-semibold py-2 sm:py-4 rounded-md sm:rounded-xl text-sm sm:text-lg transition"
             >
               Calculate All
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 sm:py-4 rounded-none sm:rounded-lg text-sm sm:text-lg transition"
+              className="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 sm:py-4 rounded-md sm:rounded-xl text-sm sm:text-lg transition"
             >
               Clear
             </button>
@@ -110,9 +110,9 @@ const EWTCalculator: React.FC = () => {
 
       {/* Results */}
       {showResults && (
-        <div className="mt-2 sm:mt-6 w-full grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-4 px-0">
+        <div className="mt-2 sm:mt-6 w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4 px-0">
           {/* VATable */}
-          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-none sm:rounded-2xl p-2 sm:p-4">
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-md sm:rounded-xl p-2 sm:p-4">
             <h3 className="text-lg sm:text-2xl font-bold text-center mb-2">With 12% VAT</h3>
             {/* 1% */}
             <div className="mb-2 sm:mb-4">
@@ -136,7 +136,7 @@ const EWTCalculator: React.FC = () => {
           </div>
 
           {/* Zero-Rated */}
-          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-none sm:rounded-2xl p-2 sm:p-4">
+          <div className="bg-gradient-to-r from-gray-700 to-black text-white rounded-md sm:rounded-xl p-2 sm:p-4">
             <h3 className="text-lg sm:text-2xl font-bold text-center mb-2">Zero-Rated / Non-VAT</h3>
             <div className="mb-2 sm:mb-4">
               <h4 className="font-semibold text-sm sm:text-xl text-blue-300 mb-1">@ 1% EWT (Goods)</h4>
