@@ -16,28 +16,28 @@ export default function DashboardPage() {
 
   // Dashboard cards info with background images (no solid bg colors)
   const dashboardCards = [
-    {
-      name: "EWT",
-      href: "/dashboard/ewt",
-      // removed color class; use image background
-      image: "url('/calculator-bg.jpg')",
-    },
-    {
-      name: "Outs",
-      href: "/dashboard/outs",
-      image: "url('/cut-bg.jpg')",
-    },
-    {
-      name: "Large Format",
-      href: "/dashboard/printingtools",
-      image: "url('/paper-bg.jpg')",
-    },
-    {
-      name: "Roll to Sheet",
-      href: "/dashboard/rolltosheet",
-      image: "url('/weight-bg.png')",
-    },
-  ];
+  {
+    name: "EWT",
+    href: "/dashboard/ewt",
+    image: "/calculator-bg.jpg", // just the path
+  },
+  {
+    name: "Outs",
+    href: "/dashboard/outs",
+    image: "/cut-bg.jpg",
+  },
+  {
+    name: "Large Format",
+    href: "/dashboard/printingtools",
+    image: "/paper-bg.jpg",
+  },
+  {
+    name: "Roll to Sheet",
+    href: "/dashboard/rolltosheet",
+    image: "/weight-bg.png",
+  },
+];
+
 
   return (
     <DashboardGuard>
