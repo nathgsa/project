@@ -625,7 +625,7 @@ export default function LargeFormatCalculator() {
               <p className="text-xs md:text-lg font-semibold text-gray-800">
                 PHP {formatNumber(results.total1)}
               </p>
-              <div className="mt-3 space-y-1 text-xs text-gray-600 text-left">
+              <div className="mt-3 space-y-1 text-xs text-gray-600 text-left items-center justify-center">
                 {results.breakdown1.map((line, index) => (
                   <div key={index}>{line}</div>
                 ))}
@@ -639,7 +639,7 @@ export default function LargeFormatCalculator() {
                 PHP {formatNumber(results.total2)}
               </p>
               {results.breakdown2.length > 0 && (
-                <div className="mt-3 space-y-1 text-xs text-gray-600 text-left">
+                <div className="mt-3 space-y-1 text-xs text-gray-600 text-left items-center justify-center">
                   {results.breakdown2.map((line, index) => (
                     <div key={index}>{line}</div>
                   ))}
