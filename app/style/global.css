@@ -33,21 +33,23 @@ body {
   height: 100%;
 }
 
-.app-layout {
+.page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.content {
+.page-content {
   flex: 1;
 }
 
-.footer {
+/* Footer styling only */
+.page-footer {
   border-top: 1px solid #e5e7eb;
   text-align: center;
   font-size: 0.875rem;
   color: #6b7280;
   padding: 1rem 0;
 }
+
 
