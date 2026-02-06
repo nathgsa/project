@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import React from 'react';
 
 interface Material {
   id: string;
@@ -376,155 +375,259 @@ export default function LargeFormatCalculator() {
       .includes(materialSearch.toLowerCase())
   );
 
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-0 -m-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Large Format Calculator
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-xl shadow-md">
+          {/* Left side: Inputs */}
+        <div className="space-y-6">
+          {/* Size section */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-lg font-semibold text-gray-600 mb-1">
+              Job Details
+            </h2>
+            <h3 className="text-xl font-semibold mb-4 text-gray-800">
+              Size
+            </h3>
 
-  const LargeFormatCalculator: React.FC = () => {
-    return (
-      <div className="min-h-screen bg-[#f5f6fa] p-5">
-        <div className="mx-auto w-full max-w-[1200px]">
-          {/* Title */}
-          <h1 className="mb-8 text-center text-3xl font-semibold text-[#2c3e50]">
-            Large Format Calculator
-          </h1>
-
-          {/* Main Grid */}
-          <div className="grid grid-cols-1 gap-8 rounded-[10px] bg-white p-8 shadow md:grid-cols-2">
-            {/* ================= LEFT SIDE ================= */}
-            <div className="space-y-6">
-              {/* Job Details */}
-              <div className="rounded-lg bg-[#f5f6fa] p-4">
-                <h3 className="mb-4 text-lg font-medium text-[#2c3e50]">
-                  Job Details
-                </h3>
-
-                {/* Size Inputs */}
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block font-medium text-[#2c3e50]">
-                      Length (ft)
-                    </label>
-                    <input
-                      type="number"
-                      className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block font-medium text-[#2c3e50]">
-                      Width (ft)
-                    </label>
-                    <input
-                      type="number"
-                      className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
+              <div className="flex flex-col gap-4">
+                {/* Unit selector */}
+                <div>
+                  <label className="block mb-2 font-medium text-gray-700">Unit</label>
+                  <select
+                    className="w-full p-2 border border-gray-300 rounded"
+                    value={unit}
+                    onChange={(e) => {
+                      setUnit(e.target.value);
+                      calculator.setUnit(e.target.value);
+                      updateCalculations();
+                    }}
+                  >
+                    <option value="ft">Feet (ft)</option>
+                    <option value="in">Inches (in)</option>
+                    <option value="cm">Centimeters (cm)</option>
+                    <option value="mm">Millimeters (mm)</option>
+                  </select>
                 </div>
-              </div>
-
-              {/* Quantity */}
-              <div className="rounded-lg bg-[#f5f6fa] p-4">
-                <label className="mb-2 block font-medium text-[#2c3e50]">
-                  Quantity
-                </label>
-                <input
-                  type="number"
-                  className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-
-              {/* Material */}
-              <div className="rounded-lg bg-[#f5f6fa] p-4">
-                <label className="mb-2 block font-medium text-[#2c3e50]">
-                  Material
-                </label>
-
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search materials..."
-                    className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
-                  />
-
-                  {/* Dropdown */}
-                  <div className="absolute z-50 mt-1 max-h-52 w-full overflow-y-auto rounded border border-gray-300 bg-white shadow">
-                    <div className="cursor-pointer p-2 hover:bg-gray-100">
-                      Vinyl Gloss – ₱60.00
-                    </div>
-                    <div className="cursor-pointer p-2 hover:bg-gray-100">
-                      Tarpaulin – ₱35.00
-                    </div>
+                {/* Length & Width inputs */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-2 font-medium text-gray-700">Length</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      className="w-full p-2 border border-gray-300 rounded"
+                      value={length}
+                      onChange={(e) => {
+                        setLength(e.target.value);
+                        calculator.setDimensions(parseFloat(e.target.value) || 0, parseFloat(width) || 0);
+                        updateCalculations();
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 font-medium text-gray-700">Width</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      className="w-full p-2 border border-gray-300 rounded"
+                      value={width}
+                      onChange={(e) => {
+                        setWidth(e.target.value);
+                        calculator.setDimensions(parseFloat(length) || 0, parseFloat(e.target.value) || 0);
+                        updateCalculations();
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* ================= RIGHT SIDE ================= */}
-            <div className="space-y-6">
-              {/* Calculation Display */}
-              <div className="rounded-lg bg-[#f5f6fa] p-4">
-                <h3 className="mb-4 text-lg font-medium text-[#2c3e50]">
-                  Dimension Calculation
-                </h3>
+            {/* Material search */}
+            <div className="bg-gray-50 p-4 rounded-lg relative">
+              <h2 className="text-xl font-semibold mb-4">Material</h2>
+              <input
+                type="text"
+                placeholder="Search material..."
+                className="w-full p-2 border border-gray-300 rounded"
+                value={materialSearch}
+                onChange={(e) => {
+                  setMaterialSearch(e.target.value);
+                  setShowMaterialDropdown(true);
+                }}
+                onFocus={() => setShowMaterialDropdown(true)}
+              />
+              {showMaterialDropdown && (
+                <div className="absolute z-50 top-full mt-1 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg">
+                  {filteredMaterials.map((material) => (
+                    <div
+                      key={material.id}
+                      className="p-2 cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleMaterialSelect(material)}
+                    >
+                      {material.name} - PHP {formatNumber(material.baseRate)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-4 text-[#2c3e50]">
-                  <div className="flex min-w-[80px] flex-col items-center">
-                    <span className="text-xl font-medium">10.00</span>
-                    <small className="text-xs uppercase tracking-wide text-gray-500">
-                      Length
-                    </small>
-                  </div>
+            {/* Rate 1 input */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4">Rate (PHP per sq ft)</h3>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                className="w-full p-2 border border-gray-300 rounded"
+                value={rate1}
+                onChange={(e) => {
+                  setRate1(e.target.value);
+                  calculator.setRate1(parseFloat(e.target.value) || 0);
+                  updateCalculations();
+                }}
+              />
+            </div>
 
-                  <span className="text-xl">×</span>
+            {/* Rate 2 input */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4">Optional Rate (PHP per sq ft)</h3>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                className="w-full p-2 border border-gray-300 rounded"
+                value={rate2}
+                onChange={(e) => {
+                  setRate2(e.target.value);
+                  calculator.setRate2(parseFloat(e.target.value) || 0);
+                  updateCalculations();
+                }}
+              />
+            </div>
 
-                  <div className="flex min-w-[80px] flex-col items-center">
-                    <span className="text-xl font-medium">5.00</span>
-                    <small className="text-xs uppercase tracking-wide text-gray-500">
-                      Width
-                    </small>
-                  </div>
+            {/* Add-ons */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4">Add-ons</h3>
+              <select
+                className="w-full p-2 mb-4 border border-gray-300 rounded"
+                onChange={(e) => {
+                  handleAddonSelect(e.target.value);
+                  e.target.value = "";
+                }}
+                defaultValue=""
+              >
+                <option value="">Select Add-on</option>
+                <optgroup label="Per Square Foot">
+                  {CONFIG.addons.perSquareFoot.map((addon) => (
+                    <option key={addon.id} value={`perSquareFoot:${addon.id}`}>
+                      {addon.name} (PHP {formatNumber(addon.rate)} / sq ft)
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Per Piece">
+                  {CONFIG.addons.perPiece.map((addon) => (
+                    <option key={addon.id} value={`perPiece:${addon.id}`}>
+                      {addon.name} (PHP {formatNumber(addon.rate)} / piece)
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
 
-                  <span className="text-xl">=</span>
+              {/* List of selected add-ons */}
+              <div className="space-y-3">
+                {Array.from(selectedAddons.entries()).map(
+                  ([key, { type, addon }]) => (
+                    <div
+                      key={key}
+                      className="relative bg-white p-4 rounded border border-gray-300"
+                    >
+                      {/* untouched logic */}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
 
-                  <div className="flex min-w-[120px] flex-col items-center">
-                    <span className="text-xl font-medium">50.00</span>
-                    <small className="text-xs uppercase tracking-wide text-gray-500">
-                      Sq Ft
-                    </small>
-                  </div>
+          {/* Right side: Results */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Calculation Results</h2>
+
+            {/* Total Area */}
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h3 className="text-lg font-medium text-gray-800 mb-4">Total Area</h3>
+              <div className="flex items-center justify-center gap-4 flex-wrap text-gray-800">
+                <div className="flex flex-col items-center min-w-[80px]">
+                  <span className="font-medium text-xl">
+                    {formatNumber(
+                      calculator.length / Calculator.UNIT_CONVERSIONS[unit]
+                    )}
+                  </span>
+                  <small className="text-xs uppercase font-medium text-gray-600">
+                    Length
+                  </small>
+                </div>
+                <div className="flex items-center justify-center font-medium text-xl">
+                  ×
+                </div>
+                <div className="flex flex-col items-center min-w-[80px]">
+                  <span className="font-medium text-xl">
+                    {formatNumber(
+                      calculator.width / Calculator.UNIT_CONVERSIONS[unit]
+                    )}
+                  </span>
+                  <small className="text-xs uppercase font-medium text-gray-600">
+                    Width
+                  </small>
+                </div>
+                <div className="flex items-center justify-center font-medium text-xl">
+                  =
+                </div>
+                <div className="flex flex-col items-center min-w-[120px]">
+                  <span className="font-medium text-xl">
+                    {formatNumber(results.totalSquareFeet)}
+                  </span>
+                  <small className="text-xs uppercase font-medium text-gray-600">
+                    sq/{unit}
+                  </small>
                 </div>
               </div>
+            </div>
 
-              {/* Price Summary */}
-              <div className="rounded-lg bg-[#f5f6fa] p-4">
-                <h3 className="mb-4 text-lg font-medium text-[#2c3e50]">
-                  Price Summary
-                </h3>
-
-                <div className="space-y-2 text-[#2c3e50]">
-                  <div className="flex justify-between">
-                    <span>Price per sq ft</span>
-                    <span>₱60.00</span>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span>Total Area</span>
-                    <span>50.00</span>
-                  </div>
-
-                  <div className="flex justify-between font-semibold">
-                    <span>Total Price</span>
-                    <span>₱3,000.00</span>
-                  </div>
-                </div>
+            {/* Total (Rate 1) */}
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h3 className="text-lg font-medium mb-2">Total (Rate 1)</h3>
+              <p className="text-2xl font-semibold text-gray-800">
+                PHP {formatNumber(results.total1)}
+              </p>
+              <div className="mt-3 space-y-1 text-sm text-gray-600 text-left">
+                {results.breakdown1.map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
               </div>
+            </div>
 
-              {/* Action */}
-              <button className="w-full rounded bg-blue-600 py-3 font-medium text-white hover:bg-blue-700">
-                Calculate
-              </button>
+            {/* Total (Rate 2) */}
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h3 className="text-lg font-medium mb-2">Total (Rate 2)</h3>
+              <p className="text-2xl font-semibold text-gray-800">
+                PHP {formatNumber(results.total2)}
+              </p>
+              <div className="mt-3 space-y-1 text-sm text-gray-600 text-left">
+                {results.breakdown2.map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    );
-  };
-  }
+    </div>
+  );
+}
