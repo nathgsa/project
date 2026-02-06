@@ -376,7 +376,7 @@ export default function LargeFormatCalculator() {
   );
 
   return (
-  <div className="min-h-screen flex flex-col items-center justify-start p-4 md:p-0 bg-gray-50">
+  <div className="min-h-screen flex flex-col items-center justify-start pt-4 -m-6 p-0 bg-gray-50">
     <div className="w-full max-w-3xl md:max-w-7xl mx-auto">
       <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6 md:mb-8">
         Large Format Calculator
