@@ -384,11 +384,12 @@ export default function LargeFormatCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 bg-white p-4 md:p-8 rounded-xl shadow-md">
         {/* Left side: Inputs */}
         <div className="space-y-4 md:space-y-6">
+          <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 md:mb-6">
+              Job Details
+          </h2>
           {/* Size section */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-600 mb-1">
-              Job Details
-            </h2>
+            
             <h3 className="text-xl font-semibold mb-4 text-gray-800">
               Size
             </h3>
