@@ -44,7 +44,7 @@ body {
 }
 
 /* Footer styling only */
-.page-footer {
+.footer {
   border-top: 1px solid #e5e7eb;
   text-align: center;
   font-size: 0.875rem;
@@ -52,9 +52,5 @@ body {
   padding: 1rem 0;
 }
 
-.dashboard-layout {
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-}
+
 

@@ -26,16 +26,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <SessionProvider>
-          {/* Page wrapper */}
-          <div className="page">
-            {/* App content (sidebar lives inside children) */}
-            <main className="page-content">
+          <div className="app-layout">
+            <main className="content">
               {children}
             </main>
 
-            {/* Global footer */}
-            <footer className="page-footer">
-              © 2026 Optima Typographics. All rights reserved.
+            <footer className="footer">
+              © 20256 Optima Typographics. All rights reserved.
             </footer>
           </div>
         </SessionProvider>
