@@ -58,7 +58,7 @@ export default function DashboardPage() {
         )}
 
         {/* Dashboard Links */}
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 mt-6">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mt-6">
           <Suspense>
             {dashboardCards.map((card) => (
               <Link
