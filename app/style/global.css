@@ -27,3 +27,16 @@ html, body {
     @apply font-sans text-slate-800 bg-[#f5f6fa];
   }
 }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}

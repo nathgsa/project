@@ -21,11 +21,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <SessionProvider>
-          {children}
+          <main className="flex-grow">
+            {children}
+          </main>
+
+          <footer className="border-t text-center text-sm text-gray-500 py-6">
+            © 2026 Optima Typographics. All rights reserved.
+          </footer>
         </SessionProvider>
       </body>
     </html>
