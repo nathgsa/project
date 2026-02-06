@@ -300,7 +300,8 @@ export default function LargeFormatCalculator() {
   // Handle add-on selection
   const handleAddonSelect = (value: string) => {
     if (!value) return;
-    const [type, id] = value.split(":") as ["perSquareFoot" | "perPiece", string];
+    const [typeRaw, id] = value.split(":");
+    const type = typeRaw as "perSquareFoot" | "perPiece";
     const addonList = CONFIG.addons[type];
     const addon = addonList.find((a) => a.id === id);
     if (!addon) return;
@@ -376,238 +377,280 @@ export default function LargeFormatCalculator() {
   );
 
   return (
-  <div className="min-h-screen flex flex-col items-center justify-start pt-4 -m-6 p-0 bg-gray-50">
-    <div className="w-full max-w-3xl md:max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
-        Large Format Calculator
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 bg-white p-4 md:p-8 rounded-xl shadow-md">
-        {/* Left side: Inputs */}
-        <div className="space-y-4 md:space-y-6">
-          <h2 className="text-lg font-bold mb-4 text-gray-800">
-              Job Details
-          </h2>
-          {/* Size section */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            
-            <h3 className="text-sm font-bold mb-2 text-gray-800">
-              Size
-            </h3>
-            <div className="flex flex-col gap-3 md:gap-4">
-              {/* Unit selector */}
-              <div>
-                <label className="block mb-1 font-medium text-gray-700">Unit</label>
-                <select
-                  className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
-                  value={unit}
-                  onChange={(e) => {
-                    setUnit(e.target.value);
-                    calculator.setUnit(e.target.value);
-                    updateCalculations();
-                  }}
-                >
-                  <option value="ft">Feet (ft)</option>
-                  <option value="in">Inches (in)</option>
-                  <option value="cm">Centimeters (cm)</option>
-                  <option value="mm">Millimeters (mm)</option>
-                </select>
-              </div>
-              {/* Length & Width inputs */}
-              <div className="grid grid-cols-2 gap-3 min-w-0">
+    <div className="min-h-screen flex flex-col items-center justify-start pt-4 -m-6 p-0 bg-gray-50">
+      <div className="w-full max-w-3xl md:max-w-7xl mx-auto">
+        <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
+          Large Format Calculator
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 bg-white p-4 md:p-8 rounded-xl shadow-md">
+          {/* Left side: Inputs */}
+          <div className="space-y-4 md:space-y-6">
+            {/* Job Details / Size */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Size</h3>
+              <div className="flex flex-col gap-3 md:gap-4">
                 <div>
-                  <label className="block mb-1 font-medium text-gray-700">Length</label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
+                  <label className="block mb-1 font-medium text-gray-700">Unit</label>
+                  <select
                     className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
-                    value={length}
+                    value={unit}
                     onChange={(e) => {
-                      setLength(e.target.value);
-                      calculator.setDimensions(parseFloat(e.target.value) || 0, parseFloat(width) || 0);
+                      setUnit(e.target.value);
+                      calculator.setUnit(e.target.value);
                       updateCalculations();
                     }}
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium text-gray-700">Width</label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
-                    value={width}
-                    onChange={(e) => {
-                      setWidth(e.target.value);
-                      calculator.setDimensions(parseFloat(length) || 0, parseFloat(e.target.value) || 0);
-                      updateCalculations();
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Material search */}
-          <div className="bg-gray-50 p-4 rounded-lg relative">
-            <h2 className="text-sm font-bold mb-2 text-gray-800">Material</h2>
-            <input
-              type="text"
-              placeholder="Search material..."
-              className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
-              value={materialSearch}
-              onChange={(e) => {
-                setMaterialSearch(e.target.value);
-                setShowMaterialDropdown(true);
-              }}
-              onFocus={() => setShowMaterialDropdown(true)}
-            />
-            {showMaterialDropdown && (
-              <div className="absolute z-50 top-full mt-1 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg">
-                {filteredMaterials.map((material) => (
-                  <div
-                    key={material.id}
-                    className="p-2 text-sm md:text-base cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleMaterialSelect(material)}
                   >
-                    {material.name} - PHP {formatNumber(material.baseRate)}
+                    <option value="ft">Feet (ft)</option>
+                    <option value="in">Inches (in)</option>
+                    <option value="cm">Centimeters (cm)</option>
+                    <option value="mm">Millimeters (mm)</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-3 min-w-0">
+                  <div>
+                    <label className="block mb-1 font-medium text-gray-700">Length</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                      value={length}
+                      onChange={(e) => {
+                        setLength(e.target.value);
+                        calculator.setDimensions(parseFloat(e.target.value) || 0, parseFloat(width) || 0);
+                        updateCalculations();
+                      }}
+                    />
                   </div>
-                ))}
+                  <div>
+                    <label className="block mb-1 font-medium text-gray-700">Width</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                      value={width}
+                      onChange={(e) => {
+                        setWidth(e.target.value);
+                        calculator.setDimensions(parseFloat(length) || 0, parseFloat(e.target.value) || 0);
+                        updateCalculations();
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
 
-          {/* Rate 1 */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-bold mb-2 text-gray-800">Rate (PHP per sq ft)</h3>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
-              value={rate1}
-              onChange={(e) => {
-                setRate1(e.target.value);
-                calculator.setRate1(parseFloat(e.target.value) || 0);
-                updateCalculations();
-              }}
-            />
-          </div>
+            {/* Material Search */}
+            <div className="bg-gray-50 p-4 rounded-lg relative" ref={materialDropdownRef}>
+              <h2 className="text-sm font-bold mb-2 text-gray-800">Material</h2>
+              <input
+                type="text"
+                placeholder="Search material..."
+                className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                value={materialSearch}
+                onChange={(e) => {
+                  setMaterialSearch(e.target.value);
+                  setShowMaterialDropdown(true);
+                }}
+                onFocus={() => setShowMaterialDropdown(true)}
+              />
+              {showMaterialDropdown && (
+                <div className="absolute z-50 top-full mt-1 w-full max-h-52 overflow-y-auto bg-white border border-gray-300 rounded shadow-lg">
+                  {filteredMaterials.map((material) => (
+                    <div
+                      key={material.id}
+                      className="p-2 text-sm md:text-base cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleMaterialSelect(material)}
+                    >
+                      {material.name} - PHP {formatNumber(material.baseRate)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {/* Rate 2 */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-bold mb-2 text-gray-800">Optional Rate (PHP per sq ft)</h3>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
-              value={rate2}
-              onChange={(e) => {
-                setRate2(e.target.value);
-                calculator.setRate2(parseFloat(e.target.value) || 0);
-                updateCalculations();
-              }}
-            />
-          </div>
+            {/* Rate 1 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Rate (PHP per sq ft)</h3>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                value={rate1}
+                onChange={(e) => {
+                  setRate1(e.target.value);
+                  calculator.setRate1(parseFloat(e.target.value) || 0);
+                  updateCalculations();
+                }}
+              />
+            </div>
 
-          {/* Add-ons */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-bold mb-2 text-gray-800">Add-ons</h3>
-            <select
-              className="w-full p-2 mb-3 text-sm md:text-base border border-gray-300 rounded"
-              onChange={(e) => {
-                handleAddonSelect(e.target.value);
-                e.target.value = "";
-              }}
-              defaultValue=""
-            >
-              <option value="">Select Add-on</option>
-              <optgroup label="Per Square Foot">
-                {CONFIG.addons.perSquareFoot.map((addon) => (
-                  <option key={addon.id} value={`perSquareFoot:${addon.id}`}>
-                    {addon.name} (PHP {formatNumber(addon.rate)} / sq ft)
-                  </option>
-                ))}
-              </optgroup>
-              <optgroup label="Per Piece">
-                {CONFIG.addons.perPiece.map((addon) => (
-                  <option key={addon.id} value={`perPiece:${addon.id}`}>
-                    {addon.name} (PHP {formatNumber(addon.rate)} / piece)
-                  </option>
-                ))}
-              </optgroup>
-            </select>
-          </div>
-        </div>
+            {/* Rate 2 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Optional Rate (PHP per sq ft)</h3>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                value={rate2}
+                onChange={(e) => {
+                  setRate2(e.target.value);
+                  calculator.setRate2(parseFloat(e.target.value) || 0);
+                  updateCalculations();
+                }}
+              />
+            </div>
 
-        {/* Right side: Results */}
-        <div className="space-y-4 md:space-y-6">
-          <h2 className="text-lg font-bold mb-4 text-gray-800">
-            Calculation Results
-          </h2>
+            {/* Add-ons */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Add-ons</h3>
+              <select
+                className="w-full p-2 mb-3 text-sm md:text-base border border-gray-300 rounded"
+                onChange={(e) => {
+                  handleAddonSelect(e.target.value);
+                  e.target.value = "";
+                }}
+                defaultValue=""
+              >
+                <option value="">Select Add-on</option>
+                <optgroup label="Per Square Foot">
+                  {CONFIG.addons.perSquareFoot.map((addon) => (
+                    <option key={addon.id} value={`perSquareFoot:${addon.id}`}>
+                      {addon.name} (PHP {formatNumber(addon.rate)} / sq ft)
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Per Piece">
+                  {CONFIG.addons.perPiece.map((addon) => (
+                    <option key={addon.id} value={`perPiece:${addon.id}`}>
+                      {addon.name} (PHP {formatNumber(addon.rate)} / piece)
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
 
-          {/* Total Area */}
-          <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-sm font-bold mb-2 text-gray-800">Total Area</h3>
-            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-gray-800">
-              <div className="flex flex-col items-center min-w-[70px]">
-                <span className="font-medium text-lg md:text-xl">
-                  {formatNumber(calculator.length / Calculator.UNIT_CONVERSIONS[unit])}
-                </span>
-                <small className="text-xs md:text-sm uppercase font-medium text-gray-600">
-                  Length
-                </small>
-              </div>
-              <div className="flex items-center justify-center font-medium text-lg md:text-xl">
-                ×
-              </div>
-              <div className="flex flex-col items-center min-w-[70px]">
-                <span className="font-medium text-lg md:text-xl">
-                  {formatNumber(calculator.width / Calculator.UNIT_CONVERSIONS[unit])}
-                </span>
-                <small className="text-xs md:text-sm uppercase font-medium text-gray-600">
-                  Width
-                </small>
-              </div>
-              <div className="flex items-center justify-center font-medium text-lg md:text-xl">
-                =
-              </div>
-              <div className="flex flex-col items-center min-w-[110px]">
-                <span className="font-medium text-lg md:text-xl">
-                  {formatNumber(results.totalSquareFeet)}
-                </span>
-                <small className="text-xs md:text-sm uppercase font-medium text-gray-600">
-                  sq/{unit}
-                </small>
-              </div>
+              {/* Selected Add-ons */}
+              {selectedAddons.size > 0 && (
+                <div className="mt-3 space-y-2">
+                  {[...selectedAddons.values()].map(({ type, addon }) => (
+                    <div key={`${type}:${addon.id}`} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-800">{addon.name}</span>
+                        <span className="text-xs text-gray-600">
+                          {type === "perSquareFoot"
+                            ? `PHP ${formatNumber(addon.rate)} / sq ft`
+                            : `PHP ${formatNumber(addon.rate)} / piece`}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {type === "perPiece" && (
+                          <input
+                            type="number"
+                            min="1"
+                            className="w-16 p-1 text-sm border border-gray-300 rounded"
+                            value={addon.quantity}
+                            onChange={(e) => handleAddonQuantityChange(type, addon.id, e.target.value)}
+                          />
+                        )}
+                        <input
+                          type="number"
+                          min="0"
+                          className="w-20 p-1 text-sm border border-gray-300 rounded"
+                          value={addon.rate}
+                          onChange={(e) => handleAddonRateChange(type, addon.id, e.target.value)}
+                        />
+                        <button
+                          className="px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600"
+                          onClick={() => handleRemoveAddon(type, addon.id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Total Rate 1 */}
-          <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 1)</h3>
-            <p className="text-xs md:text-2xl font-semibold text-gray-800">
-              PHP {formatNumber(results.total1)}
-            </p>
-            <div className="mt-3 space-y-1 text-xs text-gray-600 text-left"> 
-              {results.breakdown1.map((line, index) => ( 
-                <div key={index}>{line}</div> 
-                ))} 
-            </div>
-          </div>
+          {/* Right side: Results */}
+          <div className="space-y-4 md:space-y-6">
+            <h2 className="text-lg font-bold mb-4 text-gray-800">
+              Calculation Results
+            </h2>
 
-          {/* Total Rate 2 */}
-          <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 2)</h3>
-            <p className="text-xs md:text-2xl font-semibold text-gray-800">
-              PHP {formatNumber(results.total2)}
-            </p>
+            {/* Total Area */}
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Total Area</h3>
+              <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-gray-800">
+                <div className="flex flex-col items-center min-w-[70px]">
+                  <span className="font-medium text-lg md:text-xl">
+                    {formatNumber(calculator.length / Calculator.UNIT_CONVERSIONS[unit])}
+                  </span>
+                  <small className="text-xs md:text-sm uppercase font-medium text-gray-600">
+                    Length
+                  </small>
+                </div>
+                <div className="flex items-center justify-center font-medium text-lg md:text-xl">
+                  ×
+                </div>
+                <div className="flex flex-col items-center min-w-[70px]">
+                  <span className="font-medium text-lg md:text-xl">
+                    {formatNumber(calculator.width / Calculator.UNIT_CONVERSIONS[unit])}
+                  </span>
+                  <small className="text-xs md:text-sm uppercase font-medium text-gray-600">
+                    Width
+                  </small>
+                </div>
+                <div className="flex items-center justify-center font-medium text-lg md:text-xl">
+                  =
+                </div>
+                <div className="flex flex-col items-center min-w-[110px]">
+                  <span className="font-medium text-lg md:text-xl">
+                    {formatNumber(results.totalSquareFeet)}
+                  </span>
+                  <small className="text-xs md:text-sm uppercase font-medium text-gray-600">
+                    sq/{unit}
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            {/* Total Rate 1 */}
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 1)</h3>
+              <p className="text-xs md:text-2xl font-semibold text-gray-800">
+                PHP {formatNumber(results.total1)}
+              </p>
+              <div className="mt-3 space-y-1 text-xs text-gray-600 text-left">
+                {results.breakdown1.map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
+              </div>
+            </div>
+
+            {/* Total Rate 2 */}
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 2)</h3>
+              <p className="text-xs md:text-2xl font-semibold text-gray-800">
+                PHP {formatNumber(results.total2)}
+              </p>
+              {results.breakdown2.length > 0 && (
+                <div className="mt-3 space-y-1 text-xs text-gray-600 text-left">
+                  {results.breakdown2.map((line, index) => (
+                    <div key={index}>{line}</div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+
 
 }
