@@ -34,7 +34,7 @@ export default function DashboardPage() {
   {
     name: "Roll to Sheet",
     href: "/dashboard/rolltosheet",
-    image: "/weight-bg.png",
+    image: "/wieght-bg.png",
   },
 ];
 
