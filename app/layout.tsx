@@ -28,9 +28,10 @@ export default function RootLayout({
         <SessionProvider>
           <main className="flex-grow">
             {children}
-            <footer className="border-t text-center text-sm text-gray-500 py-6">
-            © 2026 Optima Typographics. All rights reserved.
-          </footer>
+            <footer className="border-t border-transparent text-center text-sm text-gray-500 py-6">
+              © 2026 Optima Typographics. All rights reserved.
+            </footer>
+
           </main>
 
         </SessionProvider>
