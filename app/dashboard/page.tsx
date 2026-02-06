@@ -41,8 +41,8 @@ export default function DashboardPage() {
 
   return (
     <DashboardGuard>
-      <main className="p-4 pt-8">
-        <div className="shadow rounded-[5px] p-4">
+      <main className="p-4">
+        <div className="shadow rounded-[5px] p-4 pt-8">
           <h1 className={`${lusitana.className} mb-2 text-xl md:text-2xl`}>
             Dashboard
           </h1>
