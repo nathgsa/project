@@ -28,7 +28,8 @@ html, body {
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -39,4 +40,10 @@ body {
 
 main {
   flex: 1;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
