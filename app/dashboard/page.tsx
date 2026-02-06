@@ -7,6 +7,8 @@ import DashboardGuard from "@/app/ui/dashboard/dashboard-guard";
 import { useSession } from "next-auth/react";
 import AddRemoveUsers from "@/app/components/AddRemoveUsers";
 import Link from "next/link";
+import Image from "next/image";
+
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -18,22 +20,22 @@ export default function DashboardPage() {
       name: "EWT",
       href: "/dashboard/ewt",
       // removed color class; use image background
-      backgroundImage: "url('/calculator-bg.jpg')",
+      image: "url('/calculator-bg.jpg')",
     },
     {
       name: "Outs",
       href: "/dashboard/outs",
-      backgroundImage: "url('/cut-paper.jpg')",
+      image: "url('/cut-bg.jpg')",
     },
     {
       name: "Large Format",
       href: "/dashboard/printingtools",
-      backgroundImage: "url('/paper.jpg')",
+      image: "url('/paper-bg.jpg')",
     },
     {
       name: "Roll to Sheet",
       href: "/dashboard/rolltosheet",
-      backgroundImage: "url('/weight.png')",
+      image: "url('/weight-bg.png')",
     },
   ];
 
@@ -76,21 +78,25 @@ export default function DashboardPage() {
         
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mt-6">
           <Suspense>
-            {dashboardCards.map((card) => (
+            {dashboardCards.map((card, index) => (
               <Link
                 key={card.name}
                 href={card.href}
                 className="group relative h-40 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
-                style={{
-                  backgroundImage: card.backgroundImage,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
               >
-                {/* Full overlay */}
+                {/* Optimized Image */}
+                <Image
+                  src={card.image}
+                  alt={card.name}
+                  fill
+                  priority={index === 0} // first card loads instantly
+                  className="object-cover"
+                />
+
+                {/* Overlay */}
                 <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors" />
 
-                {/* Centered text */}
+                {/* Text */}
                 <div className="relative z-10 flex h-full items-center justify-center">
                   <span className="text-white text-xl font-semibold tracking-wide">
                     {card.name}
