@@ -390,9 +390,9 @@ export default function LargeFormatCalculator() {
               <h3 className="text-sm font-bold mb-2 text-gray-800">Size</h3>
               <div className="flex flex-col gap-3 md:gap-4">
                 <div>
-                  <label className="block mb-1 font-medium text-gray-700">Unit</label>
+                  <label className="block text-sm font-bold mb-1 text-gray-700">Unit</label>
                   <select
-                    className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                    className="w-full p-2 text-sm mb-1 md:text-base border border-gray-300 rounded"
                     value={unit}
                     onChange={(e) => {
                       setUnit(e.target.value);
@@ -408,12 +408,12 @@ export default function LargeFormatCalculator() {
                 </div>
                 <div className="grid grid-cols-2 gap-3 min-w-0">
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">Length</label>
+                    <label className="block text-sm font-bold mb-1 text-gray-700">Length</label>
                     <input
                       type="number"
                       min="0"
                       step="0.01"
-                      className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                      className="w-full p-2 text-sm mb-1 md:text-base border border-gray-300 rounded"
                       value={length}
                       onChange={(e) => {
                         setLength(e.target.value);
@@ -423,12 +423,12 @@ export default function LargeFormatCalculator() {
                     />
                   </div>
                   <div>
-                    <label className="block mb-1 font-medium text-gray-700">Width</label>
+                    <label className="block text-sm font-bold mb-1 text-gray-700">Width</label>
                     <input
                       type="number"
                       min="0"
                       step="0.01"
-                      className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                      className="w-full p-2 text-sm mb-1 md:text-base border border-gray-300 rounded"
                       value={width}
                       onChange={(e) => {
                         setWidth(e.target.value);
@@ -447,7 +447,7 @@ export default function LargeFormatCalculator() {
               <input
                 type="text"
                 placeholder="Search material..."
-                className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                className="w-full p-2 text-sm mb-1 md:text-base border border-gray-300 rounded"
                 value={materialSearch}
                 onChange={(e) => {
                   setMaterialSearch(e.target.value);
@@ -460,7 +460,7 @@ export default function LargeFormatCalculator() {
                   {filteredMaterials.map((material) => (
                     <div
                       key={material.id}
-                      className="p-2 text-sm md:text-base cursor-pointer hover:bg-gray-100"
+                      className="p-2 text-sm mb-1 md:text-base cursor-pointer hover:bg-gray-100"
                       onClick={() => handleMaterialSelect(material)}
                     >
                       {material.name} - PHP {formatNumber(material.baseRate)}
@@ -477,7 +477,7 @@ export default function LargeFormatCalculator() {
                 type="number"
                 min="0"
                 step="0.01"
-                className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                className="w-full p-2 text-sm mb-1 md:text-base border border-gray-300 rounded"
                 value={rate1}
                 onChange={(e) => {
                   setRate1(e.target.value);
@@ -494,7 +494,7 @@ export default function LargeFormatCalculator() {
                 type="number"
                 min="0"
                 step="0.01"
-                className="w-full p-2 text-sm md:text-base border border-gray-300 rounded"
+                className="w-full p-2 text-sm mb-1 md:text-base border border-gray-300 rounded"
                 value={rate2}
                 onChange={(e) => {
                   setRate2(e.target.value);
@@ -508,7 +508,7 @@ export default function LargeFormatCalculator() {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-sm font-bold mb-2 text-gray-800">Add-ons</h3>
               <select
-                className="w-full p-2 mb-3 text-sm md:text-base border border-gray-300 rounded"
+                className="w-full p-2 mb-1 text-sm md:text-base border border-gray-300 rounded"
                 onChange={(e) => {
                   handleAddonSelect(e.target.value);
                   e.target.value = "";
@@ -622,7 +622,7 @@ export default function LargeFormatCalculator() {
             {/* Total Rate 1 */}
             <div className="bg-gray-50 p-4 rounded-lg text-center">
               <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 1)</h3>
-              <p className="text-xs md:text-2xl font-semibold text-gray-800">
+              <p className="text-xs md:text-lg font-semibold text-gray-800">
                 PHP {formatNumber(results.total1)}
               </p>
               <div className="mt-3 space-y-1 text-xs text-gray-600 text-left">
@@ -635,7 +635,7 @@ export default function LargeFormatCalculator() {
             {/* Total Rate 2 */}
             <div className="bg-gray-50 p-4 rounded-lg text-center">
               <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 2)</h3>
-              <p className="text-xs md:text-2xl font-semibold text-gray-800">
+              <p className="text-xs md:text-lg font-semibold text-gray-800">
                 PHP {formatNumber(results.total2)}
               </p>
               {results.breakdown2.length > 0 && (
