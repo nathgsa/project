@@ -18,22 +18,22 @@ export default function DashboardPage() {
       name: "EWT",
       href: "/dashboard/ewt",
       // removed color class; use image background
-      backgroundImage: "url('/images/calculator-bg.jpg')",
+      backgroundImage: "url('/calculator-bg.jpg')",
     },
     {
       name: "Outs",
       href: "/dashboard/outs",
-      backgroundImage: "url('/images/cut-paper.jpg')",
+      backgroundImage: "url('/cut-paper.jpg')",
     },
     {
       name: "Large Format",
       href: "/dashboard/printingtools",
-      backgroundImage: "url('/images/paper.jpg')",
+      backgroundImage: "url('/paper.jpg')",
     },
     {
       name: "Roll to Sheet",
       href: "/dashboard/rolltosheet",
-      backgroundImage: "url('/images/weight.jpg')",
+      backgroundImage: "url('/weight.png')",
     },
   ];
 
