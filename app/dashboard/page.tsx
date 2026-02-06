@@ -80,21 +80,27 @@ export default function DashboardPage() {
               <Link
                 key={card.name}
                 href={card.href}
-                className="hover:scale-105 transition-transform rounded-lg p-6 flex items-center justify-center text-white font-semibold text-lg shadow-lg"
+                className="group relative h-40 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
                 style={{
                   backgroundImage: card.backgroundImage,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               >
-                {/* Overlay for readability over images */}
-                <div className="bg-black bg-opacity-50 p-2 rounded">
-                  {card.name}
+                {/* Full overlay */}
+                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors" />
+
+                {/* Centered text */}
+                <div className="relative z-10 flex h-full items-center justify-center">
+                  <span className="text-white text-xl font-semibold tracking-wide">
+                    {card.name}
+                  </span>
                 </div>
               </Link>
             ))}
           </Suspense>
         </div>
+
       </main>
     </DashboardGuard>
   );
