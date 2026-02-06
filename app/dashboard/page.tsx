@@ -12,30 +12,27 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
-  // Dashboard cards info with background images
+  // Dashboard cards info with background images (no solid bg colors)
   const dashboardCards = [
     {
       name: "EWT",
       href: "/dashboard/ewt",
-      color: "bg-indigo-400",
-      backgroundImage: "url('/images/calculator-bg.jpg')", // replace with your actual image path
+      // removed color class; use image background
+      backgroundImage: "url('/images/calculator-bg.jpg')",
     },
     {
       name: "Outs",
       href: "/dashboard/outs",
-      color: "bg-green-400",
       backgroundImage: "url('/images/cut-paper.jpg')",
     },
     {
       name: "Large Format",
       href: "/dashboard/printingtools",
-      color: "bg-yellow-400",
       backgroundImage: "url('/images/paper.jpg')",
     },
     {
       name: "Roll to Sheet",
       href: "/dashboard/rolltosheet",
-      color: "bg-pink-400",
       backgroundImage: "url('/images/weight.jpg')",
     },
   ];
@@ -56,7 +53,7 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* Admin Panel */}
+        {/* Admin Panel (unchanged) */}
         {session?.user?.role === "admin" && (
           <div className="bg-gray-100 p-4 my-4 rounded shadow-md">
             <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -83,14 +80,14 @@ export default function DashboardPage() {
               <Link
                 key={card.name}
                 href={card.href}
-                className={`${card.color} hover:scale-105 transition-transform rounded-lg p-6 flex items-center justify-center text-white font-semibold text-lg shadow-lg`}
+                className="hover:scale-105 transition-transform rounded-lg p-6 flex items-center justify-center text-white font-semibold text-lg shadow-lg"
                 style={{
                   backgroundImage: card.backgroundImage,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               >
-                {/* Optional overlay for better text visibility */}
+                {/* Overlay for readability over images */}
                 <div className="bg-black bg-opacity-50 p-2 rounded">
                   {card.name}
                 </div>
