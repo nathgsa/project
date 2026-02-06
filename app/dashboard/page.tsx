@@ -82,22 +82,23 @@ export default function DashboardPage() {
               <Link
                 key={card.name}
                 href={card.href}
-                className="group relative h-40 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
+                className="group relative h-44 rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-105"
               >
-                {/* Optimized Image */}
+                {/* IMAGE */}
                 <Image
                   src={card.image}
                   alt={card.name}
                   fill
-                  priority={index === 0} // first card loads instantly
+                  priority={index === 0}
+                  sizes="(max-width: 768px) 100vw, 25vw"
                   className="object-cover"
                 />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors" />
+                {/* OVERLAY */}
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/55 transition-colors z-10" />
 
-                {/* Text */}
-                <div className="relative z-10 flex h-full items-center justify-center">
+                {/* TEXT */}
+                <div className="absolute inset-0 z-20 flex items-center justify-center">
                   <span className="text-white text-xl font-semibold tracking-wide">
                     {card.name}
                   </span>
