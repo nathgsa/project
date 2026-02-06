@@ -413,7 +413,7 @@ export default function LargeFormatCalculator() {
                 </select>
               </div>
               {/* Length & Width inputs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 min-w-0">
                 <div>
                   <label className="block mb-1 font-medium text-gray-700">Length</label>
                   <input
