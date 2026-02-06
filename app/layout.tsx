@@ -32,7 +32,7 @@ export default function RootLayout({
             </main>
 
             <footer className="footer">
-              © 20256 Optima Typographics. All rights reserved.
+              © 2026 Optima Typographics. All rights reserved.
             </footer>
           </div>
         </SessionProvider>
