@@ -378,7 +378,7 @@ export default function LargeFormatCalculator() {
   return (
   <div className="min-h-screen flex flex-col items-center justify-start pt-4 -m-6 p-0 bg-gray-50">
     <div className="w-full max-w-3xl md:max-w-7xl mx-auto">
-      <h1 className="text-lg font-bold mb-8 text-center text-gray-800">
+      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
         Large Format Calculator
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 bg-white p-4 md:p-8 rounded-xl shadow-md">
@@ -390,7 +390,7 @@ export default function LargeFormatCalculator() {
           {/* Size section */}
           <div className="bg-gray-50 p-4 rounded-lg">
             
-            <h3 className="text-lg font-bold mb-2 text-gray-800">
+            <h3 className="text-sm font-bold mb-2 text-gray-800">
               Size
             </h3>
             <div className="flex flex-col gap-3 md:gap-4">
@@ -450,7 +450,7 @@ export default function LargeFormatCalculator() {
 
           {/* Material search */}
           <div className="bg-gray-50 p-4 rounded-lg relative">
-            <h2 className="text-lg font-bold mb-2 text-gray-800">Material</h2>
+            <h2 className="text-sm font-bold mb-2 text-gray-800">Material</h2>
             <input
               type="text"
               placeholder="Search material..."
@@ -479,7 +479,7 @@ export default function LargeFormatCalculator() {
 
           {/* Rate 1 */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2 text-gray-800">Rate (PHP per sq ft)</h3>
+            <h3 className="text-sm font-bold mb-2 text-gray-800">Rate (PHP per sq ft)</h3>
             <input
               type="number"
               min="0"
@@ -496,7 +496,7 @@ export default function LargeFormatCalculator() {
 
           {/* Rate 2 */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2 text-gray-800">Optional Rate (PHP per sq ft)</h3>
+            <h3 className="text-sm font-bold mb-2 text-gray-800">Optional Rate (PHP per sq ft)</h3>
             <input
               type="number"
               min="0"
@@ -513,7 +513,7 @@ export default function LargeFormatCalculator() {
 
           {/* Add-ons */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2 text-gray-800">Add-ons</h3>
+            <h3 className="text-sm font-bold mb-2 text-gray-800">Add-ons</h3>
             <select
               className="w-full p-2 mb-3 text-sm md:text-base border border-gray-300 rounded"
               onChange={(e) => {
@@ -549,7 +549,7 @@ export default function LargeFormatCalculator() {
 
           {/* Total Area */}
           <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-lg font-bold mb-2 text-gray-800">Total Area</h3>
+            <h3 className="text-sm font-bold mb-2 text-gray-800">Total Area</h3>
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-gray-800">
               <div className="flex flex-col items-center min-w-[70px]">
                 <span className="font-medium text-lg md:text-xl">
@@ -586,16 +586,21 @@ export default function LargeFormatCalculator() {
 
           {/* Total Rate 1 */}
           <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-lg font-bold mb-2 text-gray-800">Total (Rate 1)</h3>
-            <p className="text-xl md:text-2xl font-semibold text-gray-800">
+            <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 1)</h3>
+            <p className="text-xs md:text-2xl font-semibold text-gray-800">
               PHP {formatNumber(results.total1)}
             </p>
+            <div className="mt-3 space-y-1 text-sm text-gray-600 text-left"> 
+              {results.breakdown1.map((line, index) => ( 
+                <div key={index}>{line}</div> 
+                ))} 
+            </div>
           </div>
 
           {/* Total Rate 2 */}
           <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-lg font-bold mb-2 text-gray-800">Total (Rate 2)</h3>
-            <p className="text-xl md:text-2xl font-semibold text-gray-800">
+            <h3 className="text-sm font-bold mb-2 text-gray-800">Total (Base Rate 2)</h3>
+            <p className="text-xs md:text-2xl font-semibold text-gray-800">
               PHP {formatNumber(results.total2)}
             </p>
           </div>
