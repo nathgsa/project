@@ -18,14 +18,24 @@ export default function SideNav() {
   return (
     <>
       {/* Mobile toggle button */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-md bg-gray-100 shadow-md"
-        >
-          {isOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
-        </button>
-      </div>
+        <div className="md:hidden fixed top-4 left-4 z-50 flex items-center gap-2">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center gap-2 p-2 rounded-md bg-gray-100 shadow-md"
+          >
+            {isOpen ? (
+              <>
+                <XMarkIcon className="w-6 h-6" />
+                <span className="text-sm font-medium">Close</span>
+              </>
+            ) : (
+              <>
+                <Bars3Icon className="w-6 h-6" />
+                <span className="text-sm font-medium">Menu</span>
+              </>
+            )}
+          </button>
+        </div>
 
       {/* SideNav container */}
       <div
