@@ -390,7 +390,7 @@ export default function LargeFormatCalculator() {
           {/* Size section */}
           <div className="bg-gray-50 p-4 rounded-lg">
             
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
+            <h3 className="text-lg font-semibold mb-2 text-gray-800">
               Size
             </h3>
             <div className="flex flex-col gap-3 md:gap-4">
@@ -450,7 +450,7 @@ export default function LargeFormatCalculator() {
 
           {/* Material search */}
           <div className="bg-gray-50 p-4 rounded-lg relative">
-            <h2 className="text-lg md:text-xl font-semibold mb-2">Material</h2>
+            <h2 className="text-lg md:text-lg font-semibold mb-2">Material</h2>
             <input
               type="text"
               placeholder="Search material..."
@@ -479,7 +479,7 @@ export default function LargeFormatCalculator() {
 
           {/* Rate 1 */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg md:text-xl font-semibold mb-2">Rate (PHP per sq ft)</h3>
+            <h3 className="text-lg md:text-lg font-semibold mb-2">Rate (PHP per sq ft)</h3>
             <input
               type="number"
               min="0"
@@ -496,7 +496,7 @@ export default function LargeFormatCalculator() {
 
           {/* Rate 2 */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg md:text-xl font-semibold mb-2">Optional Rate (PHP per sq ft)</h3>
+            <h3 className="text-lg md:text-lg font-semibold mb-2">Optional Rate (PHP per sq ft)</h3>
             <input
               type="number"
               min="0"
@@ -513,7 +513,7 @@ export default function LargeFormatCalculator() {
 
           {/* Add-ons */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg md:text-xl font-semibold mb-2">Add-ons</h3>
+            <h3 className="text-lg md:text-lg font-semibold mb-2">Add-ons</h3>
             <select
               className="w-full p-2 mb-3 text-sm md:text-base border border-gray-300 rounded"
               onChange={(e) => {
@@ -543,13 +543,13 @@ export default function LargeFormatCalculator() {
 
         {/* Right side: Results */}
         <div className="space-y-4 md:space-y-6">
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 md:mb-6">
+          <h2 className="text-xl md:text-lg font-semibold text-gray-800 mb-4 md:mb-6">
             Calculation Results
           </h2>
 
           {/* Total Area */}
           <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-lg md:text-xl font-medium text-gray-800 mb-3">Total Area</h3>
+            <h3 className="text-lg md:text-lg font-medium text-gray-800 mb-2">Total Area</h3>
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-gray-800">
               <div className="flex flex-col items-center min-w-[70px]">
                 <span className="font-medium text-lg md:text-xl">
@@ -586,7 +586,7 @@ export default function LargeFormatCalculator() {
 
           {/* Total Rate 1 */}
           <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-lg md:text-xl font-medium mb-2">Total (Rate 1)</h3>
+            <h3 className="text-lg md:text-lg font-medium mb-2">Total (Rate 1)</h3>
             <p className="text-xl md:text-2xl font-semibold text-gray-800">
               PHP {formatNumber(results.total1)}
             </p>
@@ -594,7 +594,7 @@ export default function LargeFormatCalculator() {
 
           {/* Total Rate 2 */}
           <div className="bg-gray-50 p-4 rounded-lg text-center">
-            <h3 className="text-lg md:text-xl font-medium mb-2">Total (Rate 2)</h3>
+            <h3 className="text-lg md:text-lg font-medium mb-2">Total (Rate 2)</h3>
             <p className="text-xl md:text-2xl font-semibold text-gray-800">
               PHP {formatNumber(results.total2)}
             </p>
