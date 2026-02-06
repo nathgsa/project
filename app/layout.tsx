@@ -26,13 +26,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <SessionProvider>
-          <main className="flex-grow">
-            {children}
-          </main>
+          <div className="app-layout">
+            <main className="content">
+              {children}
+            </main>
 
-          <footer className="border-t text-center text-sm text-gray-500 py-6">
-            © 2026 Optima Typographics. All rights reserved.
-          </footer>
+            <footer className="footer">
+              © 20256 Optima Typographics. All rights reserved.
+            </footer>
+          </div>
         </SessionProvider>
       </body>
     </html>
