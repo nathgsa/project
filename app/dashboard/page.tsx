@@ -12,12 +12,32 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
-  // Dashboard cards info
+  // Dashboard cards info with background images
   const dashboardCards = [
-    { name: "EWT", href: "/dashboard/ewt", color: "bg-indigo-400" },
-    { name: "Outs", href: "/dashboard/outs", color: "bg-green-400" },
-    { name: "Large Format", href: "/dashboard/printingtools", color: "bg-yellow-400" },
-    { name: "Roll to Sheet", href: "/dashboard/rolltosheet", color: "bg-pink-400" },
+    {
+      name: "EWT",
+      href: "/dashboard/ewt",
+      color: "bg-indigo-400",
+      backgroundImage: "url('/images/calculator-bg.jpg')", // replace with your actual image path
+    },
+    {
+      name: "Outs",
+      href: "/dashboard/outs",
+      color: "bg-green-400",
+      backgroundImage: "url('/images/cut-paper.jpg')",
+    },
+    {
+      name: "Large Format",
+      href: "/dashboard/printingtools",
+      color: "bg-yellow-400",
+      backgroundImage: "url('/images/paper.jpg')",
+    },
+    {
+      name: "Roll to Sheet",
+      href: "/dashboard/rolltosheet",
+      color: "bg-pink-400",
+      backgroundImage: "url('/images/weight.jpg')",
+    },
   ];
 
   return (
@@ -56,8 +76,7 @@ export default function DashboardPage() {
             <AddRemoveUsers />
           </div>
         )}
-
-        {/* Dashboard Links */}
+        
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mt-6">
           <Suspense>
             {dashboardCards.map((card) => (
@@ -65,8 +84,16 @@ export default function DashboardPage() {
                 key={card.name}
                 href={card.href}
                 className={`${card.color} hover:scale-105 transition-transform rounded-lg p-6 flex items-center justify-center text-white font-semibold text-lg shadow-lg`}
+                style={{
+                  backgroundImage: card.backgroundImage,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
               >
-                {card.name}
+                {/* Optional overlay for better text visibility */}
+                <div className="bg-black bg-opacity-50 p-2 rounded">
+                  {card.name}
+                </div>
               </Link>
             ))}
           </Suspense>
