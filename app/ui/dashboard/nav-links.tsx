@@ -44,7 +44,7 @@ export default function NavLinks({ onLinkClick }: NavLinksProps) {
             )}
           >
             <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <p className="block text-sm md:text-base">{link.name}</p>
           </Link>
         );
       })}
