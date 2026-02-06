@@ -4,15 +4,18 @@ import { useState } from "react";
 import Link from "next/link";
 import NavLinks from "./nav-links";
 import AppLogo from "../app-logo";
-import { PowerIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  PowerIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { signOut } from "next-auth/react";
 
 export default function SideNav() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Close sidebar when clicking a link
   const handleLinkClick = () => {
-    if (isOpen) setIsOpen(false);
+    setIsOpen(false);
   };
 
   return (
@@ -20,59 +23,64 @@ export default function SideNav() {
       {/* Mobile toggle button */}
       <div className="md:hidden fixed top-4 left-4 z-50">
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen((prev) => !prev)}
           className="p-2 rounded-md bg-gray-100 shadow-md"
+          aria-label="Toggle menu"
         >
-          {isOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
+          {isOpen ? (
+            <XMarkIcon className="w-6 h-6" />
+          ) : (
+            <Bars3Icon className="w-6 h-6" />
+          )}
         </button>
       </div>
 
-      {/* SideNav container */}
-      <div
+      {/* Sidebar */}
+      <aside
         className={`
-          fixed top-0 left-0 h-full px-3 py-4 flex flex-col bg-gray-200
-          transform transition-transform duration-300 ease-in-out z-50
+          fixed top-0 left-0 h-screen w-64
+          px-3 py-4 flex flex-col bg-gray-200
+          transform transition-transform duration-300 ease-in-out
+          z-50
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0 md:static md:w-64
+          md:translate-x-0 md:static
         `}
       >
         {/* Logo */}
         <Link
           href="/dashboard"
           onClick={handleLinkClick}
-          className="flex h-20 w-full md:h-40 items-center justify-center mb-4"
+          className="flex h-20 md:h-40 items-center justify-center mb-4"
         >
           <AppLogo showText={false} size={250} />
         </Link>
 
-        {/* Nav container */}
-        <div className="flex flex-1 flex-col">
-
-          {/* Nav links – FORCE COLUMN */}
-          <div className="flex flex-col gap-2 w-full">
+        {/* Navigation */}
+        <nav className="flex flex-1 flex-col overflow-hidden">
+          {/* Links */}
+          <div className="flex flex-col gap-2">
             <NavLinks onLinkClick={handleLinkClick} />
           </div>
 
-          {/* Flexible spacer */}
+          {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Sign out button */}
+          {/* Sign out */}
           <button
             type="button"
             onClick={() => {
               signOut({ callbackUrl: "/login" });
               setIsOpen(false);
             }}
-            className="flex h-[48px] items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
+            className="flex h-12 items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
           >
             <PowerIcon className="w-6" />
             <span className="hidden md:block">Sign Out</span>
           </button>
+        </nav>
+      </aside>
 
-        </div>
-      </div>
-
-      {/* Overlay when menu is open on mobile */}
+      {/* Mobile overlay */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}

@@ -52,4 +52,9 @@ body {
   padding: 1rem 0;
 }
 
+.dashboard-layout {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
 
