@@ -81,7 +81,7 @@ export default function DashboardPage() {
           </div>
         )}
         
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mt-6">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5 mt-6">
           <Suspense>
             {dashboardCards.map((card, index) => (
               <Link
