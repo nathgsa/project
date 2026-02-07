@@ -175,11 +175,6 @@ export default function ReceiptCalculator() {
     <div className="mx-auto max-w-6xl space-y-6  flex flex-col pt-4 -m-6 p-0 ">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <img
-          src="/optima-logo.png"
-          alt="Optima"
-          className="h-16 object-contain"
-        />
         <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-slate-900 bg-clip-text text-transparent">
           Receipt Price Calculator
         </h1>
