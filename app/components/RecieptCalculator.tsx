@@ -146,7 +146,7 @@ export default function RecieptCalculator() {
     new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(n);
 
   return (
-    <div className="min-h-screen  flex flex-col space-y-6 flex flex-col pt-4 -m-6 p-0">
+    <div className="min-h-screen  flex flex-col space-y-6 flex flex-col pt-4 -m-6 p-0 pb-5">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-slate-900 bg-clip-text text-transparent">
