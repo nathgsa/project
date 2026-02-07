@@ -56,7 +56,7 @@ export default function DashboardPage() {
           </p>
           {/* Role badge */}
           <span className="inline-block mt-3 px-3 py-1 text-xs font-medium rounded-full bg-white/20">
-            Role: {session?.user?.role ?? "member"}
+            Role: {session?.user?.role === "member" ? "User" : session?.user?.role ?? "User"}
           </span>
         </div>
 
