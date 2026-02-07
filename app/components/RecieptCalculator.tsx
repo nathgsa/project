@@ -52,7 +52,14 @@ function calculateMarginPrice(base: number, margin: number, qty: number) {
 }
 
 function calculateCost(inputs: Inputs) {
-  const { qty, ply, material, sizeVariant, outs, numColors } = inputs;
+  const {
+    qty,
+    ply,
+    material,
+    sizeVariant,
+    outs,
+    numColors,
+  } = inputs;
 
   const {
     setsPerBooklet,
@@ -69,8 +76,8 @@ function calculateCost(inputs: Inputs) {
   const totalSheets =
     (qty * setsPerBooklet * ply) / outs + overRun * ply;
 
-  const materialCost =
-    totalSheets * materials[material][sizeVariant];
+  const materialPrice = materials[material][sizeVariant];
+  const materialCost = totalSheets * materialPrice;
 
   const per1k = Math.max(1, totalSheets / 1000);
   const plateFee = numColors * plateRate;
@@ -85,6 +92,7 @@ function calculateCost(inputs: Inputs) {
   return {
     totalSheets,
     materialCost,
+    per1k,
     plateFee,
     runningFee,
     finishingFee,
@@ -142,9 +150,9 @@ export default function RecieptCalculator() {
     }).format(n);
 
   return (
-    <div className="mx-auto max-w-6xl flex flex-col space-y-6 pt-4 -m-6 p-0">
-      {/* HEADER */}
-      <div className="flex items-center justify-between">
+    <div className="mx-auto max-w-6xl space-y-6 flex flex-col pt-4 -m-6 p-0">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-slate-900 bg-clip-text text-transparent">
           Receipt Price Calculator
         </h1>
@@ -152,8 +160,8 @@ export default function RecieptCalculator() {
 
       <div className="grid gap-6 md:grid-cols-[350px_1fr]">
         {/* SIDEBAR */}
-        <aside className="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-          <h2 className="text-lg font-semibold">
+        <div className="bg-white border rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold mb-4">
             Job Specifications
           </h2>
 
@@ -161,7 +169,7 @@ export default function RecieptCalculator() {
             { label: "Quantity (Booklets)", name: "qty" },
             { label: "No. of Ply", name: "ply" },
           ].map((f) => (
-            <div key={f.name}>
+            <div key={f.name} className="mb-4">
               <label className="block text-sm text-slate-500 mb-1">
                 {f.label}
               </label>
@@ -213,7 +221,7 @@ export default function RecieptCalculator() {
               ],
             },
           ].map((s) => (
-            <div key={s.name}>
+            <div key={s.name} className="mb-4">
               <label className="block text-sm text-slate-500 mb-1">
                 {s.label}
               </label>
@@ -232,6 +240,7 @@ export default function RecieptCalculator() {
             </div>
           ))}
 
+          {/* ADMIN ONLY DEBUG TOGGLE */}
           {isAdmin && (
             <button
               onClick={() => setIsDebug(!isDebug)}
@@ -244,11 +253,11 @@ export default function RecieptCalculator() {
               {isDebug ? "Hide Debug" : "Show Debug"}
             </button>
           )}
-        </aside>
+        </div>
 
         {/* MAIN */}
-        <section className="space-y-6">
-          {/* TABS */}
+        <div className="space-y-6">
+          {/* Tabs */}
           <div className="flex gap-1 rounded-xl bg-slate-100 p-1 border">
             {(Object.keys(results.totals) as MarginKey[]).map((tier) => (
               <button
@@ -265,7 +274,7 @@ export default function RecieptCalculator() {
             ))}
           </div>
 
-          {/* PRICE CARD */}
+          {/* Price Card */}
           <div className="bg-white border rounded-2xl p-8 shadow">
             <div className="text-center text-slate-500 font-semibold mb-6">
               Quantity: {inputs.qty} booklets
@@ -285,22 +294,22 @@ export default function RecieptCalculator() {
                 </span>
               </div>
             </div>
-          </div>
 
-          {/* DEBUG */}
-          {isAdmin && isDebug && (
-            <div className="bg-white border rounded-2xl p-6 text-sm space-y-2">
-              <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
-              <div>Material Cost: {peso(results.materialCost)}</div>
-              <div>Running Fee: {peso(results.runningFee)}</div>
-              <div>Plate Fee: {peso(results.plateFee)}</div>
-              <div>Finishing Fee: {peso(results.finishingFee)}</div>
-              <div className="font-bold">
-                Base Rate: {peso(results.baseRate)}
+            {/* DEBUG */}
+            {isAdmin && isDebug && (
+              <div className="bg-white border rounded-2xl p-6 text-sm space-y-2 mt-4">
+                <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
+                <div>Material Cost: {peso(results.materialCost)}</div>
+                <div>Running Fee: {peso(results.runningFee)}</div>
+                <div>Plate Fee: {peso(results.plateFee)}</div>
+                <div>Finishing Fee: {peso(results.finishingFee)}</div>
+                <div className="font-bold">
+                  Base Rate: {peso(results.baseRate)}
+                </div>
               </div>
-            </div>
-          )}
-        </section>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
