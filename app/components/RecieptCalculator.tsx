@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 /* =======================
    CONFIG
@@ -36,15 +37,19 @@ interface Inputs {
   qty: number;
   ply: number;
   material: keyof typeof config.materials;
-  sizeVariant: 'Short' | 'Long';
+  sizeVariant: "Short" | "Long";
   outs: number;
   numColors: number;
 }
 
 /* =======================
-   CALCULATOR
+   CALCULATOR LOGIC
 ======================= */
-function calculateMarginPrice(base: number, marginRate: number, qty: number) {
+function calculateMarginPrice(
+  base: number,
+  marginRate: number,
+  qty: number
+) {
   const netOfVat = base * (1 + marginRate);
   const withVat = netOfVat * 1.12;
 
@@ -122,19 +127,27 @@ function calculateCost(inputs: Inputs) {
    COMPONENT
 ======================= */
 export default function ReceiptCalculator() {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "admin";
+
   const [inputs, setInputs] = useState<Inputs>({
     qty: 10,
     ply: 2,
-    material: 'Carbonless',
-    sizeVariant: 'Short',
+    material: "Carbonless",
+    sizeVariant: "Short",
     outs: 2,
     numColors: 1,
   });
 
   const [activeTier, setActiveTier] =
-    useState<MarginKey>('SRP');
+    useState<MarginKey>("SRP");
 
-  const [isDebug, setIsDebug] = useState(true);
+  const [isDebug, setIsDebug] = useState(false);
+
+  // Force-disable debug for non-admins
+  useEffect(() => {
+    if (!isAdmin) setIsDebug(false);
+  }, [isAdmin]);
 
   const results = calculateCost(inputs);
 
@@ -146,16 +159,16 @@ export default function ReceiptCalculator() {
     setInputs((prev) => ({
       ...prev,
       [name]:
-        name === 'material' || name === 'sizeVariant'
+        name === "material" || name === "sizeVariant"
           ? value
           : Number(value),
     }));
   };
 
   const peso = (n: number) =>
-    new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
+    new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
     }).format(n);
 
   return (
@@ -180,8 +193,8 @@ export default function ReceiptCalculator() {
           </h2>
 
           {[
-            { label: 'Quantity', name: 'qty' },
-            { label: 'No. of Ply', name: 'ply' },
+            { label: "Quantity", name: "qty" },
+            { label: "No. of Ply", name: "ply" },
           ].map((f) => (
             <div key={f.name} className="mb-4">
               <label className="block text-sm text-slate-500 mb-1">
@@ -263,16 +276,19 @@ export default function ReceiptCalculator() {
             </select>
           </div>
 
-          <button
-            onClick={() => setIsDebug(!isDebug)}
-            className={`w-full rounded-lg border px-4 py-2 text-sm font-medium ${
-              isDebug
-                ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-600'
-            }`}
-          >
-            {isDebug ? 'Hide Debug' : 'Show Debug'}
-          </button>
+          {/* ADMIN ONLY DEBUG TOGGLE */}
+          {isAdmin && (
+            <button
+              onClick={() => setIsDebug(!isDebug)}
+              className={`w-full rounded-lg border px-4 py-2 text-sm font-medium ${
+                isDebug
+                  ? "bg-slate-900 text-white"
+                  : "bg-white text-slate-600"
+              }`}
+            >
+              {isDebug ? "Hide Debug" : "Show Debug"}
+            </button>
+          )}
         </div>
 
         {/* MAIN */}
@@ -286,13 +302,11 @@ export default function ReceiptCalculator() {
                   onClick={() => setActiveTier(tier)}
                   className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold ${
                     activeTier === tier
-                      ? 'bg-white text-blue-900 shadow'
-                      : 'text-slate-500'
+                      ? "bg-white text-blue-900 shadow"
+                      : "text-slate-500"
                   }`}
                 >
-                  {tier === 'BestPrice'
-                    ? 'Best Price'
-                    : tier}
+                  {tier === "BestPrice" ? "Best Price" : tier}
                 </button>
               )
             )}
@@ -320,8 +334,8 @@ export default function ReceiptCalculator() {
             </div>
           </div>
 
-          {/* Debug */}
-          {isDebug && (
+          {/* ADMIN ONLY DEBUG PANEL */}
+          {isAdmin && isDebug && (
             <div className="bg-white border rounded-2xl p-6 text-sm space-y-2">
               <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
               <div>Material Cost: {peso(results.materialCost)}</div>
