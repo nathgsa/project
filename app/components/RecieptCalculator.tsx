@@ -64,6 +64,34 @@ function calculateCost(inputs: Inputs) {
   const finishingFee = sortingFee * per1k + bookletFee * qty + adminFee;
   const baseRate = materialCost + plateFee + runningFee + finishingFee;
 
+  // Build step-by-step debug info
+  const steps = {
+    step1: {
+      totalSheets,
+      materialPrice,
+      materialCost,
+      formula: `(qty * setsPerBooklet * ply) / outs + overRun * ply = (${qty} * ${setsPerBooklet} * ${ply}) / ${outs} + ${overRun} * ${ply}`,
+    },
+    step2: {
+      per1k,
+      plateFee,
+      runningFee,
+      step2Total: plateFee + runningFee,
+      formulaPlate: `${numColors} * ${plateRate}`,
+      formulaRunning: `${runningRate} * ${per1k.toFixed(2)} * ${numColors}`,
+    },
+    step3: {
+      sortingFee,
+      bookletFee,
+      adminFee,
+      finishingFee,
+      formula: `${sortingFee} * ${per1k.toFixed(2)} + ${bookletFee} * ${qty} + ${adminFee}`,
+    },
+    step4: {
+      baseRate,
+    },
+  };
+
   return {
     totalSheets,
     materialCost,
@@ -77,6 +105,7 @@ function calculateCost(inputs: Inputs) {
       Discounted: calculateMarginPrice(baseRate, margins.Discounted, qty),
       BestPrice: calculateMarginPrice(baseRate, margins.BestPrice, qty),
     },
+    steps,
   };
 }
 
@@ -260,13 +289,109 @@ export default function RecieptCalculator() {
 
             {/* ADMIN DEBUG PANEL */}
             {isAdmin && isDebug && (
-              <div className="bg-white border rounded-2xl p-6 text-sm space-y-2">
-                <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
-                <div>Material Cost: {peso(results.materialCost)}</div>
-                <div>Running Fee: {peso(results.runningFee)}</div>
-                <div>Plate Fee: {peso(results.plateFee)}</div>
-                <div>Finishing Fee: {peso(results.finishingFee)}</div>
-                <div className="font-bold">Base Rate: {peso(results.baseRate)}</div>
+              <div className="bg-white border rounded-2xl p-6 text-sm space-y-6 mt-6">
+                <h3 className="text-lg font-semibold mb-2">Calculation Breakdown</h3>
+
+                {/* Step 1: Material Cost */}
+                <div>
+                  <h4 className="font-semibold mb-1">Step 1: Material Cost</h4>
+                  <table className="w-full text-sm">
+                    <tbody>
+                      <tr>
+                        <td>Total Sheets</td>
+                        <td>
+                          <strong>{results.steps.step1.totalSheets.toFixed(2)}</strong>
+                          <div className="text-xs text-gray-400">Formula: {results.steps.step1.formula}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Material Price</td>
+                        <td>{results.steps.step1.materialPrice.toFixed(2)}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Material Cost</strong></td>
+                        <td><strong>{peso(results.steps.step1.materialCost)}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Step 2: Running Fee & Plate */}
+                <div>
+                  <h4 className="font-semibold mt-4 mb-1">Step 2: Running Fee & Plate</h4>
+                  <table className="w-full text-sm">
+                    <tbody>
+                      <tr>
+                        <td>Per 1k (Min 1)</td>
+                        <td>{results.steps.step2.per1k.toFixed(3)}</td>
+                      </tr>
+                      <tr>
+                        <td>Plate Fee</td>
+                        <td>
+                          {peso(results.steps.step2.plateFee)}
+                          <div className="text-xs text-gray-400">Formula: {results.steps.step2.formulaPlate}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Running Fee</td>
+                        <td>
+                          {peso(results.steps.step2.runningFee)}
+                          <div className="text-xs text-gray-400">Formula: {results.steps.step2.formulaRunning}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><strong>Step 2 Total</strong></td>
+                        <td><strong>{peso(results.steps.step2.step2Total)}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Step 3: Finishing */}
+                <div>
+                  <h4 className="font-semibold mt-4 mb-1">Step 3: Finishing</h4>
+                  <table className="w-full text-sm">
+                    <tbody>
+                      <tr>
+                        <td>Sorting Fee</td>
+                        <td>{peso(results.steps.step3.sortingFee * results.steps.step2.per1k)} ({results.steps.step3.sortingFee} * {results.steps.step2.per1k.toFixed(2)})</td>
+                      </tr>
+                      <tr>
+                        <td>Booklet Fee</td>
+                        <td>{peso(results.steps.step3.bookletFee * inputs.qty)} ({results.steps.step3.bookletFee} * {inputs.qty})</td>
+                      </tr>
+                      <tr>
+                        <td>Admin Fee</td>
+                        <td>{peso(results.steps.step3.adminFee)}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Finishing Fee</strong></td>
+                        <td>
+                          <strong>{peso(results.steps.step3.finishingFee)}</strong>
+                          <div className="text-xs text-gray-400">Formula: {results.steps.step3.formula}</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Step 4: Base & Margins */}
+                <div>
+                  <h4 className="font-semibold mt-4 mb-1">Step 4: Base & Margins</h4>
+                  <table className="w-full text-sm">
+                    <tbody>
+                      <tr>
+                        <td><strong>Base Rate</strong></td>
+                        <td><strong>{peso(results.steps.step4.baseRate)}</strong></td>
+                      </tr>
+                      <tr>
+                        <td colSpan={2} className="text-xs text-gray-400">
+                          *Final prices are calculated by adding margin markup to this base rate.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
