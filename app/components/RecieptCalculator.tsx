@@ -53,27 +53,15 @@ function calculateMarginPrice(base: number, margin: number, qty: number) {
 
 function calculateCost(inputs: Inputs) {
   const { qty, ply, material, sizeVariant, outs, numColors } = inputs;
-  const {
-    setsPerBooklet,
-    overRun,
-    runningRate,
-    sortingFee,
-    bookletFee,
-    adminFee,
-    margins,
-    materials,
-    plateRate,
-  } = config;
+  const { setsPerBooklet, overRun, runningRate, sortingFee, bookletFee, adminFee, margins, materials, plateRate } = config;
 
   const totalSheets = (qty * setsPerBooklet * ply) / outs + overRun * ply;
   const materialPrice = materials[material][sizeVariant];
   const materialCost = totalSheets * materialPrice;
-
   const per1k = Math.max(1, totalSheets / 1000);
   const plateFee = numColors * plateRate;
   const runningFee = runningRate * per1k * numColors;
   const finishingFee = sortingFee * per1k + bookletFee * qty + adminFee;
-
   const baseRate = materialCost + plateFee + runningFee + finishingFee;
 
   return {
@@ -117,9 +105,7 @@ export default function RecieptCalculator() {
 
   const results = calculateCost(inputs);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setInputs((prev) => ({
       ...prev,
@@ -128,10 +114,7 @@ export default function RecieptCalculator() {
   };
 
   const peso = (n: number) =>
-    new Intl.NumberFormat("en-PH", {
-      style: "currency",
-      currency: "PHP",
-    }).format(n);
+    new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(n);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 flex flex-col pt-4 -m-6 p-0">
@@ -147,10 +130,7 @@ export default function RecieptCalculator() {
         <div className="bg-white border rounded-2xl p-6 shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Job Specifications</h2>
 
-          {[
-            { label: "Quantity (Booklets)", name: "qty" },
-            { label: "No. of Ply", name: "ply" },
-          ].map((f) => (
+          {[{ label: "Quantity (Booklets)", name: "qty" }, { label: "No. of Ply", name: "ply" }].map((f) => (
             <div key={f.name} className="mb-4">
               <label className="block text-sm text-slate-500 mb-1">{f.label}</label>
               <input
@@ -163,61 +143,57 @@ export default function RecieptCalculator() {
             </div>
           ))}
 
-          <div className="mb-4">
-            <label className="block text-sm text-slate-500 mb-1">Material Type</label>
-            <select
-              name="material"
-              value={inputs.material}
-              onChange={handleChange}
-              className="w-full rounded-lg border bg-slate-100 px-4 py-2"
-            >
-              <option value="Carbonless">Carbonless</option>
-              <option value="Bond">Bond Paper</option>
-            </select>
-          </div>
+          {["material", "sizeVariant", "outs", "numColors"].map((field) => {
+            let label = "";
+            let options: any[] = [];
+            if (field === "material") {
+              label = "Material Type";
+              options = [
+                { value: "Carbonless", label: "Carbonless" },
+                { value: "Bond", label: "Bond Paper" },
+              ];
+            } else if (field === "sizeVariant") {
+              label = "Paper Size";
+              options = [
+                { value: "Short", label: "Short (Letter)" },
+                { value: "Long", label: "Long (Legal/A4)" },
+              ];
+            } else if (field === "outs") {
+              label = "Outs per Sheet";
+              options = [
+                { value: 1, label: "1 Out (Full Sheet)" },
+                { value: 2, label: "2 Outs (Half Sheet)" },
+                { value: 3, label: "3 Outs" },
+                { value: 4, label: "4 Outs (Quarter Sheet)" },
+              ];
+            } else if (field === "numColors") {
+              label = "Number of Colors";
+              options = [
+                { value: 1, label: "1 Color" },
+                { value: 2, label: "2 Colors" },
+                { value: 3, label: "3 Colors" },
+                { value: 4, label: "4 Colors" },
+              ];
+            }
 
-          <div className="mb-4">
-            <label className="block text-sm text-slate-500 mb-1">Paper Size</label>
-            <select
-              name="sizeVariant"
-              value={inputs.sizeVariant}
-              onChange={handleChange}
-              className="w-full rounded-lg border bg-slate-100 px-4 py-2"
-            >
-              <option value="Short">Short (Letter)</option>
-              <option value="Long">Long (Legal/A4)</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm text-slate-500 mb-1">Outs per Sheet</label>
-            <select
-              name="outs"
-              value={inputs.outs}
-              onChange={handleChange}
-              className="w-full rounded-lg border bg-slate-100 px-4 py-2"
-            >
-              <option value={1}>1 Out (Full Sheet)</option>
-              <option value={2}>2 Outs (Half Sheet)</option>
-              <option value={3}>3 Outs</option>
-              <option value={4}>4 Outs (Quarter Sheet)</option>
-            </select>
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-sm text-slate-500 mb-1">Number of Colors</label>
-            <select
-              name="numColors"
-              value={inputs.numColors}
-              onChange={handleChange}
-              className="w-full rounded-lg border bg-slate-100 px-4 py-2"
-            >
-              <option value={1}>1 Color</option>
-              <option value={2}>2 Colors</option>
-              <option value={3}>3 Colors</option>
-              <option value={4}>4 Colors</option>
-            </select>
-          </div>
+            return (
+              <div key={field} className="mb-4">
+                <label className="block text-sm text-slate-500 mb-1">{label}</label>
+                <select
+                  name={field}
+                  value={(inputs as any)[field]}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border bg-slate-100 px-4 py-2"
+                >
+                  {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            );
+          })}
 
           {isAdmin && (
             <button
@@ -255,9 +231,10 @@ export default function RecieptCalculator() {
             </div>
 
             {/* WITH VAT */}
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between text-sm text-slate-500">
-                <span>Unit Price (With VAT)</span>
+            <div className="space-y-2 mb-4 bg-gray-50 p-4 rounded-lg">
+              <div className="text-sm font-semibold text-slate-500">With VAT</div>
+              <div className="flex justify-between text-sm text-slate-700">
+                <span>Unit price:</span>
                 <span>{peso(results.totals[activeTier].unitVat)}</span>
               </div>
               <div className="flex justify-between text-2xl font-bold text-blue-900">
@@ -266,12 +243,13 @@ export default function RecieptCalculator() {
               </div>
             </div>
 
-            <hr className="my-4" />
+            <hr className="my-4 border-gray-300" />
 
             {/* WITHOUT VAT */}
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm text-slate-500">
-                <span>Unit Price (Without VAT)</span>
+            <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
+              <div className="text-sm font-semibold text-slate-500">Without VAT</div>
+              <div className="flex justify-between text-sm text-slate-700">
+                <span>Unit price:</span>
                 <span>{peso(results.totals[activeTier].unitNet)}</span>
               </div>
               <div className="flex justify-between text-xl font-semibold text-blue-900">
@@ -279,19 +257,19 @@ export default function RecieptCalculator() {
                 <span>{peso(results.totals[activeTier].netOfVat)}</span>
               </div>
             </div>
-          </div>
 
-          {/* ADMIN DEBUG PANEL */}
-          {isAdmin && isDebug && (
-            <div className="bg-white border rounded-2xl p-6 text-sm space-y-2">
-              <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
-              <div>Material Cost: {peso(results.materialCost)}</div>
-              <div>Running Fee: {peso(results.runningFee)}</div>
-              <div>Plate Fee: {peso(results.plateFee)}</div>
-              <div>Finishing Fee: {peso(results.finishingFee)}</div>
-              <div className="font-bold">Base Rate: {peso(results.baseRate)}</div>
-            </div>
-          )}
+            {/* ADMIN DEBUG PANEL */}
+            {isAdmin && isDebug && (
+              <div className="bg-white border rounded-2xl p-6 text-sm space-y-2">
+                <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
+                <div>Material Cost: {peso(results.materialCost)}</div>
+                <div>Running Fee: {peso(results.runningFee)}</div>
+                <div>Plate Fee: {peso(results.plateFee)}</div>
+                <div>Finishing Fee: {peso(results.finishingFee)}</div>
+                <div className="font-bold">Base Rate: {peso(results.baseRate)}</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
