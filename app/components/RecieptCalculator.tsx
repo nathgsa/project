@@ -52,14 +52,7 @@ function calculateMarginPrice(base: number, margin: number, qty: number) {
 }
 
 function calculateCost(inputs: Inputs) {
-  const {
-    qty,
-    ply,
-    material,
-    sizeVariant,
-    outs,
-    numColors,
-  } = inputs;
+  const { qty, ply, material, sizeVariant, outs, numColors } = inputs;
 
   const {
     setsPerBooklet,
@@ -76,8 +69,8 @@ function calculateCost(inputs: Inputs) {
   const totalSheets =
     (qty * setsPerBooklet * ply) / outs + overRun * ply;
 
-  const materialPrice = materials[material][sizeVariant];
-  const materialCost = totalSheets * materialPrice;
+  const materialCost =
+    totalSheets * materials[material][sizeVariant];
 
   const per1k = Math.max(1, totalSheets / 1000);
   const plateFee = numColors * plateRate;
@@ -92,7 +85,6 @@ function calculateCost(inputs: Inputs) {
   return {
     totalSheets,
     materialCost,
-    per1k,
     plateFee,
     runningFee,
     finishingFee,
@@ -150,31 +142,35 @@ export default function RecieptCalculator() {
     }).format(n);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+    <div className="mx-auto max-w-6xl flex flex-col space-y-6 pt-4 -m-6 p-0">
       {/* HEADER */}
-      <header className="text-center space-y-2">
-        <h1 className="text-2xl font-bold tracking-wide">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-slate-900 bg-clip-text text-transparent">
           Receipt Price Calculator
         </h1>
-      </header>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
+      <div className="grid gap-6 md:grid-cols-[350px_1fr]">
         {/* SIDEBAR */}
-        <aside className="bg-white border rounded-xl p-6 shadow space-y-4">
-          <h2 className="text-lg font-semibold">Job Specifications</h2>
+        <aside className="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+          <h2 className="text-lg font-semibold">
+            Job Specifications
+          </h2>
 
           {[
             { label: "Quantity (Booklets)", name: "qty" },
             { label: "No. of Ply", name: "ply" },
           ].map((f) => (
             <div key={f.name}>
-              <label className="text-sm text-gray-500">{f.label}</label>
+              <label className="block text-sm text-slate-500 mb-1">
+                {f.label}
+              </label>
               <input
                 type="number"
                 name={f.name}
                 value={(inputs as any)[f.name]}
                 onChange={handleChange}
-                className="w-full mt-1 rounded border px-3 py-2"
+                className="w-full rounded-lg border bg-slate-100 px-4 py-2 focus:ring-2 focus:ring-blue-900"
               />
             </div>
           ))}
@@ -218,12 +214,14 @@ export default function RecieptCalculator() {
             },
           ].map((s) => (
             <div key={s.name}>
-              <label className="text-sm text-gray-500">{s.label}</label>
+              <label className="block text-sm text-slate-500 mb-1">
+                {s.label}
+              </label>
               <select
                 name={s.name}
                 value={(inputs as any)[s.name]}
                 onChange={handleChange}
-                className="w-full mt-1 rounded border px-3 py-2"
+                className="w-full rounded-lg border bg-slate-100 px-4 py-2"
               >
                 {s.options.map(([val, label]) => (
                   <option key={val} value={val}>
@@ -237,10 +235,10 @@ export default function RecieptCalculator() {
           {isAdmin && (
             <button
               onClick={() => setIsDebug(!isDebug)}
-              className={`w-full mt-4 rounded border py-2 text-sm font-medium ${
+              className={`w-full rounded-lg border px-4 py-2 text-sm font-medium ${
                 isDebug
                   ? "bg-slate-900 text-white"
-                  : "bg-white text-gray-600"
+                  : "bg-white text-slate-600"
               }`}
             >
               {isDebug ? "Hide Debug" : "Show Debug"}
@@ -251,15 +249,15 @@ export default function RecieptCalculator() {
         {/* MAIN */}
         <section className="space-y-6">
           {/* TABS */}
-          <div className="flex border rounded overflow-hidden">
+          <div className="flex gap-1 rounded-xl bg-slate-100 p-1 border">
             {(Object.keys(results.totals) as MarginKey[]).map((tier) => (
               <button
                 key={tier}
                 onClick={() => setActiveTier(tier)}
-                className={`flex-1 py-2 text-sm font-semibold ${
+                className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold ${
                   activeTier === tier
-                    ? "bg-slate-900 text-white"
-                    : "bg-gray-100 text-gray-600"
+                    ? "bg-white text-blue-900 shadow"
+                    : "text-slate-500"
                 }`}
               >
                 {tier === "BestPrice" ? "Best Price" : tier}
@@ -268,49 +266,34 @@ export default function RecieptCalculator() {
           </div>
 
           {/* PRICE CARD */}
-          <div className="bg-white border rounded-xl p-6 shadow space-y-6">
-            <div className="text-center text-gray-500">
+          <div className="bg-white border rounded-2xl p-8 shadow">
+            <div className="text-center text-slate-500 font-semibold mb-6">
               Quantity: {inputs.qty} booklets
             </div>
 
-            <div>
-              <p className="text-sm font-semibold text-gray-500 mb-2">
-                With VAT
-              </p>
+            <div className="space-y-2">
               <div className="flex justify-between">
-                <span>Unit price</span>
-                <span>{peso(results.totals[activeTier].unitVat)}</span>
+                <span>Unit Price (VAT)</span>
+                <strong>
+                  {peso(results.totals[activeTier].unitVat)}
+                </strong>
               </div>
-              <div className="flex justify-between text-xl font-bold">
+              <div className="flex justify-between text-2xl font-bold text-blue-900">
                 <span>Total</span>
-                <span>{peso(results.totals[activeTier].withVat)}</span>
-              </div>
-            </div>
-
-            <hr />
-
-            <div className="opacity-70">
-              <p className="text-sm font-semibold mb-2">
-                Without VAT
-              </p>
-              <div className="flex justify-between">
-                <span>Unit price</span>
-                <span>{peso(results.totals[activeTier].unitNet)}</span>
-              </div>
-              <div className="flex justify-between font-semibold">
-                <span>Total</span>
-                <span>{peso(results.totals[activeTier].netOfVat)}</span>
+                <span>
+                  {peso(results.totals[activeTier].withVat)}
+                </span>
               </div>
             </div>
           </div>
 
           {/* DEBUG */}
           {isAdmin && isDebug && (
-            <div className="bg-white border rounded-xl p-6 text-sm space-y-1">
+            <div className="bg-white border rounded-2xl p-6 text-sm space-y-2">
               <div>Total Sheets: {results.totalSheets.toFixed(2)}</div>
               <div>Material Cost: {peso(results.materialCost)}</div>
-              <div>Plate Fee: {peso(results.plateFee)}</div>
               <div>Running Fee: {peso(results.runningFee)}</div>
+              <div>Plate Fee: {peso(results.plateFee)}</div>
               <div>Finishing Fee: {peso(results.finishingFee)}</div>
               <div className="font-bold">
                 Base Rate: {peso(results.baseRate)}
