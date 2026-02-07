@@ -172,7 +172,7 @@ export default function ReceiptCalculator() {
     }).format(n);
 
   return (
-    <div className="mx-auto max-w-6xl p-6 space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6  flex flex-col pt-4 -m-6 p-0 ">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <img
