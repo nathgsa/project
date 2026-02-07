@@ -324,7 +324,7 @@ export default function RecieptCalculator() {
 
             {/* ADMIN DEBUG PANEL */}
             {isAdmin && isDebug && (
-              <div className="bg-white border rounded-2xl p-6 text-sm space-y-6 mt-6">
+              <div className="bg-white border rounded-2xl p-6 text-sm space-y-6 mt-6 -m-5">
                 <h3 className="text-lg font-semibold mb-2">Calculation Breakdown</h3>
 
                 {/* Step 1: Material Cost */}
