@@ -10,6 +10,7 @@ import { signOut } from "next-auth/react";
 export default function SideNav() {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Close sidebar when clicking a link
   const handleLinkClick = () => {
     if (isOpen) setIsOpen(false);
   };
@@ -46,11 +47,13 @@ export default function SideNav() {
 
         {/* Nav container */}
         <div className="flex flex-1 flex-col">
-          {/* Nav links */}
+
+          {/* Nav links – FORCE COLUMN */}
           <div className="flex flex-col gap-2 w-full">
             <NavLinks onLinkClick={handleLinkClick} />
           </div>
 
+          {/* Flexible spacer */}
           <div className="flex-1" />
 
           {/* Sign out button */}
@@ -60,21 +63,16 @@ export default function SideNav() {
               signOut({ callbackUrl: "/login" });
               setIsOpen(false);
             }}
-            className="flex h-[48px] items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 relative overflow-hidden"
-            style={{
-              backgroundImage: 'url(/signout-bg.jpg)', // your background image
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
+            className="flex h-[48px] items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600"
           >
-            <div className="absolute inset-0 bg-black/30 rounded-md" />
-            <PowerIcon className="w-6 relative z-10" />
-            <span className="hidden md:block relative z-10">Sign Out</span>
+            <PowerIcon className="w-6" />
+            <span className="hidden md:block">Sign Out</span>
           </button>
+
         </div>
       </div>
 
-      {/* Overlay for mobile */}
+      {/* Overlay when menu is open on mobile */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
