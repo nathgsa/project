@@ -73,7 +73,7 @@ const EWTCalculator: React.FC = () => {
       {/* Calculator Card */}
       <div className="w-full max-w-5xl bg-gradient-to-br from-white to-gray-200 shadow-lg rounded-2xl p-6 md:p-10">
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">EWT Calculator</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-slate-900 bg-clip-text text-transparent">EWT Calculator</h1>
           <p className="text-gray-500 mt-2">Calculate all EWT combinations for a given payment amount.</p>
         </div>
 
