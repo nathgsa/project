@@ -159,134 +159,134 @@ export default function RecieptCalculator() {
         <div className="bg-white border rounded-2xl p-6 shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Job Specifications</h2>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            {[{ label: "Quantity (Booklets)", name: "qty" }, { label: "No. of Ply", name: "ply" }].map((f) => (
-                <div key={f.name}>
-                <label className="block text-sm text-slate-500 mb-1">{f.label}</label>
-                <input
-                    type="number"
-                    name={f.name}
-                    value={(inputs as any)[f.name]}
-                    onChange={handleChange}
-                    min={1}
-                    className="w-full rounded-lg border bg-slate-100 px-4 py-2 focus:ring-2 focus:ring-blue-900"
-                />
+          {/* First row: Quantity & Ply */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                {[{ label: "Quantity (Booklets)", name: "qty" }, { label: "No. of Ply", name: "ply" }].map((f) => (
+                    <div key={f.name}>
+                        <label className="block text-sm text-slate-500 mb-1">{f.label}</label>
+                        <input
+                            type="number"
+                            name={f.name}
+                            value={(inputs as any)[f.name]}
+                            onChange={handleChange}
+                            min={1}
+                            className="w-full rounded-lg border bg-slate-100 px-4 py-2 focus:ring-2 focus:ring-blue-900"
+                        />
+                    </div>
+                ))}
                 </div>
-            ))}
-            </div>
 
-            {/* Bottom two selects: Outs & Colors */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-            {["outs", "numColors"].map((field) => {
-                let label = "";
-                let options: any[] = [];
+                {/* Second row: Material Type & Paper Size (single-column) */}
+                <div className="grid grid-cols-1 gap-4 mb-4">
+                    {["material", "sizeVariant"].map((field) => {
+                        let label = "";
+                        let options: any[] = [];
+                        if (field === "material") {
+                            label = "Material Type";
+                            options = [
+                                { value: "Carbonless", label: "Carbonless" },
+                                { value: "Bond", label: "Bond Paper" },
+                            ];
+                            } else if (field === "sizeVariant") {
+                            label = "Paper Size";
+                            options = [
+                                { value: "Short", label: "Short (Letter)" },
+                                { value: "Long", label: "Long (Legal/A4)" },
+                            ];
+                        }
 
-                if (field === "outs") {
-                label = "Outs per Sheet";
-                options = [
-                    { value: 1, label: "1 Out (Full Sheet)" },
-                    { value: 2, label: "2 Outs (Half Sheet)" },
-                    { value: 3, label: "3 Outs" },
-                    { value: 4, label: "4 Outs (Quarter Sheet)" },
-                ];
-                } else if (field === "numColors") {
-                label = "Number of Colors";
-                options = [
-                    { value: 1, label: "1 Color" },
-                    { value: 2, label: "2 Colors" },
-                    { value: 3, label: "3 Colors" },
-                    { value: 4, label: "4 Colors" },
-                ];
-                }
+                        return (
+                            <div key={field}>
+                                <label className="block text-sm text-slate-500 mb-1">{label}</label>
+                                <select
+                                name={field}
+                                value={(inputs as any)[field]}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border bg-slate-100 px-4 py-2"
+                                >
+                                {options.map((opt) => (
+                                    <option key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                    </option>
+                                ))}
+                                </select>
+                            </div>
+                        );
+                    })}
+                </div>
 
-                return (
-                <div key={field}>
-                    <label className="block text-sm text-slate-500 mb-1">{label}</label>
-                    <select
-                    name={field}
-                    value={(inputs as any)[field]}
-                    onChange={handleChange}
-                    className="w-full rounded-lg border bg-slate-100 px-4 py-2"
+                {/* Third row: Outs per Sheet & Number of Colors */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    {["outs", "numColors"].map((field) => {
+                        let label = "";
+                        let options: any[] = [];
+                        if (field === "outs") {
+                            label = "Outs per Sheet";
+                            options = [
+                                { value: 1, label: "1 Out (Full Sheet)" },
+                                { value: 2, label: "2 Outs (Half Sheet)" },
+                                { value: 3, label: "3 Outs" },
+                                { value: 4, label: "4 Outs (Quarter Sheet)" },
+                            ];
+                            } else if (field === "numColors") {
+                            label = "Number of Colors";
+                            options = [
+                                { value: 1, label: "1 Color" },
+                                { value: 2, label: "2 Colors" },
+                                { value: 3, label: "3 Colors" },
+                                { value: 4, label: "4 Colors" },
+                            ];
+                        }
+
+                        return (
+                        <div key={field}>
+                            <label className="block text-sm text-slate-500 mb-1">{label}</label>
+                            <select
+                            name={field}
+                            value={(inputs as any)[field]}
+                            onChange={handleChange}
+                            className="w-full rounded-lg border bg-slate-100 px-4 py-2"
+                            >
+                            {options.map((opt) => (
+                                <option key={opt.value} value={opt.value}>
+                                {opt.label}
+                                </option>
+                            ))}
+                            </select>
+                        </div>
+                        );
+                    })}
+                </div>
+
+
+                {isAdmin && (
+                    <button
+                    onClick={() => setIsDebug(!isDebug)}
+                    className={`w-full rounded-lg border px-4 py-2 text-sm font-medium ${
+                        isDebug ? "bg-slate-900 text-white" : "bg-white text-slate-600"
+                    }`}
                     >
-                    {options.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                        </option>
-                    ))}
-                    </select>
-                </div>
-                );
-            })}
+                    {isDebug ? "Hide Debug" : "Show Debug"}
+                    </button>
+                )}
             </div>
 
-            {/* Material & Size select in a separate row if needed */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-            {["material", "sizeVariant"].map((field) => {
-                let label = "";
-                let options: any[] = [];
-
-                if (field === "material") {
-                label = "Material Type";
-                options = [
-                    { value: "Carbonless", label: "Carbonless" },
-                    { value: "Bond", label: "Bond Paper" },
-                ];
-                } else if (field === "sizeVariant") {
-                label = "Paper Size";
-                options = [
-                    { value: "Short", label: "Short (Letter)" },
-                    { value: "Long", label: "Long (Legal/A4)" },
-                ];
-                }
-
-                return (
-                <div key={field}>
-                    <label className="block text-sm text-slate-500 mb-1">{label}</label>
-                    <select
-                    name={field}
-                    value={(inputs as any)[field]}
-                    onChange={handleChange}
-                    className="w-full rounded-lg border bg-slate-100 px-4 py-2"
-                    >
-                    {options.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                        </option>
-                    ))}
-                    </select>
-                </div>
-                );
-            })}
-            </div>
-
-          {isAdmin && (
-            <button
-              onClick={() => setIsDebug(!isDebug)}
-              className={`w-full rounded-lg border px-4 py-2 text-sm font-medium ${
-                isDebug ? "bg-slate-900 text-white" : "bg-white text-slate-600"
-              }`}
-            >
-              {isDebug ? "Hide Debug" : "Show Debug"}
-            </button>
-          )}
+            {/* MAIN */}
+            <div className="space-y-6">
+            {/* Tabs */}
+            <div className="flex gap-1 rounded-xl bg-slate-100 p-1 border">
+                {(Object.keys(results.totals) as MarginKey[]).map((tier) => (
+                <button
+                    key={tier}
+                    onClick={() => setActiveTier(tier)}
+                    className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold ${
+                    activeTier === tier ? "bg-white text-blue-900 shadow" : "text-slate-500"
+                    }`}
+                >
+                    {tier === "BestPrice" ? "Best Price" : tier}
+                </button>
+                ))}
         </div>
-
-        {/* MAIN */}
-        <div className="space-y-6">
-          {/* Tabs */}
-          <div className="flex gap-1 rounded-xl bg-slate-100 p-1 border">
-            {(Object.keys(results.totals) as MarginKey[]).map((tier) => (
-              <button
-                key={tier}
-                onClick={() => setActiveTier(tier)}
-                className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold ${
-                  activeTier === tier ? "bg-white text-blue-900 shadow" : "text-slate-500"
-                }`}
-              >
-                {tier === "BestPrice" ? "Best Price" : tier}
-              </button>
-            ))}
-          </div>
 
           {/* PRICE CARD */}
           <div className="bg-white border rounded-2xl p-8 shadow">
