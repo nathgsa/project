@@ -36,6 +36,11 @@ export default function DashboardPage() {
     href: "/dashboard/rolltosheet",
     image: "/wieght-bg.png",
   },
+  {
+    name: "Reciept",
+    href: "/dashboard/reciept",
+    image: "/reciept-bg.jpg",
+  },
 ];
 
 

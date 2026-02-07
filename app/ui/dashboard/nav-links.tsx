@@ -5,7 +5,8 @@ import {
   CalculatorIcon,
   ClipboardIcon,
   PrinterIcon,
-  ArrowsRightLeftIcon
+  ArrowsRightLeftIcon,
+  ReceiptPercentIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,7 +18,8 @@ const links = [
   { name: 'EWT', href: '/dashboard/ewt', icon: CalculatorIcon },
   { name: 'Outs', href: '/dashboard/outs', icon: ClipboardIcon },
   { name: 'Large Formats', href: '/dashboard/printingtools', icon: PrinterIcon },
-  { name: 'Roll to Sheet', href: '/dashboard/rolltosheet', icon: ArrowsRightLeftIcon }
+  { name: 'Roll to Sheet', href: '/dashboard/rolltosheet', icon: ArrowsRightLeftIcon },
+  { name: 'Reciept', href: '/dashboard/reciept', icon: ReceiptPercentIcon },
 ];
 
 // Add a prop type for mobile toggle
