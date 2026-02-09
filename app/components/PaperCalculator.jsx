@@ -1,17 +1,16 @@
-"use client";
-
+"use client"
 import React, { useState, useEffect } from 'react';
 import { Calculator, ScrollText, Scale, Coins, Info, RefreshCw, FileSpreadsheet } from 'lucide-react';
 
 const PaperCalculator = () => {
-  // --- Input States ---
+  // State for inputs
   const [width, setWidth] = useState(38);
   const [length, setLength] = useState(34);
   const [gsm, setGsm] = useState(70);
   const [draws, setDraws] = useState(500);
   const [costPerKg, setCostPerKg] = useState(60);
 
-  // --- Calculated Results ---
+  // State for calculated results
   const [results, setResults] = useState({
     sqMeters: 0,
     weightPerSheet: 0,
@@ -20,11 +19,20 @@ const PaperCalculator = () => {
     costPerSheet: 0
   });
 
-  // --- Calculation Logic ---
+  // Calculation Logic (matches the CSV formulas)
   useEffect(() => {
+    // Step 1: Convert Paper size to Sq Meter
+    // Formula from CSV: (Width * Draw Length) / 1550
     const calculatedSqMeters = (Number(width) * Number(length)) / 1550;
+
+    // Step 2: Sq Meter * GSM = Weight In grams, then / 1000 for KG
     const calculatedWeightPerSheet = (calculatedSqMeters * Number(gsm)) / 1000;
+
+    // Total Weight based on number of draws (impressions)
+    // ROUNDING UP: Matches CSV logic (e.g. 29.17kg -> 30kg)
     const calculatedTotalWeight = Math.ceil(calculatedWeightPerSheet * Number(draws));
+
+    // Cost calculations based on ROUNDED weight
     const calculatedTotalCost = calculatedTotalWeight * Number(costPerKg);
     const calculatedCostPerSheet = Number(draws) > 0 ? calculatedTotalCost / Number(draws) : 0;
 
@@ -37,9 +45,9 @@ const PaperCalculator = () => {
     });
   }, [width, length, gsm, draws, costPerKg]);
 
-  // --- Helpers ---
-  const format = (num: number, decimals = 4) => num.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: decimals });
-  const formatCurrency = (num: number) => num.toLocaleString(undefined, { style: 'currency', currency: 'PHP', minimumFractionDigits: 2 }).replace('₱', '');
+  // Helper to format numbers safely
+  const format = (num, decimals = 4) => num.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: decimals });
+  const formatCurrency = (num) => num.toLocaleString(undefined, { style: 'currency', currency: 'PHP', minimumFractionDigits: 2 }).replace('₱', ''); // removing symbol for generic use
 
   return (
     <div className="min-h-screen  flex flex-col items-center justify-center pt-4 -m-6 p-0 font-sans text-slate-800">
@@ -57,7 +65,7 @@ const PaperCalculator = () => {
             </div>
           </div>
           <button 
-            onClick={() => { setWidth(38); setLength(34); setGsm(70); setDraws(500); setCostPerKg(60); }}
+            onClick={() => {setWidth(38); setLength(34); setGsm(70); setDraws(500); setCostPerKg(60);}}
             className="flex items-center gap-2 text-sm text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-md transition-colors"
           >
             <RefreshCw size={14} />
@@ -80,24 +88,48 @@ const PaperCalculator = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Roll Width (in)</label>
-                    <input type="number" value={width} onChange={e => setWidth(e.target.value === '' ? 0 : Number(e.target.value))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"/>
+                    <input 
+                      type="number" 
+                      inputMode="numeric"
+                      value={width}
+                      onChange={(e) => setWidth(e.target.value === '' ? '' : Number(e.target.value))}
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Draw Length (in)</label>
-                    <input type="number" value={length} onChange={e => setLength(e.target.value === '' ? 0 : Number(e.target.value))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"/>
+                    <input 
+                      type="number" 
+                      inputMode="numeric"
+                      value={length}
+                      onChange={(e) => setLength(e.target.value === '' ? '' : Number(e.target.value))}
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"
+                    />
                   </div>
                 </div>
 
                 {/* GSM */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">GSM (Grams/m²)</label>
-                  <input type="number" value={gsm} onChange={e => setGsm(e.target.value === '' ? 0 : Number(e.target.value))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"/>
+                  <input 
+                    type="number" 
+                    inputMode="numeric"
+                    value={gsm}
+                    onChange={(e) => setGsm(e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"
+                  />
                 </div>
 
                 {/* Quantity */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sheets (Default Ream: 500)</label>
-                  <input type="number" value={draws} onChange={e => setDraws(e.target.value === '' ? 0 : Number(e.target.value))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"/>
+                  <input 
+                    type="number" 
+                    inputMode="numeric"
+                    value={draws}
+                    onChange={(e) => setDraws(e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"
+                  />
                 </div>
 
                 {/* Cost */}
@@ -105,7 +137,13 @@ const PaperCalculator = () => {
                   <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Cost Per KG</label>
                   <div className="relative">
                     <span className="absolute left-3 top-2.5 text-slate-400 font-bold">₱</span>
-                    <input type="number" value={costPerKg} onChange={e => setCostPerKg(e.target.value === '' ? 0 : Number(e.target.value))} className="w-full p-2.5 pl-7 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"/>
+                    <input 
+                      type="number" 
+                      inputMode="numeric"
+                      value={costPerKg}
+                      onChange={(e) => setCostPerKg(e.target.value === '' ? '' : Number(e.target.value))}
+                      className="w-full p-2.5 pl-7 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-medium"
+                    />
                   </div>
                 </div>
               </div>
@@ -114,10 +152,14 @@ const PaperCalculator = () => {
 
           {/* Results Section */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Main Metrics */}
+            
+            {/* Primary Metrics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-emerald-600 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
-                <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2"><Coins size={120} /></div>
+              {/* Cost Per Sheet (Now the Main Highlight) */}
+              <div className="bg-emerald-600 text-white p-6 rounded-2xl shadow-lg shadow-emerald-200 relative overflow-hidden">
+                <div className="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2">
+                  <Coins size={120} />
+                </div>
                 <p className="text-emerald-100 text-sm font-medium mb-1">Final Cost Per Sheet</p>
                 <h3 className="text-4xl font-bold tracking-tight">₱{format(results.costPerSheet, 2)}</h3>
                 <div className="mt-4 pt-4 border-t border-emerald-500/30 flex justify-between items-center text-sm text-emerald-50">
@@ -126,8 +168,11 @@ const PaperCalculator = () => {
                 </div>
               </div>
 
+              {/* Total Weight */}
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
-                <div className="absolute right-4 top-4 text-slate-100"><Scale size={80} /></div>
+                <div className="absolute right-4 top-4 text-slate-100">
+                  <Scale size={80} />
+                </div>
                 <div className="relative z-10">
                   <p className="text-slate-500 text-sm font-medium mb-1">Total Weight Required</p>
                   <h3 className="text-4xl font-bold text-slate-800">{format(results.totalWeight, 0)} <span className="text-lg text-slate-400 font-normal">kg</span></h3>
@@ -141,9 +186,12 @@ const PaperCalculator = () => {
               </div>
             </div>
 
-            {/* Calculation Breakdown */}
+            {/* Detailed Logic Breakdown */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><ScrollText size={18} className="text-blue-500" /> Calculation Breakdown</h2>
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <ScrollText size={18} className="text-blue-500" />
+                Calculation Breakdown
+              </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-100">
@@ -184,7 +232,9 @@ const PaperCalculator = () => {
               <Info className="text-blue-500 shrink-0 mt-0.5" size={18} />
               <div className="text-sm text-blue-700 space-y-1">
                 <p className="font-semibold">Calculation Note:</p>
-                <p>Total batch weight is <strong>rounded up</strong> to the nearest whole kilogram before calculating cost, matching standard paper purchasing logic.</p>
+                <p>
+                  Total batch weight is <strong>rounded up</strong> to the nearest whole kilogram before calculating cost, matching standard paper purchasing logic.
+                </p>
               </div>
             </div>
 
@@ -196,3 +246,4 @@ const PaperCalculator = () => {
 };
 
 export default PaperCalculator;
+
