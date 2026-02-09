@@ -39,7 +39,7 @@ const PaperCalculator = () => {
     setResults({
       sqMeters: calculatedSqMeters || 0,
       weightPerSheet: calculatedWeightPerSheet || 0,
-      totalWeight: calculatedTotalWeight || 0,
+      totalWeight: calculatedTotalWeight || 0,  
       totalCost: calculatedTotalCost || 0,
       costPerSheet: calculatedCostPerSheet || 0
     });
